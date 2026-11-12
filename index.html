@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pcm">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Wey Talk</title>
+  <meta name="description" content="Data analytics wey dey talk Pidgin. Put your file, see wetin your numbers dey talk.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">📊</span>
+      <span>Data Wey Talk</span>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="pcm" aria-pressed="true">Pidgin</button>
+      <button type="button" data-lang="en" aria-pressed="false">English</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Upload -->
+    <section class="hero" id="start">
+      <h1 data-i18n="heroTitle"></h1>
+      <p class="lede" data-i18n="heroLede"></p>
+
+      <label class="drop" id="drop" for="file">
+        <input type="file" id="file" accept=".csv,text/csv,.txt">
+        <span class="drop-icon" aria-hidden="true">⬆️</span>
+        <strong data-i18n="dropTitle"></strong>
+        <span class="muted" data-i18n="dropHint"></span>
+      </label>
+
+      <div class="hero-actions">
+        <button type="button" class="btn" id="sample" data-i18n="trySample"></button>
+      </div>
+      <p class="privacy muted" data-i18n="privacy"></p>
+      <p class="error" id="error" role="alert" hidden></p>
+    </section>
+
+    <!-- Results -->
+    <section id="results" hidden>
+      <div class="file-bar">
+        <div>
+          <h2 id="fileName"></h2>
+          <p class="muted" id="fileShape"></p>
+        </div>
+        <button type="button" class="btn ghost" id="reset" data-i18n="newFile"></button>
+      </div>
+
+      <div class="controls">
+        <label>
+          <span data-i18n="pickNumber"></span>
+          <select id="numCol"></select>
+        </label>
+        <label>
+          <span data-i18n="pickGroup"></span>
+          <select id="groupCol"></select>
+        </label>
+      </div>
+
+      <h3 class="section-title" data-i18n="glance"></h3>
+      <div class="tiles" id="tiles"></div>
+
+      <h3 class="section-title" data-i18n="talking"></h3>
+      <ul class="insights" id="insights"></ul>
+
+      <div class="card" id="barCard">
+        <h3 id="barTitle"></h3>
+        <p class="muted small" data-i18n="barHint"></p>
+        <div class="bars" id="bars"></div>
+      </div>
+
+      <div class="card" id="lineCard" hidden>
+        <h3 id="lineTitle"></h3>
+        <p class="muted small" data-i18n="lineHint"></p>
+        <div class="line-wrap" id="lineWrap">
+          <div class="tooltip" id="tip" hidden></div>
+        </div>
+      </div>
+
+      <details class="card table-card">
+        <summary data-i18n="seeTable"></summary>
+        <div class="table-scroll"><table id="table"></table></div>
+        <p class="muted small" id="tableNote"></p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="muted small" data-i18n="footer"></footer>
+  <script src="app.js"></script>
+</body>
+</html>
