@@ -419,3 +419,5 @@ a.btn { display: inline-block; text-decoration: none; }
 .quiz-rules summary { cursor: pointer; font-weight: 700; color: var(--ink); min-height: 32px; }
 .quiz-rules ol { padding-left: 20px; margin: 8px 0 0; }
 .quiz-rules li { margin: 4px 0; }
+.qz-banner { background: var(--page); border: 1px solid var(--gold); border-radius: 12px; padding: 10px 14px; margin: 0 0 14px; font-weight: 600; }
+.qz-won { font-size: 18px; color: var(--up); }

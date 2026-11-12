@@ -1,11 +1,14 @@
 /**
- * Data Wey Talk — survey + quiz receiver, and monthly prize draw.
+ * Data Wey Talk — survey + quiz receiver.
+ * Quiz prize: ONE winner per month = the FIRST person that month to score above 80%.
+ * The winner is recorded automatically in the "Winners" tab and you get an email.
+ *
  * Paste into the Google Sheet: Extensions → Apps Script.
  * Deploy as a Web app (Execute as: Me, Who has access: Anyone).
  * After changing this code: Deploy → Manage deployments → Edit → New version.
  */
-const WINNERS_PER_DRAW = 5;   // keep in step with quizPrize.winners in config.js
-const PASS_MARK = 0.8;        // must score ABOVE this
+const PASS_MARK = 0.8;            // must score ABOVE this
+const TZ = "Africa/Lagos";        // month boundaries use Lagos time
 
 const SHEETS = {
   survey: {
@@ -15,18 +18,31 @@ const SHEETS = {
   },
   quiz: {
     name: "Quiz Entries",
-    headers: ["Received at", "Draw month", "Name", "Email", "Phone / WhatsApp", "Score", "Out of", "Percent",
-      "Language", "Consent", "Submitted at (device)"],
+    headers: ["Received at", "Month", "Name", "Email", "Phone / WhatsApp", "Score", "Out of", "Percent",
+      "Language", "Consent", "Winner?", "Submitted at (device)"],
   },
   winners: {
     name: "Winners",
-    headers: ["Drawn at", "Draw month", "Name", "Email", "Phone / WhatsApp", "Score", "Prize sent? (fill in)"],
+    headers: ["Won at", "Month", "Name", "Email", "Phone / WhatsApp", "Score", "Prize sent? (fill in)"],
   },
 };
 
+function thisMonth_() { return Utilities.formatDate(new Date(), TZ, "yyyy-MM"); }
+
+function monthWinner_(month) {
+  const rows = sheet_("winners").getDataRange().getValues().slice(1);
+  return rows.find((r) => String(r[1]) === month) || null;
+}
+
+/** GET ?status=1 → { month, claimed } so the site can say if this month's prize is gone. */
+function doGet(e) {
+  const month = thisMonth_();
+  return json({ ok: true, month: month, claimed: !!monthWinner_(month) });
+}
+
 function doPost(e) {
   const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
+  lock.waitLock(10000);                       // one at a time, so two people can't both be "first"
   try {
     const d = JSON.parse((e && e.postData && e.postData.contents) || "{}");
     if (d.website) return json({ ok: true });                 // honeypot: bot, ignore quietly
@@ -36,12 +52,19 @@ function doPost(e) {
       const score = Number(d.score), total = Number(d.total);
       if (!(total > 0) || !(score >= 0) || score > total) return json({ ok: false, error: "bad score" });
       if (score / total <= PASS_MARK) return json({ ok: false, error: "score not above pass mark" });
-      const month = /^\d{4}-\d{2}$/.test(d.month) ? d.month : Utilities.formatDate(new Date(), "Africa/Lagos", "yyyy-MM");
+
+      const month = thisMonth_();               // server decides the month, not the visitor's device
+      const isWinner = !monthWinner_(month);
+      const now = new Date();
       sheet_("quiz").appendRow([
-        new Date(), month, clean(d.name), clean(d.email), clean(d.phone), score, total,
-        Math.round((score / total) * 100) + "%", clean(d.language), "Yes", clean(d.submitted_at),
+        now, month, clean(d.name), clean(d.email), clean(d.phone), score, total,
+        Math.round((score / total) * 100) + "%", clean(d.language), "Yes", isWinner ? "WINNER" : "", clean(d.submitted_at),
       ]);
-      return json({ ok: true });
+      if (isWinner) {
+        sheet_("winners").appendRow([now, month, clean(d.name), clean(d.email), clean(d.phone), score + "/" + total, ""]);
+        notifyOwner_(month, d, score, total);
+      }
+      return json({ ok: true, winner: isWinner, month: month });
     }
 
     sheet_("survey").appendRow([
@@ -57,49 +80,16 @@ function doPost(e) {
   }
 }
 
-/** Adds a "Data Wey Talk" menu to the Sheet. */
-function onOpen() {
-  SpreadsheetApp.getUi().createMenu("Data Wey Talk")
-    .addItem("🎟️ Draw quiz winners…", "drawWinners")
-    .addToUi();
-}
-
-/**
- * Picks WINNERS_PER_DRAW random winners for a month (asks which; default = this month).
- * One chance per person: duplicates by email OR phone count once.
- * Winners are written to the "Winners" tab.
- */
-function drawWinners() {
-  const ui = SpreadsheetApp.getUi();
-  const thisMonth = Utilities.formatDate(new Date(), "Africa/Lagos", "yyyy-MM");
-  const resp = ui.prompt("Draw quiz winners", "Which month? (format YYYY-MM)", ui.ButtonSet.OK_CANCEL);
-  if (resp.getSelectedButton() !== ui.Button.OK) return;
-  const month = resp.getResponseText().trim() || thisMonth;
-  if (!/^\d{4}-\d{2}$/.test(month)) { ui.alert("Please type the month like " + thisMonth); return; }
-
-  const already = sheet_("winners").getDataRange().getValues().slice(1).some((r) => String(r[1]) === month);
-  if (already && ui.alert("Winners for " + month + " were already drawn. Draw again anyway?", ui.ButtonSet.YES_NO) !== ui.Button.YES) return;
-
-  const rows = sheet_("quiz").getDataRange().getValues().slice(1);
-  const seen = new Set(), pool = [];
-  rows.forEach((r) => {
-    if (String(r[1]) !== month || !(Number(r[5]) / Number(r[6]) > PASS_MARK)) return;
-    const email = String(r[3]).trim().toLowerCase(), phone = String(r[4]).replace(/\D/g, "").slice(-10);
-    if (seen.has("e:" + email) || (phone && seen.has("p:" + phone))) return;
-    seen.add("e:" + email); if (phone) seen.add("p:" + phone);
-    pool.push(r);
-  });
-  if (!pool.length) { ui.alert("No qualifying entries for " + month + "."); return; }
-
-  for (let i = pool.length - 1; i > 0; i--) {             // fair shuffle (Fisher–Yates)
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  const winners = pool.slice(0, WINNERS_PER_DRAW);
-  const ws = sheet_("winners"), at = new Date();
-  winners.forEach((r) => ws.appendRow([at, month, r[2], r[3], r[4], r[5] + "/" + r[6], ""]));
-  ui.alert(winners.length + " winner(s) drawn from " + pool.length + " qualifying people for " + month +
-    ". See the Winners tab.");
+/** Emails the Sheet owner when a month's winner comes in. */
+function notifyOwner_(month, d, score, total) {
+  try {
+    const to = Session.getEffectiveUser().getEmail();
+    if (!to) return;
+    MailApp.sendEmail(to, "🎉 Data Wey Talk quiz winner for " + month,
+      "First person to score above 80% this month:\n\n" +
+      "Name: " + clean(d.name) + "\nEmail: " + clean(d.email) + "\nPhone: " + clean(d.phone) +
+      "\nScore: " + score + "/" + total + "\n\nSend their airtime/data, then mark 'Prize sent?' in the Winners tab.");
+  } catch (err) { /* email is a bonus; never block the entry */ }
 }
 
 function sheet_(key) {
