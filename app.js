@@ -9,6 +9,8 @@ const I18N = {
     dropTitle: "Press here to choose your file",
     dropHint: "Or drag am drop for here. Na CSV file we dey take (you fit save am from Excel or Google Sheets).",
     trySample: "No get file? Try am with sample data",
+    download: "⬇️ Download sample data: Akara & Bread sales (CSV)",
+    downloadHint: "Open am for Excel, change am, come put am back here.",
     privacy: "🔒 Your file no dey comot from your phone or computer. We no dey send am go anywhere.",
     newFile: "Use another file",
     pickNumber: "Which number you wan check?",
@@ -52,6 +54,8 @@ const I18N = {
     dropTitle: "Tap here to choose your file",
     dropHint: "Or drag and drop it here. We accept CSV files (save from Excel or Google Sheets).",
     trySample: "No file? Try it with sample data",
+    download: "⬇️ Download sample data: Akara & Bread sales (CSV)",
+    downloadHint: "Open it in Excel, play with it, then upload it here.",
     privacy: "🔒 Your file never leaves your phone or computer. Nothing is uploaded.",
     newFile: "Use another file",
     pickNumber: "Which number do you want to check?",
@@ -203,9 +207,11 @@ function load(name, text) {
   if (!types.includes("number")) return showError(t("errNoNum"));
   Object.assign(state, { name, ...parsed, types });
   state.date = types.indexOf("date");
-  // Prefer a money-like column, else the last number column (often the amount).
+  // Prefer a total-money column (Amount/Sales), then any money-like column, else the last number column.
   const numIdx = types.map((tp, i) => (tp === "number" ? i : -1)).filter((i) => i >= 0);
-  state.num = numIdx.find((i) => isMoneyCol(parsed.headers[i], parsed.rows, i)) ?? numIdx[numIdx.length - 1];
+  state.num = numIdx.find((i) => /amount|sales|revenue|total|income/i.test(parsed.headers[i]))
+    ?? numIdx.find((i) => isMoneyCol(parsed.headers[i], parsed.rows, i))
+    ?? numIdx[numIdx.length - 1];
   // Group by the text column with a useful number of distinct values.
   const textIdx = types.map((tp, i) => (tp === "text" ? i : -1)).filter((i) => i >= 0);
   const scored = textIdx.map((i) => ({ i, n: new Set(parsed.rows.map((r) => r[i])).size }))
@@ -490,7 +496,17 @@ const drop = $("drop");
 ["dragenter", "dragover"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
 ["dragleave", "drop"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
 drop.addEventListener("drop", (e) => readFile(e.dataTransfer.files[0]));
-$("sample").addEventListener("click", () => load("Sample: Mama Nkechi Provisions", sampleCSV()));
+const SAMPLE_URL = "data/akara-and-bread-sales.csv";
+$("sample").addEventListener("click", async () => {
+  try {
+    const res = await fetch(SAMPLE_URL);
+    if (!res.ok) throw new Error(res.status);
+    load("akara-and-bread-sales.csv", await res.text());
+  } catch (_) {
+    // Opened straight from disk (file://) — fetch no work there, so use built-in sample.
+    load("Sample: Mama Nkechi Provisions", sampleCSV());
+  }
+});
 $("reset").addEventListener("click", () => {
   $("results").hidden = true; $("start").hidden = false; $("file").value = "";
   state.headers = [];

@@ -1,0 +1,475 @@
+Date,Day,Product,Location,Quantity,Unit Price (₦),Amount (₦)
+01/09/2026,Tuesday,Akara,Bus Stop,157,100,15700
+01/09/2026,Tuesday,Agege Bread,Bus Stop,21,1200,25200
+01/09/2026,Tuesday,Sliced Bread,Bus Stop,9,1500,13500
+01/09/2026,Tuesday,Akara,School Gate,141,100,14100
+01/09/2026,Tuesday,Agege Bread,School Gate,17,1200,20400
+01/09/2026,Tuesday,Sliced Bread,School Gate,8,1500,12000
+01/09/2026,Tuesday,Akara,Market,109,100,10900
+01/09/2026,Tuesday,Agege Bread,Market,14,1200,16800
+01/09/2026,Tuesday,Sliced Bread,Market,6,1500,9000
+02/09/2026,Wednesday,Akara,Bus Stop,164,100,16400
+02/09/2026,Wednesday,Agege Bread,Bus Stop,23,1200,27600
+02/09/2026,Wednesday,Sliced Bread,Bus Stop,11,1500,16500
+02/09/2026,Wednesday,Akara,School Gate,141,100,14100
+02/09/2026,Wednesday,Agege Bread,School Gate,18,1200,21600
+02/09/2026,Wednesday,Sliced Bread,School Gate,9,1500,13500
+02/09/2026,Wednesday,Akara,Market,89,100,8900
+02/09/2026,Wednesday,Agege Bread,Market,15,1200,18000
+02/09/2026,Wednesday,Sliced Bread,Market,7,1500,10500
+03/09/2026,Thursday,Akara,Bus Stop,163,100,16300
+03/09/2026,Thursday,Agege Bread,Bus Stop,22,1200,26400
+03/09/2026,Thursday,Sliced Bread,Bus Stop,10,1500,15000
+03/09/2026,Thursday,Akara,School Gate,101,100,10100
+03/09/2026,Thursday,Agege Bread,School Gate,17,1200,20400
+03/09/2026,Thursday,Sliced Bread,School Gate,11,1500,16500
+03/09/2026,Thursday,Akara,Market,119,100,11900
+03/09/2026,Thursday,Agege Bread,Market,14,1200,16800
+03/09/2026,Thursday,Sliced Bread,Market,6,1500,9000
+04/09/2026,Friday,Akara,Bus Stop,169,100,16900
+04/09/2026,Friday,Agege Bread,Bus Stop,25,1200,30000
+04/09/2026,Friday,Sliced Bread,Bus Stop,8,1500,12000
+04/09/2026,Friday,Akara,School Gate,141,100,14100
+04/09/2026,Friday,Agege Bread,School Gate,14,1200,16800
+04/09/2026,Friday,Sliced Bread,School Gate,6,1500,9000
+04/09/2026,Friday,Akara,Market,96,100,9600
+04/09/2026,Friday,Agege Bread,Market,13,1200,15600
+04/09/2026,Friday,Sliced Bread,Market,7,1500,10500
+05/09/2026,Saturday,Akara,Bus Stop,243,100,24300
+05/09/2026,Saturday,Agege Bread,Bus Stop,21,1200,25200
+05/09/2026,Saturday,Sliced Bread,Bus Stop,12,1500,18000
+05/09/2026,Saturday,Akara,Market,122,100,12200
+05/09/2026,Saturday,Agege Bread,Market,17,1200,20400
+05/09/2026,Saturday,Sliced Bread,Market,7,1500,10500
+06/09/2026,Sunday,Akara,Bus Stop,201,100,20100
+06/09/2026,Sunday,Agege Bread,Bus Stop,31,1200,37200
+06/09/2026,Sunday,Sliced Bread,Bus Stop,12,1500,18000
+07/09/2026,Monday,Akara,Bus Stop,174,100,17400
+07/09/2026,Monday,Agege Bread,Bus Stop,25,1200,30000
+07/09/2026,Monday,Sliced Bread,Bus Stop,10,1500,15000
+07/09/2026,Monday,Akara,School Gate,120,100,12000
+07/09/2026,Monday,Agege Bread,School Gate,16,1200,19200
+07/09/2026,Monday,Sliced Bread,School Gate,10,1500,15000
+07/09/2026,Monday,Akara,Market,116,100,11600
+07/09/2026,Monday,Agege Bread,Market,14,1200,16800
+07/09/2026,Monday,Sliced Bread,Market,8,1500,12000
+08/09/2026,Tuesday,Akara,Bus Stop,146,100,14600
+08/09/2026,Tuesday,Agege Bread,Bus Stop,19,1200,22800
+08/09/2026,Tuesday,Sliced Bread,Bus Stop,10,1500,15000
+08/09/2026,Tuesday,Akara,School Gate,162,100,16200
+08/09/2026,Tuesday,Agege Bread,School Gate,20,1200,24000
+08/09/2026,Tuesday,Sliced Bread,School Gate,12,1500,18000
+08/09/2026,Tuesday,Akara,Market,132,100,13200
+08/09/2026,Tuesday,Agege Bread,Market,15,1200,18000
+08/09/2026,Tuesday,Sliced Bread,Market,5,1500,7500
+09/09/2026,Wednesday,Akara,Bus Stop,154,100,15400
+09/09/2026,Wednesday,Agege Bread,Bus Stop,26,1200,31200
+09/09/2026,Wednesday,Sliced Bread,Bus Stop,7,1500,10500
+09/09/2026,Wednesday,Akara,School Gate,135,100,13500
+09/09/2026,Wednesday,Agege Bread,School Gate,19,1200,22800
+09/09/2026,Wednesday,Sliced Bread,School Gate,10,1500,15000
+09/09/2026,Wednesday,Akara,Market,121,100,12100
+09/09/2026,Wednesday,Agege Bread,Market,16,1200,19200
+09/09/2026,Wednesday,Sliced Bread,Market,8,1500,12000
+10/09/2026,Thursday,Akara,Bus Stop,184,100,18400
+10/09/2026,Thursday,Agege Bread,Bus Stop,21,1200,25200
+10/09/2026,Thursday,Sliced Bread,Bus Stop,9,1500,13500
+10/09/2026,Thursday,Akara,School Gate,118,100,11800
+10/09/2026,Thursday,Agege Bread,School Gate,21,1200,25200
+10/09/2026,Thursday,Sliced Bread,School Gate,10,1500,15000
+10/09/2026,Thursday,Akara,Market,108,100,10800
+10/09/2026,Thursday,Agege Bread,Market,17,1200,20400
+10/09/2026,Thursday,Sliced Bread,Market,5,1500,7500
+11/09/2026,Friday,Akara,Bus Stop,162,100,16200
+11/09/2026,Friday,Agege Bread,Bus Stop,17,1200,20400
+11/09/2026,Friday,Sliced Bread,Bus Stop,8,1500,12000
+11/09/2026,Friday,Akara,School Gate,124,100,12400
+11/09/2026,Friday,Agege Bread,School Gate,20,1200,24000
+11/09/2026,Friday,Sliced Bread,School Gate,13,1500,19500
+11/09/2026,Friday,Akara,Market,110,100,11000
+11/09/2026,Friday,Agege Bread,Market,16,1200,19200
+11/09/2026,Friday,Sliced Bread,Market,6,1500,9000
+12/09/2026,Saturday,Akara,Bus Stop,268,100,26800
+12/09/2026,Saturday,Agege Bread,Bus Stop,31,1200,37200
+12/09/2026,Saturday,Sliced Bread,Bus Stop,11,1500,16500
+12/09/2026,Saturday,Akara,Market,127,100,12700
+12/09/2026,Saturday,Agege Bread,Market,20,1200,24000
+12/09/2026,Saturday,Sliced Bread,Market,8,1500,12000
+13/09/2026,Sunday,Akara,Bus Stop,244,100,24400
+13/09/2026,Sunday,Agege Bread,Bus Stop,28,1200,33600
+13/09/2026,Sunday,Sliced Bread,Bus Stop,15,1500,22500
+14/09/2026,Monday,Akara,Bus Stop,163,100,16300
+14/09/2026,Monday,Agege Bread,Bus Stop,29,1200,34800
+14/09/2026,Monday,Sliced Bread,Bus Stop,10,1500,15000
+14/09/2026,Monday,Akara,School Gate,127,100,12700
+14/09/2026,Monday,Agege Bread,School Gate,16,1200,19200
+14/09/2026,Monday,Sliced Bread,School Gate,11,1500,16500
+14/09/2026,Monday,Akara,Market,136,100,13600
+14/09/2026,Monday,Agege Bread,Market,17,1200,20400
+14/09/2026,Monday,Sliced Bread,Market,7,1500,10500
+15/09/2026,Tuesday,Akara,Bus Stop,112,100,11200
+15/09/2026,Tuesday,Agege Bread,Bus Stop,26,1200,31200
+15/09/2026,Tuesday,Sliced Bread,Bus Stop,11,1500,16500
+15/09/2026,Tuesday,Akara,School Gate,127,100,12700
+15/09/2026,Tuesday,Agege Bread,School Gate,17,1200,20400
+15/09/2026,Tuesday,Sliced Bread,School Gate,11,1500,16500
+15/09/2026,Tuesday,Akara,Market,142,100,14200
+15/09/2026,Tuesday,Agege Bread,Market,13,1200,15600
+15/09/2026,Tuesday,Sliced Bread,Market,6,1500,9000
+16/09/2026,Wednesday,Akara,Bus Stop,210,100,21000
+16/09/2026,Wednesday,Agege Bread,Bus Stop,22,1200,26400
+16/09/2026,Wednesday,Sliced Bread,Bus Stop,9,1500,13500
+16/09/2026,Wednesday,Akara,School Gate,142,100,14200
+16/09/2026,Wednesday,Agege Bread,School Gate,16,1200,19200
+16/09/2026,Wednesday,Sliced Bread,School Gate,11,1500,16500
+16/09/2026,Wednesday,Akara,Market,93,100,9300
+16/09/2026,Wednesday,Agege Bread,Market,18,1200,21600
+16/09/2026,Wednesday,Sliced Bread,Market,6,1500,9000
+17/09/2026,Thursday,Akara,Bus Stop,235,100,23500
+17/09/2026,Thursday,Agege Bread,Bus Stop,25,1200,30000
+17/09/2026,Thursday,Sliced Bread,Bus Stop,12,1500,18000
+17/09/2026,Thursday,Akara,School Gate,113,100,11300
+17/09/2026,Thursday,Agege Bread,School Gate,19,1200,22800
+17/09/2026,Thursday,Sliced Bread,School Gate,12,1500,18000
+17/09/2026,Thursday,Akara,Market,144,100,14400
+17/09/2026,Thursday,Agege Bread,Market,12,1200,14400
+17/09/2026,Thursday,Sliced Bread,Market,7,1500,10500
+18/09/2026,Friday,Akara,Bus Stop,192,100,19200
+18/09/2026,Friday,Agege Bread,Bus Stop,30,1200,36000
+18/09/2026,Friday,Sliced Bread,Bus Stop,11,1500,16500
+18/09/2026,Friday,Akara,School Gate,142,100,14200
+18/09/2026,Friday,Agege Bread,School Gate,18,1200,21600
+18/09/2026,Friday,Sliced Bread,School Gate,9,1500,13500
+18/09/2026,Friday,Akara,Market,118,100,11800
+18/09/2026,Friday,Agege Bread,Market,15,1200,18000
+18/09/2026,Friday,Sliced Bread,Market,8,1500,12000
+19/09/2026,Saturday,Akara,Bus Stop,217,100,21700
+19/09/2026,Saturday,Agege Bread,Bus Stop,29,1200,34800
+19/09/2026,Saturday,Sliced Bread,Bus Stop,9,1500,13500
+19/09/2026,Saturday,Akara,Market,146,100,14600
+19/09/2026,Saturday,Agege Bread,Market,19,1200,22800
+19/09/2026,Saturday,Sliced Bread,Market,8,1500,12000
+20/09/2026,Sunday,Akara,Bus Stop,260,100,26000
+20/09/2026,Sunday,Agege Bread,Bus Stop,29,1200,34800
+20/09/2026,Sunday,Sliced Bread,Bus Stop,10,1500,15000
+21/09/2026,Monday,Akara,Bus Stop,192,100,19200
+21/09/2026,Monday,Agege Bread,Bus Stop,27,1200,32400
+21/09/2026,Monday,Sliced Bread,Bus Stop,11,1500,16500
+21/09/2026,Monday,Akara,School Gate,128,100,12800
+21/09/2026,Monday,Agege Bread,School Gate,23,1200,27600
+21/09/2026,Monday,Sliced Bread,School Gate,11,1500,16500
+21/09/2026,Monday,Akara,Market,129,100,12900
+21/09/2026,Monday,Agege Bread,Market,19,1200,22800
+21/09/2026,Monday,Sliced Bread,Market,7,1500,10500
+22/09/2026,Tuesday,Akara,Bus Stop,188,100,18800
+22/09/2026,Tuesday,Agege Bread,Bus Stop,33,1200,39600
+22/09/2026,Tuesday,Sliced Bread,Bus Stop,11,1500,16500
+22/09/2026,Tuesday,Akara,School Gate,138,100,13800
+22/09/2026,Tuesday,Agege Bread,School Gate,20,1200,24000
+22/09/2026,Tuesday,Sliced Bread,School Gate,14,1500,21000
+22/09/2026,Tuesday,Akara,Market,119,100,11900
+22/09/2026,Tuesday,Agege Bread,Market,17,1200,20400
+22/09/2026,Tuesday,Sliced Bread,Market,8,1500,12000
+23/09/2026,Wednesday,Akara,Bus Stop,167,100,16700
+23/09/2026,Wednesday,Agege Bread,Bus Stop,18,1200,21600
+23/09/2026,Wednesday,Sliced Bread,Bus Stop,11,1500,16500
+23/09/2026,Wednesday,Akara,School Gate,150,100,15000
+23/09/2026,Wednesday,Agege Bread,School Gate,18,1200,21600
+23/09/2026,Wednesday,Sliced Bread,School Gate,13,1500,19500
+23/09/2026,Wednesday,Akara,Market,128,100,12800
+23/09/2026,Wednesday,Agege Bread,Market,14,1200,16800
+23/09/2026,Wednesday,Sliced Bread,Market,7,1500,10500
+24/09/2026,Thursday,Akara,Bus Stop,177,100,17700
+24/09/2026,Thursday,Agege Bread,Bus Stop,19,1200,22800
+24/09/2026,Thursday,Sliced Bread,Bus Stop,11,1500,16500
+24/09/2026,Thursday,Akara,School Gate,145,100,14500
+24/09/2026,Thursday,Agege Bread,School Gate,18,1200,21600
+24/09/2026,Thursday,Sliced Bread,School Gate,12,1500,18000
+24/09/2026,Thursday,Akara,Market,127,100,12700
+24/09/2026,Thursday,Agege Bread,Market,15,1200,18000
+24/09/2026,Thursday,Sliced Bread,Market,7,1500,10500
+25/09/2026,Friday,Akara,Bus Stop,211,100,21100
+25/09/2026,Friday,Agege Bread,Bus Stop,22,1200,26400
+25/09/2026,Friday,Sliced Bread,Bus Stop,11,1500,16500
+25/09/2026,Friday,Akara,School Gate,146,100,14600
+25/09/2026,Friday,Agege Bread,School Gate,27,1200,32400
+25/09/2026,Friday,Sliced Bread,School Gate,8,1500,12000
+25/09/2026,Friday,Akara,Market,131,100,13100
+25/09/2026,Friday,Agege Bread,Market,16,1200,19200
+25/09/2026,Friday,Sliced Bread,Market,7,1500,10500
+26/09/2026,Saturday,Akara,Bus Stop,319,100,31900
+26/09/2026,Saturday,Agege Bread,Bus Stop,29,1200,34800
+26/09/2026,Saturday,Sliced Bread,Bus Stop,16,1500,24000
+26/09/2026,Saturday,Akara,Market,151,100,15100
+26/09/2026,Saturday,Agege Bread,Market,20,1200,24000
+26/09/2026,Saturday,Sliced Bread,Market,7,1500,10500
+27/09/2026,Sunday,Akara,Bus Stop,199,100,19900
+27/09/2026,Sunday,Agege Bread,Bus Stop,31,1200,37200
+27/09/2026,Sunday,Sliced Bread,Bus Stop,12,1500,18000
+28/09/2026,Monday,Akara,Bus Stop,192,100,19200
+28/09/2026,Monday,Agege Bread,Bus Stop,17,1200,20400
+28/09/2026,Monday,Sliced Bread,Bus Stop,14,1500,21000
+28/09/2026,Monday,Akara,School Gate,145,100,14500
+28/09/2026,Monday,Agege Bread,School Gate,26,1200,31200
+28/09/2026,Monday,Sliced Bread,School Gate,10,1500,15000
+28/09/2026,Monday,Akara,Market,126,100,12600
+28/09/2026,Monday,Agege Bread,Market,25,1200,30000
+28/09/2026,Monday,Sliced Bread,Market,6,1500,9000
+29/09/2026,Tuesday,Akara,Bus Stop,145,100,14500
+29/09/2026,Tuesday,Agege Bread,Bus Stop,24,1200,28800
+29/09/2026,Tuesday,Sliced Bread,Bus Stop,11,1500,16500
+29/09/2026,Tuesday,Akara,School Gate,165,100,16500
+29/09/2026,Tuesday,Agege Bread,School Gate,25,1200,30000
+29/09/2026,Tuesday,Sliced Bread,School Gate,11,1500,16500
+29/09/2026,Tuesday,Akara,Market,92,100,9200
+29/09/2026,Tuesday,Agege Bread,Market,16,1200,19200
+29/09/2026,Tuesday,Sliced Bread,Market,8,1500,12000
+30/09/2026,Wednesday,Akara,Bus Stop,201,100,20100
+30/09/2026,Wednesday,Agege Bread,Bus Stop,18,1200,21600
+30/09/2026,Wednesday,Sliced Bread,Bus Stop,11,1500,16500
+30/09/2026,Wednesday,Akara,School Gate,182,100,18200
+30/09/2026,Wednesday,Agege Bread,School Gate,27,1200,32400
+30/09/2026,Wednesday,Sliced Bread,School Gate,13,1500,19500
+30/09/2026,Wednesday,Akara,Market,128,100,12800
+30/09/2026,Wednesday,Agege Bread,Market,14,1200,16800
+30/09/2026,Wednesday,Sliced Bread,Market,6,1500,9000
+01/10/2026,Thursday,Akara,Bus Stop,76,120,9120
+01/10/2026,Thursday,Agege Bread,Bus Stop,11,1200,13200
+01/10/2026,Thursday,Sliced Bread,Bus Stop,5,1500,7500
+01/10/2026,Thursday,Akara,School Gate,56,120,6720
+01/10/2026,Thursday,Agege Bread,School Gate,7,1200,8400
+01/10/2026,Thursday,Sliced Bread,School Gate,4,1500,6000
+01/10/2026,Thursday,Akara,Market,41,120,4920
+01/10/2026,Thursday,Agege Bread,Market,7,1200,8400
+01/10/2026,Thursday,Sliced Bread,Market,2,1500,3000
+02/10/2026,Friday,Akara,Bus Stop,180,120,21600
+02/10/2026,Friday,Agege Bread,Bus Stop,28,1200,33600
+02/10/2026,Friday,Sliced Bread,Bus Stop,13,1500,19500
+02/10/2026,Friday,Akara,School Gate,153,120,18360
+02/10/2026,Friday,Agege Bread,School Gate,24,1200,28800
+02/10/2026,Friday,Sliced Bread,School Gate,11,1500,16500
+02/10/2026,Friday,Akara,Market,110,120,13200
+02/10/2026,Friday,Agege Bread,Market,15,1200,18000
+02/10/2026,Friday,Sliced Bread,Market,9,1500,13500
+03/10/2026,Saturday,Akara,Bus Stop,296,120,35520
+03/10/2026,Saturday,Agege Bread,Bus Stop,32,1200,38400
+03/10/2026,Saturday,Sliced Bread,Bus Stop,19,1500,28500
+03/10/2026,Saturday,Akara,Market,167,120,20040
+03/10/2026,Saturday,Agege Bread,Market,21,1200,25200
+03/10/2026,Saturday,Sliced Bread,Market,8,1500,12000
+04/10/2026,Sunday,Akara,Bus Stop,222,120,26640
+04/10/2026,Sunday,Agege Bread,Bus Stop,43,1200,51600
+04/10/2026,Sunday,Sliced Bread,Bus Stop,16,1500,24000
+05/10/2026,Monday,Akara,Bus Stop,152,120,18240
+05/10/2026,Monday,Agege Bread,Bus Stop,25,1200,30000
+05/10/2026,Monday,Sliced Bread,Bus Stop,12,1500,18000
+05/10/2026,Monday,Akara,School Gate,172,120,20640
+05/10/2026,Monday,Agege Bread,School Gate,17,1200,20400
+05/10/2026,Monday,Sliced Bread,School Gate,8,1500,12000
+05/10/2026,Monday,Akara,Market,89,120,10680
+05/10/2026,Monday,Agege Bread,Market,17,1200,20400
+05/10/2026,Monday,Sliced Bread,Market,7,1500,10500
+06/10/2026,Tuesday,Akara,Bus Stop,204,120,24480
+06/10/2026,Tuesday,Agege Bread,Bus Stop,24,1200,28800
+06/10/2026,Tuesday,Sliced Bread,Bus Stop,9,1500,13500
+06/10/2026,Tuesday,Akara,School Gate,108,120,12960
+06/10/2026,Tuesday,Agege Bread,School Gate,22,1200,26400
+06/10/2026,Tuesday,Sliced Bread,School Gate,13,1500,19500
+06/10/2026,Tuesday,Akara,Market,145,120,17400
+06/10/2026,Tuesday,Agege Bread,Market,19,1200,22800
+06/10/2026,Tuesday,Sliced Bread,Market,7,1500,10500
+07/10/2026,Wednesday,Akara,Bus Stop,234,120,28080
+07/10/2026,Wednesday,Agege Bread,Bus Stop,26,1200,31200
+07/10/2026,Wednesday,Sliced Bread,Bus Stop,10,1500,15000
+07/10/2026,Wednesday,Akara,School Gate,143,120,17160
+07/10/2026,Wednesday,Agege Bread,School Gate,20,1200,24000
+07/10/2026,Wednesday,Sliced Bread,School Gate,8,1500,12000
+07/10/2026,Wednesday,Akara,Market,129,120,15480
+07/10/2026,Wednesday,Agege Bread,Market,18,1200,21600
+07/10/2026,Wednesday,Sliced Bread,Market,7,1500,10500
+08/10/2026,Thursday,Akara,Bus Stop,175,120,21000
+08/10/2026,Thursday,Agege Bread,Bus Stop,28,1200,33600
+08/10/2026,Thursday,Sliced Bread,Bus Stop,14,1500,21000
+08/10/2026,Thursday,Akara,School Gate,157,120,18840
+08/10/2026,Thursday,Agege Bread,School Gate,20,1200,24000
+08/10/2026,Thursday,Sliced Bread,School Gate,11,1500,16500
+08/10/2026,Thursday,Akara,Market,126,120,15120
+08/10/2026,Thursday,Agege Bread,Market,14,1200,16800
+08/10/2026,Thursday,Sliced Bread,Market,7,1500,10500
+09/10/2026,Friday,Akara,Bus Stop,198,120,23760
+09/10/2026,Friday,Agege Bread,Bus Stop,34,1200,40800
+09/10/2026,Friday,Sliced Bread,Bus Stop,13,1500,19500
+09/10/2026,Friday,Akara,School Gate,182,120,21840
+09/10/2026,Friday,Agege Bread,School Gate,19,1200,22800
+09/10/2026,Friday,Sliced Bread,School Gate,14,1500,21000
+09/10/2026,Friday,Akara,Market,106,120,12720
+09/10/2026,Friday,Agege Bread,Market,18,1200,21600
+09/10/2026,Friday,Sliced Bread,Market,8,1500,12000
+10/10/2026,Saturday,Akara,Bus Stop,236,120,28320
+10/10/2026,Saturday,Agege Bread,Bus Stop,41,1200,49200
+10/10/2026,Saturday,Sliced Bread,Bus Stop,14,1500,21000
+10/10/2026,Saturday,Akara,Market,124,120,14880
+10/10/2026,Saturday,Agege Bread,Market,22,1200,26400
+10/10/2026,Saturday,Sliced Bread,Market,8,1500,12000
+11/10/2026,Sunday,Akara,Bus Stop,238,120,28560
+11/10/2026,Sunday,Agege Bread,Bus Stop,35,1200,42000
+11/10/2026,Sunday,Sliced Bread,Bus Stop,14,1500,21000
+12/10/2026,Monday,Akara,Bus Stop,138,120,16560
+12/10/2026,Monday,Agege Bread,Bus Stop,23,1200,27600
+12/10/2026,Monday,Sliced Bread,Bus Stop,13,1500,19500
+12/10/2026,Monday,Akara,School Gate,191,120,22920
+12/10/2026,Monday,Agege Bread,School Gate,28,1200,33600
+12/10/2026,Monday,Sliced Bread,School Gate,16,1500,24000
+12/10/2026,Monday,Akara,Market,90,120,10800
+12/10/2026,Monday,Agege Bread,Market,20,1200,24000
+12/10/2026,Monday,Sliced Bread,Market,5,1500,7500
+13/10/2026,Tuesday,Akara,Bus Stop,249,120,29880
+13/10/2026,Tuesday,Agege Bread,Bus Stop,29,1200,34800
+13/10/2026,Tuesday,Sliced Bread,Bus Stop,9,1500,13500
+13/10/2026,Tuesday,Akara,School Gate,209,120,25080
+13/10/2026,Tuesday,Agege Bread,School Gate,24,1200,28800
+13/10/2026,Tuesday,Sliced Bread,School Gate,9,1500,13500
+13/10/2026,Tuesday,Akara,Market,136,120,16320
+13/10/2026,Tuesday,Agege Bread,Market,16,1200,19200
+13/10/2026,Tuesday,Sliced Bread,Market,7,1500,10500
+14/10/2026,Wednesday,Akara,Bus Stop,187,120,22440
+14/10/2026,Wednesday,Agege Bread,Bus Stop,33,1200,39600
+14/10/2026,Wednesday,Sliced Bread,Bus Stop,9,1500,13500
+14/10/2026,Wednesday,Akara,School Gate,169,120,20280
+14/10/2026,Wednesday,Agege Bread,School Gate,28,1200,33600
+14/10/2026,Wednesday,Sliced Bread,School Gate,11,1500,16500
+14/10/2026,Wednesday,Akara,Market,135,120,16200
+14/10/2026,Wednesday,Agege Bread,Market,19,1200,22800
+14/10/2026,Wednesday,Sliced Bread,Market,7,1500,10500
+15/10/2026,Thursday,Akara,Bus Stop,222,120,26640
+15/10/2026,Thursday,Agege Bread,Bus Stop,28,1200,33600
+15/10/2026,Thursday,Sliced Bread,Bus Stop,10,1500,15000
+15/10/2026,Thursday,Akara,School Gate,205,120,24600
+15/10/2026,Thursday,Agege Bread,School Gate,25,1200,30000
+15/10/2026,Thursday,Sliced Bread,School Gate,12,1500,18000
+15/10/2026,Thursday,Akara,Market,119,120,14280
+15/10/2026,Thursday,Agege Bread,Market,16,1200,19200
+15/10/2026,Thursday,Sliced Bread,Market,9,1500,13500
+16/10/2026,Friday,Akara,Bus Stop,199,120,23880
+16/10/2026,Friday,Agege Bread,Bus Stop,30,1200,36000
+16/10/2026,Friday,Sliced Bread,Bus Stop,11,1500,16500
+16/10/2026,Friday,Akara,School Gate,178,120,21360
+16/10/2026,Friday,Agege Bread,School Gate,22,1200,26400
+16/10/2026,Friday,Sliced Bread,School Gate,14,1500,21000
+16/10/2026,Friday,Akara,Market,128,120,15360
+16/10/2026,Friday,Agege Bread,Market,20,1200,24000
+16/10/2026,Friday,Sliced Bread,Market,8,1500,12000
+17/10/2026,Saturday,Akara,Bus Stop,271,120,32520
+17/10/2026,Saturday,Agege Bread,Bus Stop,28,1200,33600
+17/10/2026,Saturday,Sliced Bread,Bus Stop,11,1500,16500
+17/10/2026,Saturday,Akara,Market,159,120,19080
+17/10/2026,Saturday,Agege Bread,Market,18,1200,21600
+17/10/2026,Saturday,Sliced Bread,Market,10,1500,15000
+18/10/2026,Sunday,Akara,Bus Stop,244,120,29280
+18/10/2026,Sunday,Agege Bread,Bus Stop,42,1200,50400
+18/10/2026,Sunday,Sliced Bread,Bus Stop,19,1500,28500
+19/10/2026,Monday,Akara,Bus Stop,207,120,24840
+19/10/2026,Monday,Agege Bread,Bus Stop,22,1200,26400
+19/10/2026,Monday,Sliced Bread,Bus Stop,11,1500,16500
+19/10/2026,Monday,Akara,School Gate,163,120,19560
+19/10/2026,Monday,Agege Bread,School Gate,18,1200,21600
+19/10/2026,Monday,Sliced Bread,School Gate,12,1500,18000
+19/10/2026,Monday,Akara,Market,140,120,16800
+19/10/2026,Monday,Agege Bread,Market,17,1200,20400
+19/10/2026,Monday,Sliced Bread,Market,7,1500,10500
+20/10/2026,Tuesday,Akara,Bus Stop,183,120,21960
+20/10/2026,Tuesday,Agege Bread,Bus Stop,36,1200,43200
+20/10/2026,Tuesday,Sliced Bread,Bus Stop,11,1500,16500
+20/10/2026,Tuesday,Akara,School Gate,145,120,17400
+20/10/2026,Tuesday,Agege Bread,School Gate,22,1200,26400
+20/10/2026,Tuesday,Sliced Bread,School Gate,15,1500,22500
+20/10/2026,Tuesday,Akara,Market,121,120,14520
+20/10/2026,Tuesday,Agege Bread,Market,20,1200,24000
+20/10/2026,Tuesday,Sliced Bread,Market,8,1500,12000
+21/10/2026,Wednesday,Akara,Bus Stop,231,120,27720
+21/10/2026,Wednesday,Agege Bread,Bus Stop,35,1200,42000
+21/10/2026,Wednesday,Sliced Bread,Bus Stop,11,1500,16500
+21/10/2026,Wednesday,Akara,School Gate,195,120,23400
+21/10/2026,Wednesday,Agege Bread,School Gate,20,1200,24000
+21/10/2026,Wednesday,Sliced Bread,School Gate,12,1500,18000
+21/10/2026,Wednesday,Akara,Market,159,120,19080
+21/10/2026,Wednesday,Agege Bread,Market,21,1200,25200
+21/10/2026,Wednesday,Sliced Bread,Market,8,1500,12000
+22/10/2026,Thursday,Akara,Bus Stop,172,120,20640
+22/10/2026,Thursday,Agege Bread,Bus Stop,31,1200,37200
+22/10/2026,Thursday,Sliced Bread,Bus Stop,11,1500,16500
+22/10/2026,Thursday,Akara,School Gate,144,120,17280
+22/10/2026,Thursday,Agege Bread,School Gate,21,1200,25200
+22/10/2026,Thursday,Sliced Bread,School Gate,14,1500,21000
+22/10/2026,Thursday,Akara,Market,93,120,11160
+22/10/2026,Thursday,Agege Bread,Market,20,1200,24000
+22/10/2026,Thursday,Sliced Bread,Market,8,1500,12000
+23/10/2026,Friday,Akara,Bus Stop,192,120,23040
+23/10/2026,Friday,Agege Bread,Bus Stop,33,1200,39600
+23/10/2026,Friday,Sliced Bread,Bus Stop,13,1500,19500
+23/10/2026,Friday,Akara,School Gate,153,120,18360
+23/10/2026,Friday,Agege Bread,School Gate,21,1200,25200
+23/10/2026,Friday,Sliced Bread,School Gate,15,1500,22500
+23/10/2026,Friday,Akara,Market,105,120,12600
+23/10/2026,Friday,Agege Bread,Market,18,1200,21600
+23/10/2026,Friday,Sliced Bread,Market,7,1500,10500
+24/10/2026,Saturday,Akara,Bus Stop,288,120,34560
+24/10/2026,Saturday,Agege Bread,Bus Stop,34,1200,40800
+24/10/2026,Saturday,Sliced Bread,Bus Stop,14,1500,21000
+24/10/2026,Saturday,Akara,Market,217,120,26040
+24/10/2026,Saturday,Agege Bread,Market,22,1200,26400
+24/10/2026,Saturday,Sliced Bread,Market,8,1500,12000
+25/10/2026,Sunday,Akara,Bus Stop,208,120,24960
+25/10/2026,Sunday,Agege Bread,Bus Stop,39,1200,46800
+25/10/2026,Sunday,Sliced Bread,Bus Stop,15,1500,22500
+26/10/2026,Monday,Akara,Bus Stop,259,120,31080
+26/10/2026,Monday,Agege Bread,Bus Stop,26,1200,31200
+26/10/2026,Monday,Sliced Bread,Bus Stop,12,1500,18000
+26/10/2026,Monday,Akara,School Gate,169,120,20280
+26/10/2026,Monday,Agege Bread,School Gate,23,1200,27600
+26/10/2026,Monday,Sliced Bread,School Gate,13,1500,19500
+26/10/2026,Monday,Akara,Market,103,120,12360
+26/10/2026,Monday,Agege Bread,Market,21,1200,25200
+26/10/2026,Monday,Sliced Bread,Market,9,1500,13500
+27/10/2026,Tuesday,Akara,Bus Stop,250,120,30000
+27/10/2026,Tuesday,Agege Bread,Bus Stop,39,1200,46800
+27/10/2026,Tuesday,Sliced Bread,Bus Stop,11,1500,16500
+27/10/2026,Tuesday,Akara,School Gate,170,120,20400
+27/10/2026,Tuesday,Agege Bread,School Gate,24,1200,28800
+27/10/2026,Tuesday,Sliced Bread,School Gate,17,1500,25500
+27/10/2026,Tuesday,Akara,Market,103,120,12360
+27/10/2026,Tuesday,Agege Bread,Market,20,1200,24000
+27/10/2026,Tuesday,Sliced Bread,Market,6,1500,9000
+28/10/2026,Wednesday,Akara,Bus Stop,132,120,15840
+28/10/2026,Wednesday,Agege Bread,Bus Stop,21,1200,25200
+28/10/2026,Wednesday,Sliced Bread,Bus Stop,10,1500,15000
+28/10/2026,Wednesday,Akara,School Gate,199,120,23880
+28/10/2026,Wednesday,Agege Bread,School Gate,21,1200,25200
+28/10/2026,Wednesday,Sliced Bread,School Gate,13,1500,19500
+28/10/2026,Wednesday,Akara,Market,115,120,13800
+28/10/2026,Wednesday,Agege Bread,Market,21,1200,25200
+28/10/2026,Wednesday,Sliced Bread,Market,7,1500,10500
+29/10/2026,Thursday,Akara,Bus Stop,258,120,30960
+29/10/2026,Thursday,Agege Bread,Bus Stop,25,1200,30000
+29/10/2026,Thursday,Sliced Bread,Bus Stop,11,1500,16500
+29/10/2026,Thursday,Akara,School Gate,176,120,21120
+29/10/2026,Thursday,Agege Bread,School Gate,24,1200,28800
+29/10/2026,Thursday,Sliced Bread,School Gate,16,1500,24000
+29/10/2026,Thursday,Akara,Market,143,120,17160
+29/10/2026,Thursday,Agege Bread,Market,16,1200,19200
+29/10/2026,Thursday,Sliced Bread,Market,7,1500,10500
+30/10/2026,Friday,Akara,Bus Stop,198,120,23760
+30/10/2026,Friday,Agege Bread,Bus Stop,33,1200,39600
+30/10/2026,Friday,Sliced Bread,Bus Stop,13,1500,19500
+30/10/2026,Friday,Akara,School Gate,170,120,20400
+30/10/2026,Friday,Agege Bread,School Gate,27,1200,32400
+30/10/2026,Friday,Sliced Bread,School Gate,13,1500,19500
+30/10/2026,Friday,Akara,Market,138,120,16560
+30/10/2026,Friday,Agege Bread,Market,20,1200,24000
+30/10/2026,Friday,Sliced Bread,Market,10,1500,15000
+31/10/2026,Saturday,Akara,Bus Stop,289,120,34680
+31/10/2026,Saturday,Agege Bread,Bus Stop,33,1200,39600
+31/10/2026,Saturday,Sliced Bread,Bus Stop,12,1500,18000
+31/10/2026,Saturday,Akara,Market,211,120,25320
+31/10/2026,Saturday,Agege Bread,Market,20,1200,24000
+31/10/2026,Saturday,Sliced Bread,Market,10,1500,15000

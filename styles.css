@@ -89,6 +89,8 @@ h1, h2, h3 { line-height: 1.2; margin: 0; }
 .drop strong { font-size: 18px; }
 .hero-actions { margin-top: 16px; }
 .privacy { font-size: 14px; margin-top: 14px; }
+.download { margin-top: 18px; }
+.download a { color: var(--accent); font-weight: 600; text-underline-offset: 3px; display: inline-block; padding: 6px 0; }
 .error { color: var(--down); font-weight: 600; }
 
 .btn {
