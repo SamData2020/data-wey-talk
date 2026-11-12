@@ -198,6 +198,8 @@ const COUNTRIES = [
     btn.disabled = false;
     btn.textContent = t("svSubmit");
     store.set(DONE_KEY, JSON.stringify({ at: payload.submitted_at, name: payload.name }));
+    // Remember contact details on this device only, to prefill the quiz prize-draw entry.
+    store.set("dwt-profile", JSON.stringify({ name: payload.name, email: payload.email, phone: payload.phone }));
     setUnlocked(payload.name);
     if (/[?&]sample\b/.test(location.search)) $("sample").click();
   });

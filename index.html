@@ -31,6 +31,7 @@
       <a href="#start" data-i18n="navTool"></a>
       <a href="#learn" data-i18n="navLessons"></a>
       <a href="#curriculum" data-i18n="navCurriculum"></a>
+      <a href="#quiz" data-i18n="navQuiz"></a>
       <a href="#about" data-i18n="navAbout"></a>
     </nav>
   </header>
@@ -219,6 +220,20 @@
       <p class="cta-row"><a class="btn" href="#start" data-i18n="curCta"></a></p>
     </section>
 
+    <!-- Quiz -->
+    <section class="quiz" id="quiz">
+      <div class="quiz-head">
+        <p class="eyebrow" data-i18n="qzEyebrow"></p>
+        <h2 id="qzTitle"></h2>
+        <p id="qzLede"></p>
+      </div>
+      <div class="quiz-box" id="quizBox" aria-live="polite"></div>
+      <details class="quiz-rules">
+        <summary id="qzRulesTitle"></summary>
+        <ol id="qzRules"></ol>
+      </details>
+    </section>
+
     <!-- CSR -->
     <section class="csr" id="about">
       <img class="csr-logo" src="assets/scitylana-logo.jpg" alt="Scitylana — Remodeling the Future" width="160" height="160">
@@ -242,6 +257,7 @@
   <script src="config.js"></script>
   <script src="app.js"></script>
   <script src="survey.js"></script>
+  <script src="quiz.js"></script>
   <script src="curriculum.js"></script>
 </body>
 </html>
