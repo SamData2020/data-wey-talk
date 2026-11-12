@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data Wey Talk · Scitylana</title>
-  <meta name="description" content="Free data analytics wey dey talk Pidgin — a Scitylana Academy CSR initiative. Put your file, see wetin your numbers dey talk.">
+  <meta name="description" content="Free data analytics wey dey talk Pidgin — a Scitylana Academy CSR initiative. Learn data analytics and see wetin your business numbers dey talk.">
   <meta name="theme-color" content="#760308">
   <link rel="icon" href="assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,10 +27,16 @@
         <button type="button" data-lang="en" aria-pressed="false">English</button>
       </div>
     </div>
+    <nav class="subnav" aria-label="Sections">
+      <a href="#start" data-i18n="navTool"></a>
+      <a href="#learn" data-i18n="navLessons"></a>
+      <a href="#curriculum" data-i18n="navCurriculum"></a>
+      <a href="#about" data-i18n="navAbout"></a>
+    </nav>
   </header>
 
   <!-- Hero -->
-  <section class="hero-band" id="heroBand">
+  <section class="hero-band">
     <div class="hero">
       <p class="eyebrow" data-i18n="eyebrow"></p>
       <h1 data-i18n="heroTitle"></h1>
@@ -39,24 +45,100 @@
   </section>
 
   <main>
-    <!-- Upload -->
     <section class="upload" id="start">
-      <label class="drop" id="drop" for="file">
-        <input type="file" id="file" accept=".csv,text/csv,.txt">
-        <span class="drop-icon" aria-hidden="true">⬆️</span>
-        <strong data-i18n="dropTitle"></strong>
-        <span class="muted" data-i18n="dropHint"></span>
-      </label>
+      <!-- Step 1: survey -->
+      <form id="survey" class="survey" novalidate>
+        <h2 data-i18n="svTitle"></h2>
+        <p class="muted" data-i18n="svLede"></p>
 
-      <div class="hero-actions">
-        <button type="button" class="btn" id="sample" data-i18n="trySample"></button>
+        <fieldset>
+          <legend data-i18n="svGoals"></legend>
+          <label class="check"><input type="checkbox" name="goal_business"><span data-i18n="svGoalBusiness"></span></label>
+          <label class="check"><input type="checkbox" name="goal_analyst"><span data-i18n="svGoalAnalyst"></span></label>
+          <label class="check"><input type="checkbox" name="goal_learn"><span data-i18n="svGoalLearn"></span></label>
+          <label class="check"><input type="checkbox" name="goal_help"><span data-i18n="svGoalHelp"></span></label>
+        </fieldset>
+
+        <div class="follow" id="svBizBlock" hidden>
+          <label class="field"><span data-i18n="svBizType"></span>
+            <select id="svBizType">
+              <option value="" data-i18n="svPick"></option>
+              <option value="food" data-i18n="bt_food"></option>
+              <option value="retail" data-i18n="bt_retail"></option>
+              <option value="fashion" data-i18n="bt_fashion"></option>
+              <option value="beauty" data-i18n="bt_beauty"></option>
+              <option value="agro" data-i18n="bt_agro"></option>
+              <option value="transport" data-i18n="bt_transport"></option>
+              <option value="pos" data-i18n="bt_pos"></option>
+              <option value="electronics" data-i18n="bt_electronics"></option>
+              <option value="services" data-i18n="bt_services"></option>
+              <option value="other" data-i18n="bt_other"></option>
+            </select>
+          </label>
+          <label class="field"><span data-i18n="svBizSize"></span>
+            <select id="svBizSize">
+              <option value="" data-i18n="svPick"></option>
+              <option value="1" data-i18n="bs_1"></option>
+              <option value="2-5" data-i18n="bs_2"></option>
+              <option value="6-20" data-i18n="bs_6"></option>
+              <option value="20+" data-i18n="bs_20"></option>
+            </select>
+          </label>
+        </div>
+
+        <div class="follow" id="svLevelBlock" hidden>
+          <label class="field"><span data-i18n="svLevel"></span>
+            <select id="svLevel">
+              <option value="" data-i18n="svPick"></option>
+              <option value="beginner" data-i18n="lv_new"></option>
+              <option value="some-excel" data-i18n="lv_some"></option>
+              <option value="working" data-i18n="lv_work"></option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid2">
+          <label class="field"><span data-i18n="svName"></span>
+            <input id="svName" type="text" autocomplete="name" maxlength="100"></label>
+          <label class="field"><span><span data-i18n="svEmail"></span> *</span>
+            <input id="svEmail" type="email" autocomplete="email" inputmode="email" maxlength="120" required></label>
+          <label class="field"><span><span data-i18n="svCountry"></span> *</span>
+            <select id="svCountry" autocomplete="country-name" required></select></label>
+          <label class="field"><span><span data-i18n="svCity"></span> *</span>
+            <input id="svCity" type="text" autocomplete="address-level2" maxlength="80" required></label>
+          <label class="field wide"><span><span data-i18n="svPhone"></span> *</span>
+            <input id="svPhone" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="+234 803 123 4567" required></label>
+        </div>
+
+        <!-- Honeypot: hidden from people, bots fill it -->
+        <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+
+        <label class="check consent"><input type="checkbox" name="consent"><span data-i18n="svConsent"></span></label>
+
+        <p class="error" id="svError" role="alert" hidden></p>
+        <button type="submit" class="btn" id="svSubmit" data-i18n="svSubmit"></button>
+        <p class="privacy muted" data-i18n="svPrivacy"></p>
+      </form>
+
+      <!-- Step 2: the tool -->
+      <div id="tool" hidden>
+        <p class="thanks" id="svThanks" hidden></p>
+        <label class="drop" id="drop" for="file">
+          <input type="file" id="file" accept=".csv,text/csv,.txt">
+          <span class="drop-icon" aria-hidden="true">⬆️</span>
+          <strong data-i18n="dropTitle"></strong>
+          <span class="muted" data-i18n="dropHint"></span>
+        </label>
+        <div class="hero-actions">
+          <button type="button" class="btn" id="sample" data-i18n="trySample"></button>
+        </div>
+        <p class="download">
+          <a href="data/akara-and-bread-sales.csv" download data-i18n="download"></a><br>
+          <span class="muted small" data-i18n="downloadHint"></span>
+        </p>
+        <p class="privacy muted" data-i18n="privacy"></p>
+        <p class="error" id="error" role="alert" hidden></p>
       </div>
-      <p class="download">
-        <a href="data/akara-and-bread-sales.csv" download data-i18n="download"></a><br>
-        <span class="muted small" data-i18n="downloadHint"></span>
-      </p>
-      <p class="privacy muted" data-i18n="privacy"></p>
-      <p class="error" id="error" role="alert" hidden></p>
     </section>
 
     <!-- Results -->
@@ -107,7 +189,7 @@
       </details>
     </section>
 
-    <!-- Learn -->
+    <!-- Quick lessons -->
     <section class="learn" id="learn">
       <p class="eyebrow dark" data-i18n="learnEyebrow"></p>
       <h2 data-i18n="learnTitle"></h2>
@@ -122,8 +204,22 @@
       </div>
     </section>
 
+    <!-- Curriculum -->
+    <section class="curriculum" id="curriculum">
+      <p class="eyebrow dark" data-i18n="curEyebrow"></p>
+      <h2 data-i18n="curTitle"></h2>
+      <p class="muted" data-i18n="curLede"></p>
+      <div class="modules" id="modules"></div>
+
+      <h3 class="sub-title" data-i18n="secTitle"></h3>
+      <p class="muted" data-i18n="secLede"></p>
+      <div class="sectors" id="sectors"></div>
+
+      <p class="cta-row"><a class="btn" href="#start" data-i18n="curCta"></a></p>
+    </section>
+
     <!-- CSR -->
-    <section class="csr">
+    <section class="csr" id="about">
       <img class="csr-logo" src="assets/scitylana-logo.jpg" alt="Scitylana — Remodeling the Future" width="160" height="160">
       <div>
         <p class="eyebrow" data-i18n="csrEyebrow"></p>
@@ -142,6 +238,9 @@
     <img src="assets/scitylana-mark.jpg" alt="" width="28" height="28">
     <span data-i18n="footer"></span>
   </footer>
+  <script src="config.js"></script>
   <script src="app.js"></script>
+  <script src="survey.js"></script>
+  <script src="curriculum.js"></script>
 </body>
 </html>

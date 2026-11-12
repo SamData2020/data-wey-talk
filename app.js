@@ -520,6 +520,7 @@ function applyLang() {
   document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   if (state.headers.length) { buildSelects(); render(); }
+  document.dispatchEvent(new Event("dwt:lang"));
 }
 
 document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => {
@@ -542,6 +543,7 @@ const drop = $("drop");
 drop.addEventListener("drop", (e) => readFile(e.dataTransfer.files[0]));
 const SAMPLE_URL = "data/akara-and-bread-sales.csv";
 $("sample").addEventListener("click", async () => {
+  if (window.dwtSurveyDone && !window.dwtSurveyDone()) return; // survey first
   try {
     const res = await fetch(SAMPLE_URL);
     if (!res.ok) throw new Error(res.status);
@@ -565,5 +567,4 @@ window.addEventListener("resize", () => {
 });
 
 applyLang();
-
-if (/[?&]sample\b/.test(location.search)) $("sample").click();
+// ?sample auto-load is handled in survey.js, after the survey is done.
