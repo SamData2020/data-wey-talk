@@ -29,6 +29,7 @@ Object.assign(I18N.pcm, {
   svThanks: "Thank you, {name}! Now put your file or try di sample.",
   svThanksNoName: "Thank you! Now put your file or try di sample.",
   svPrivacy: "🔒 Na only Scitylana go see your details. Your data file (CSV) no dey comot from your device at all.",
+  svDelete: "You wan make we delete your details? Send email to",
   // option labels
   bt_food: "Food & drinks (buka, akara, snacks)", bt_retail: "Provisions / shop / supermarket", bt_fashion: "Fashion & tailoring",
   bt_beauty: "Hair & beauty", bt_agro: "Farming & agro", bt_transport: "Transport & logistics",
@@ -65,6 +66,7 @@ Object.assign(I18N.en, {
   svThanks: "Thank you, {name}! Now upload your file or try the sample.",
   svThanksNoName: "Thank you! Now upload your file or try the sample.",
   svPrivacy: "🔒 Only Scitylana sees your details. Your data file (CSV) never leaves your device.",
+  svDelete: "Want your details deleted? Email",
   bt_food: "Food & drinks (buka, akara, snacks)", bt_retail: "Provisions / shop / supermarket", bt_fashion: "Fashion & tailoring",
   bt_beauty: "Hair & beauty", bt_agro: "Farming & agro", bt_transport: "Transport & logistics",
   bt_pos: "POS / mobile money agent", bt_electronics: "Phone & electronics", bt_services: "Services (repair, cleaning, etc.)", bt_other: "Other",
