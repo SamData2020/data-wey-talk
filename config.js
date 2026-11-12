@@ -1,7 +1,9 @@
 /* Site settings.
-   surveyEndpoint: paste your Google Apps Script "Web app" URL here
-   (see apps-script/README.md). While it is empty, survey answers are
-   kept on the visitor's device only and NOT sent to Scitylana. */
+   surveyEndpoint: Google Apps Script "Web app" URL (see apps-script/README.md).
+   videos: when a real recording is on YouTube, put its link here and it
+   replaces the computer-voice draft for that module, e.g.
+     videos: { 1: "https://youtu.be/XXXXXXXXXXX", 2: "..." },  */
 window.DWT_CONFIG = {
   surveyEndpoint: "https://script.google.com/macros/s/AKfycbzei0wjwauo23eMK1F7hGFPEFa6Kefv_2hNOjCVbUpKvpPLJCZGrntrWalItTdrOivvNQ/exec",
+  videos: {},
 };

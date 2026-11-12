@@ -12,6 +12,8 @@ Object.assign(I18N.pcm, {
   secLede: "Small business all over Africa dey use data take answer dis kind question:",
   curCta: "Start Module 1 with di free tool",
   navTool: "Use di tool", navLessons: "Lessons", navCurriculum: "Curriculum", navAbout: "About",
+  vidDraft: "Dis one na draft video wey computer voice dey talk. Di real Pidgin voice dey come soon. Di words dey under di video.",
+  vidPlay: "Play video",
 });
 
 Object.assign(I18N.en, {
@@ -26,6 +28,8 @@ Object.assign(I18N.en, {
   secLede: "Small businesses across Africa use data to answer questions like these:",
   curCta: "Start Module 1 with the free tool",
   navTool: "Use the tool", navLessons: "Lessons", navCurriculum: "Curriculum", navAbout: "About",
+  vidDraft: "Draft video with a computer voice — a real Pidgin-speaking presenter is coming soon. Captions show the words.",
+  vidPlay: "Play video",
 });
 
 const CURRICULUM = {
@@ -106,6 +110,33 @@ const SECTORS = {
   ],
 };
 
+// Video for a module: a YouTube recording if one is set in config.js, else the draft MP4.
+function youtubeId(v) {
+  const m = String(v || "").match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/) || String(v || "").match(/^([\w-]{11})$/);
+  return m ? m[1] : "";
+}
+function videoBlock(n, title) {
+  const nn = String(n).padStart(2, "0");
+  const yt = youtubeId(((window.DWT_CONFIG || {}).videos || {})[n]);
+  if (yt) {
+    return `<div class="vid"><button type="button" class="yt" data-yt="${yt}" aria-label="${esc(t("vidPlay"))}: ${esc(title)}">
+      <img src="https://i.ytimg.com/vi/${yt}/hqdefault.jpg" alt="" loading="lazy"><span class="play" aria-hidden="true">▶</span></button></div>`;
+  }
+  return `<div class="vid">
+      <video controls playsinline preload="none" poster="video/module-${nn}.jpg" aria-label="${esc(title)}">
+        <source src="video/module-${nn}.mp4" type="video/mp4">
+        <track kind="captions" srclang="pcm" label="Pidgin" src="video/module-${nn}.vtt" default>
+      </video>
+      <p class="vid-note">🤖 ${esc(t("vidDraft"))}</p>
+    </div>`;
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".yt");
+  if (!b) return;
+  b.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="Video"
+    allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+});
+
 (function curriculum() {
   function renderCurriculum() {
     const mods = CURRICULUM[lang] || CURRICULUM.en;
@@ -117,6 +148,7 @@ const SECTORS = {
           <span class="mod-tag ${m.for}">${esc(t(m.for))}</span>
         </summary>
         <div class="mod-body">
+          ${videoBlock(i + 1, m.t)}
           <h4>${esc(t("curLearn"))}</h4>
           <ul>${m.learn.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
           <p class="mod-helps"><b>${esc(t("curHelps"))}:</b> ${esc(m.helps)}</p>
