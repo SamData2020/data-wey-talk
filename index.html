@@ -3,28 +3,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Data Wey Talk</title>
-  <meta name="description" content="Data analytics wey dey talk Pidgin. Put your file, see wetin your numbers dey talk.">
+  <title>Data Wey Talk · Scitylana</title>
+  <meta name="description" content="Free data analytics wey dey talk Pidgin — a Scitylana Academy CSR initiative. Put your file, see wetin your numbers dey talk.">
+  <meta name="theme-color" content="#760308">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;700&display=swap">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="logo" aria-hidden="true">📊</span>
-      <span>Data Wey Talk</span>
-    </div>
-    <div class="lang" role="group" aria-label="Language">
-      <button type="button" data-lang="pcm" aria-pressed="true">Pidgin</button>
-      <button type="button" data-lang="en" aria-pressed="false">English</button>
+  <header class="topbar-wrap">
+    <div class="topbar">
+      <a class="brand" href="./" aria-label="Data Wey Talk by Scitylana — home">
+        <img src="assets/scitylana-mark.jpg" alt="" width="40" height="40">
+        <span class="brand-text">
+          <span class="brand-name">Data Wey Talk</span>
+          <span class="brand-by">by Scitylana</span>
+        </span>
+      </a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="pcm" aria-pressed="true">Pidgin</button>
+        <button type="button" data-lang="en" aria-pressed="false">English</button>
+      </div>
     </div>
   </header>
 
-  <main>
-    <!-- Upload -->
-    <section class="hero" id="start">
+  <!-- Hero -->
+  <section class="hero-band" id="heroBand">
+    <div class="hero">
+      <p class="eyebrow" data-i18n="eyebrow"></p>
       <h1 data-i18n="heroTitle"></h1>
       <p class="lede" data-i18n="heroLede"></p>
+    </div>
+  </section>
 
+  <main>
+    <!-- Upload -->
+    <section class="upload" id="start">
       <label class="drop" id="drop" for="file">
         <input type="file" id="file" accept=".csv,text/csv,.txt">
         <span class="drop-icon" aria-hidden="true">⬆️</span>
@@ -90,9 +106,42 @@
         <p class="muted small" id="tableNote"></p>
       </details>
     </section>
+
+    <!-- Learn -->
+    <section class="learn" id="learn">
+      <p class="eyebrow dark" data-i18n="learnEyebrow"></p>
+      <h2 data-i18n="learnTitle"></h2>
+      <p class="muted" data-i18n="learnLede"></p>
+      <div class="lessons">
+        <article class="lesson"><span class="num">1</span><h3 data-i18n="l1t"></h3><p data-i18n="l1b"></p></article>
+        <article class="lesson"><span class="num">2</span><h3 data-i18n="l2t"></h3><p data-i18n="l2b"></p></article>
+        <article class="lesson"><span class="num">3</span><h3 data-i18n="l3t"></h3><p data-i18n="l3b"></p></article>
+        <article class="lesson"><span class="num">4</span><h3 data-i18n="l4t"></h3><p data-i18n="l4b"></p></article>
+        <article class="lesson"><span class="num">5</span><h3 data-i18n="l5t"></h3><p data-i18n="l5b"></p></article>
+        <article class="lesson"><span class="num">6</span><h3 data-i18n="l6t"></h3><p data-i18n="l6b"></p></article>
+      </div>
+    </section>
+
+    <!-- CSR -->
+    <section class="csr">
+      <img class="csr-logo" src="assets/scitylana-logo.jpg" alt="Scitylana — Remodeling the Future" width="160" height="160">
+      <div>
+        <p class="eyebrow" data-i18n="csrEyebrow"></p>
+        <h2 data-i18n="csrTitle"></h2>
+        <p data-i18n="csrBody"></p>
+        <ul class="pills">
+          <li data-i18n="pill1"></li>
+          <li data-i18n="pill2"></li>
+          <li data-i18n="pill3"></li>
+        </ul>
+      </div>
+    </section>
   </main>
 
-  <footer class="muted small" data-i18n="footer"></footer>
+  <footer>
+    <img src="assets/scitylana-mark.jpg" alt="" width="28" height="28">
+    <span data-i18n="footer"></span>
+  </footer>
   <script src="app.js"></script>
 </body>
 </html>
