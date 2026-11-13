@@ -1,0 +1,15 @@
+{
+  "name": "Data Wey Talk by Scitylana",
+  "short_name": "Data Wey Talk",
+  "description": "Free business book, data analytics and lessons for African businesses — in Pidgin and 8 more languages.",
+  "start_url": "./?src=app#book",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf7ef",
+  "theme_color": "#760308",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

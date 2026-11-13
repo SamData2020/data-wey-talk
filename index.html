@@ -7,6 +7,9 @@
   <meta name="description" content="Free data analytics wey dey talk Pidgin — a Scitylana Academy CSR initiative. Learn data analytics and see wetin your business numbers dey talk.">
   <meta name="theme-color" content="#760308">
   <link rel="icon" href="assets/favicon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;700&display=swap">
@@ -39,6 +42,7 @@
     </div>
     <nav class="subnav" aria-label="Sections">
       <a href="#start" data-i18n="navTool"></a>
+      <a href="#book" data-i18n="navBook"></a>
       <a href="#game" data-i18n="navGame"></a>
       <a href="#learn" data-i18n="navLessons"></a>
       <a href="#curriculum" data-i18n="navCurriculum"></a>
@@ -144,6 +148,7 @@
         </label>
         <div class="hero-actions">
           <button type="button" class="btn" id="sample" data-i18n="trySample"></button>
+          <a class="btn ghost" href="#book" data-i18n="bkToolBtn"></a>
           <a class="btn ghost" href="#game" data-i18n="gmToolBtn"></a>
         </div>
         <p class="download">
@@ -223,6 +228,16 @@
         <a class="btn gold" id="helpBtn" href="mailto:scitylanaltd@gmail.com" data-i18n="helpBtn"></a>
         <p class="small help-note" data-i18n="helpNote"></p>
       </div>
+    </section>
+
+    <!-- My Book: daily business book -->
+    <section class="game book" id="book">
+      <div class="quiz-head game-head">
+        <p class="eyebrow" data-i18n="bkEyebrow"></p>
+        <h2 data-i18n="bkTitle"></h2>
+        <p data-i18n="bkLede"></p>
+      </div>
+      <div class="game-box book-box" id="bookBox" aria-live="polite"></div>
     </section>
 
     <!-- Business Boss game -->
@@ -305,6 +320,7 @@
   <script src="correlate.js"></script>
   <script src="curriculum.js"></script>
   <script src="game.js"></script>
+  <script src="book.js"></script>
   <!-- Languages: one file each; a missing word falls back to English -->
   <script src="lang/sw.js"></script>
   <script src="lang/fr.js"></script>
@@ -315,6 +331,7 @@
   <script src="lang/zu.js"></script>
   <script src="lang/game-i18n.js"></script>
   <script src="lang/quiz-more.js"></script>
+  <script src="lang/book-i18n.js"></script>
   <script>applyLang();</script>
 </body>
 </html>

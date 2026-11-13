@@ -11,3 +11,15 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000 (add `?sample` to load the demo data).
+
+## My Book (daily business book)
+
+`book.js` (+ `lang/book-i18n.js`) is a phone-first daily book for one-person businesses — barbers, make-up artists, photographers, tailors, food sellers, POS agents and shops:
+
+- **Record** a job or expense in seconds (ready buttons per trade), with deposits and balances.
+- **Summary** for today / this week / this month, top services, best day; one tap sends the book to the analysis tool, or downloads it as CSV.
+- **Who owes me** with a ready-written WhatsApp reminder.
+- **Price calculator**: the minimum price that covers costs and pays the owner what they want.
+- **Receipts / quotes** and a **Business Report Card** as shareable images (with "Made free with Data Wey Talk").
+
+Everything stays in the visitor's browser (`localStorage`). `manifest.webmanifest` + `sw.js` let people install the site on their phone and use it offline.
