@@ -29,9 +29,16 @@ const SHEETS = {
 
 function thisMonth_() { return Utilities.formatDate(new Date(), TZ, "yyyy-MM"); }
 
+// Sheets turns "2026-11" into a date by itself, so read the month back either way.
+function monthOf_(v) {
+  return v instanceof Date ? Utilities.formatDate(v, TZ, "yyyy-MM") : String(v).replace(/^'/, "").trim();
+}
+// Write the month with a leading ' so Sheets keeps it as plain text.
+function monthCell_(month) { return "'" + month; }
+
 function monthWinner_(month) {
   const rows = sheet_("winners").getDataRange().getValues().slice(1);
-  return rows.find((r) => String(r[1]) === month) || null;
+  return rows.find((r) => monthOf_(r[1]) === month) || null;
 }
 
 /** GET ?status=1 → { month, claimed } so the site can say if this month's prize is gone. */
@@ -57,11 +64,11 @@ function doPost(e) {
       const isWinner = !monthWinner_(month);
       const now = new Date();
       sheet_("quiz").appendRow([
-        now, month, clean(d.name), clean(d.email), clean(d.phone), score, total,
+        now, monthCell_(month), clean(d.name), clean(d.email), clean(d.phone), score, total,
         Math.round((score / total) * 100) + "%", clean(d.language), "Yes", isWinner ? "WINNER" : "", clean(d.submitted_at),
       ]);
       if (isWinner) {
-        sheet_("winners").appendRow([now, month, clean(d.name), clean(d.email), clean(d.phone), score + "/" + total, ""]);
+        sheet_("winners").appendRow([now, monthCell_(month), clean(d.name), clean(d.email), clean(d.phone), score + "/" + total, ""]);
         notifyOwner_(month, d, score, total);
       }
       return json({ ok: true, winner: isWinner, month: month });
