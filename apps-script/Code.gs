@@ -9,6 +9,9 @@
  */
 const PASS_MARK = 0.8;            // must score ABOVE this
 const TZ = "Africa/Lagos";        // month boundaries use Lagos time
+// Who gets the "we have a winner" email. Leave "" to use the Google account that owns this script.
+// You can list several, separated by commas.
+const NOTIFY_EMAIL = "";
 
 const SHEETS = {
   survey: {
@@ -67,11 +70,12 @@ function doPost(e) {
         now, monthCell_(month), clean(d.name), clean(d.email), clean(d.phone), score, total,
         Math.round((score / total) * 100) + "%", clean(d.language), "Yes", isWinner ? "WINNER" : "", clean(d.submitted_at),
       ]);
+      let emailStatus;
       if (isWinner) {
         sheet_("winners").appendRow([now, monthCell_(month), clean(d.name), clean(d.email), clean(d.phone), score + "/" + total, ""]);
-        notifyOwner_(month, d, score, total);
+        emailStatus = notifyOwner_(month, d, score, total);
       }
-      return json({ ok: true, winner: isWinner, month: month });
+      return json({ ok: true, winner: isWinner, month: month, email: emailStatus });
     }
 
     sheet_("survey").appendRow([
@@ -87,16 +91,32 @@ function doPost(e) {
   }
 }
 
-/** Emails the Sheet owner when a month's winner comes in. */
+function notifyTo_() { return NOTIFY_EMAIL || Session.getEffectiveUser().getEmail(); }
+
+/** Emails you when a month's winner comes in. Returns "sent" or the reason it failed. */
 function notifyOwner_(month, d, score, total) {
   try {
-    const to = Session.getEffectiveUser().getEmail();
-    if (!to) return;
+    const to = notifyTo_();
+    if (!to) return "failed: no address (set NOTIFY_EMAIL)";
     MailApp.sendEmail(to, "🎉 Data Wey Talk quiz winner for " + month,
       "First person to score above 80% this month:\n\n" +
       "Name: " + clean(d.name) + "\nEmail: " + clean(d.email) + "\nPhone: " + clean(d.phone) +
       "\nScore: " + score + "/" + total + "\n\nSend their airtime/data, then mark 'Prize sent?' in the Winners tab.");
-  } catch (err) { /* email is a bonus; never block the entry */ }
+    return "sent";
+  } catch (err) {
+    return "failed: " + String(err).slice(0, 150);   // never block the entry because of email
+  }
+}
+
+/**
+ * RUN THIS ONCE from the Apps Script editor (select "testEmail" at the top, click ▶ Run).
+ * Google will ask you to allow sending email — say Allow. You should get a test email.
+ */
+function testEmail() {
+  const to = notifyTo_();
+  MailApp.sendEmail(to, "✅ Data Wey Talk: winner emails are working",
+    "This is a test. When someone wins the monthly quiz prize, the details will come to " + to + ".");
+  Logger.log("Test email sent to " + to + ". Emails left today: " + MailApp.getRemainingDailyQuota());
 }
 
 function sheet_(key) {
