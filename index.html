@@ -39,6 +39,7 @@
     </div>
     <nav class="subnav" aria-label="Sections">
       <a href="#start" data-i18n="navTool"></a>
+      <a href="#game" data-i18n="navGame"></a>
       <a href="#learn" data-i18n="navLessons"></a>
       <a href="#curriculum" data-i18n="navCurriculum"></a>
       <a href="#quiz" data-i18n="navQuiz"></a>
@@ -143,6 +144,7 @@
         </label>
         <div class="hero-actions">
           <button type="button" class="btn" id="sample" data-i18n="trySample"></button>
+          <a class="btn ghost" href="#game" data-i18n="gmToolBtn"></a>
         </div>
         <p class="download">
           <a href="data/akara-and-bread-sales.csv" download data-i18n="download"></a><br>
@@ -223,6 +225,16 @@
       </div>
     </section>
 
+    <!-- Business Boss game -->
+    <section class="game" id="game">
+      <div class="quiz-head game-head">
+        <p class="eyebrow" data-i18n="gmEyebrow"></p>
+        <h2 data-i18n="gmTitle"></h2>
+        <p data-i18n="gmLede"></p>
+      </div>
+      <div class="game-box" id="gameBox" aria-live="polite"></div>
+    </section>
+
     <!-- Quick lessons -->
     <section class="learn" id="learn">
       <p class="eyebrow dark" data-i18n="learnEyebrow"></p>
@@ -292,6 +304,7 @@
   <script src="quiz.js"></script>
   <script src="correlate.js"></script>
   <script src="curriculum.js"></script>
+  <script src="game.js"></script>
   <!-- Languages: one file each; a missing word falls back to English -->
   <script src="lang/sw.js"></script>
   <script src="lang/fr.js"></script>
@@ -300,6 +313,7 @@
   <script src="lang/yo.js"></script>
   <script src="lang/ig.js"></script>
   <script src="lang/zu.js"></script>
+  <script src="lang/game-i18n.js"></script>
   <script>applyLang();</script>
 </body>
 </html>
