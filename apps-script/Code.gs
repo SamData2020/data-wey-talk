@@ -1,5 +1,5 @@
 /**
- * Data Wey Talk — survey + quiz receiver.
+ * Data Wey Talk — survey + quiz + Business Boss game receiver.
  * Quiz prize: ONE winner per month = the FIRST person that month to score above 80%.
  * The winner is recorded automatically in the "Winners" tab and you get an email.
  *
@@ -26,6 +26,12 @@ const SHEETS = {
   winners: {
     name: "Winners",
     headers: ["Won at", "Month", "Name", "Email", "Phone / WhatsApp", "Score", "Prize sent? (fill in)"],
+  },
+  game: {
+    name: "Game Plays",
+    headers: ["Received at", "Event", "Name", "Email", "Phone / WhatsApp", "Country", "Business name", "Business type",
+      "Currency", "Period", "Sales", "Costs", "Profit", "Margin %", "Customers", "Profit goal", "Health score",
+      "Language", "Submitted at (device)"],
   },
 };
 
@@ -80,6 +86,18 @@ function doPost(e) {
         emailStatus = notifyOwner_(month, d, score, total);
       }
       return json({ ok: true, winner: isWinner, month: month, email: emailStatus });
+    }
+
+    // Business Boss game: one row when someone reaches the scoreboard, one when they download the report.
+    if (d.type === "game") {
+      const n = (v) => (isFinite(Number(v)) ? Math.round(Number(v) * 100) / 100 : "");
+      sheet_("game").appendRow([
+        new Date(), d.event === "report" ? "Downloaded report" : d.event === "example" ? "Tried example" : "Played", clean(d.name), clean(d.email), clean(d.phone),
+        clean(d.country), clean(d.business), clean(d.business_type), clean(d.currency), clean(d.period),
+        n(d.sales), n(d.costs), n(d.profit), n(d.margin), n(d.customers), d.goal === "" || d.goal == null ? "" : n(d.goal),
+        n(d.health), clean(d.language), clean(d.submitted_at),
+      ]);
+      return json({ ok: true });
     }
 
     sheet_("survey").appendRow([

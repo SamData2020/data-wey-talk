@@ -2,6 +2,7 @@
    (Pidgin and English are in game.js.) Loaded after the other language files. */
 
 Object.assign(I18N.fr, {
+  gmShare: "🔒 Quand vous atteignez le tableau de score, un court résumé (nom, ventes, coûts, bénéfice) est enregistré avec vos informations pour Scitylana, afin de mieux vous accompagner. Il n'est partagé avec personne d'autre.",
   navGame: "Jeu Business", gmToolBtn: "🎮 Jouer à Business Boss", gmEyebrow: "🎮 Jeu Business Boss",
   gmTitle: "Soyez le patron : faites grandir votre bénéfice",
   gmLede: "Saisissez vos ventes et vos coûts, voyez votre bénéfice, jouez à « et si », et dites au jeu quel bénéfice vous voulez — il vous montre le chemin. Téléchargez votre rapport gratuitement.",
@@ -50,6 +51,7 @@ Object.assign(I18N.fr, {
 });
 
 Object.assign(I18N.sw, {
+  gmShare: "🔒 Ukifika kwenye ubao wa alama, muhtasari mfupi (jina la biashara, mauzo, gharama, faida) unahifadhiwa pamoja na taarifa za fomu yako kwa ajili ya Scitylana, ili tukusaidie. Haushirikiwi na mtu mwingine.",
   navGame: "Mchezo wa Biashara", gmToolBtn: "🎮 Cheza mchezo wa Business Boss", gmEyebrow: "🎮 Mchezo wa Business Boss",
   gmTitle: "Kuwa bosi: kuza faida ya biashara yako",
   gmLede: "Weka mauzo na gharama zako, ona faida yako, cheza 'itakuwaje kama', na uuambie mchezo faida unayotaka — utakuonyesha njia. Pakua ripoti ya biashara yako bure.",
@@ -98,6 +100,7 @@ Object.assign(I18N.sw, {
 });
 
 Object.assign(I18N.ar, {
+  gmShare: "🔒 عند وصولك إلى لوحة النتائج، يُحفظ ملخص قصير (اسم التجارة، المبيعات، التكاليف، الربح) مع بيانات استمارتك لدى Scitylana لنتمكن من دعمك. لا تتم مشاركته مع أي جهة أخرى.",
   navGame: "لعبة الأعمال", gmToolBtn: "🎮 العب لعبة Business Boss", gmEyebrow: "🎮 لعبة Business Boss",
   gmTitle: "كن المدير: نمِّ أرباح تجارتك",
   gmLede: "أدخل مبيعاتك وتكاليفك، شاهد ربحك، جرّب «ماذا لو»، وأخبر اللعبة بالربح الذي تريده — وستريك الطريق. نزّل تقرير تجارتك مجانًا.",
@@ -146,6 +149,7 @@ Object.assign(I18N.ar, {
 });
 
 Object.assign(I18N.ha, {
+  gmShare: "🔒 Idan ka kai allon maki, za a ajiye taƙaitaccen bayani (sunan kasuwanci, ciniki, kashewa, riba) tare da bayanan fom ɗinka don Scitylana, domin mu tallafa maka. Ba za a raba shi da kowa ba.",
   navGame: "Wasan Kasuwanci", gmToolBtn: "🎮 Yi wasan Business Boss", gmEyebrow: "🎮 Wasan Business Boss",
   gmTitle: "Zama shugaba: ƙara ribar kasuwancinka",
   gmLede: "Saka cinikinka da kuɗin da kake kashewa, ga ribarka, yi wasan 'idan', ka faɗa wa wasan ribar da kake so — zai nuna maka hanya. Sauke rahoton kasuwancinka kyauta.",
@@ -194,6 +198,7 @@ Object.assign(I18N.ha, {
 });
 
 Object.assign(I18N.yo, {
+  gmShare: "🔒 Nigba ti o ba de patako maaki, a o fi akopọ kukuru (orukọ iṣowo, tita, inawo, ere) pamọ pẹlu alaye fọọmu rẹ fun Scitylana, ki a le ran ọ lọwọ. A ko ni pin in pẹlu ẹnikẹni miiran.",
   navGame: "Ere Iṣowo", gmToolBtn: "🎮 Ṣe ere Business Boss", gmEyebrow: "🎮 Ere Business Boss",
   gmTitle: "Di ọga: mu ere iṣowo rẹ pọ si",
   gmLede: "Fi tita ati inawo rẹ sii, wo ere rẹ, ṣe ere 'ti o ba jẹ pe', ki o sọ fun ere naa iye ere ti o fẹ — yoo fi ọna han ọ. Ṣe igbasilẹ ijabọ iṣowo rẹ lọfẹ.",
@@ -242,6 +247,7 @@ Object.assign(I18N.yo, {
 });
 
 Object.assign(I18N.ig, {
+  gmShare: "🔒 Mgbe i ruru bọọdụ akara, a ga-echekwa obere nchịkọta (aha azụmahịa, ire ahịa, mmefu, uru) ya na nkọwa fọm gị maka Scitylana, ka anyị nwee ike ịkwado gị. A gaghị ekesa ya na onye ọzọ.",
   navGame: "Egwuregwu Azụmahịa", gmToolBtn: "🎮 Kpọọ egwuregwu Business Boss", gmEyebrow: "🎮 Egwuregwu Business Boss",
   gmTitle: "Bụrụ onyeisi: mee ka uru azụmahịa gị too",
   gmLede: "Tinye ire ahịa na mmefu gị, hụ uru gị, kpọọ 'ọ bụrụ na', ma gwa egwuregwu ahụ uru ị chọrọ — ọ ga-egosi gị ụzọ. Budata akụkọ azụmahịa gị n'efu.",
@@ -290,6 +296,7 @@ Object.assign(I18N.ig, {
 });
 
 Object.assign(I18N.zu, {
+  gmShare: "🔒 Uma ufika ebhodini lamaphuzu, isifinyezo esifushane (igama lebhizinisi, ukuthengisa, izindleko, inzuzo) silondolozwa kanye nemininingwane yefomu lakho ku-Scitylana, ukuze sikusekele. Asabelwana nomunye umuntu.",
   navGame: "Umdlalo Webhizinisi", gmToolBtn: "🎮 Dlala umdlalo we-Business Boss", gmEyebrow: "🎮 Umdlalo we-Business Boss",
   gmTitle: "Yiba ngumphathi: khulisa inzuzo yebhizinisi lakho",
   gmLede: "Faka ukuthengisa nezindleko zakho, ubone inzuzo yakho, udlale 'kuthiwani uma', futhi utshele umdlalo inzuzo oyifunayo — uzokukhombisa indlela. Dawuniloda umbiko webhizinisi lakho mahhala.",

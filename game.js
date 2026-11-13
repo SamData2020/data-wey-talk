@@ -3,6 +3,7 @@
    Everything stays on the visitor's device (saved in localStorage "dwt-game"). */
 
 Object.assign(I18N.pcm, {
+  gmShare: "🔒 When you reach di scoreboard, we go save small summary (business name, sales, costs, profit) with your form details for Scitylana, so we fit support you. Your numbers no go anywhere else.",
   navGame: "Business Game",
   gmToolBtn: "🎮 Play di Business Boss game",
   gmEyebrow: "🎮 Business Boss game",
@@ -74,6 +75,7 @@ Object.assign(I18N.pcm, {
 });
 
 Object.assign(I18N.en, {
+  gmShare: "🔒 When you reach the scoreboard, a short summary (business name, sales, costs, profit) is saved with your form details for Scitylana, so we can support you. It isn't shared with anyone else.",
   navGame: "Business Game",
   gmToolBtn: "🎮 Play the Business Boss game",
   gmEyebrow: "🎮 Business Boss game",
@@ -172,7 +174,7 @@ Object.assign(I18N.en, {
   g.stage = "intro";
 
   const demo = () => Object.assign(blank(), {
-    name: "Mama Nkechi Akara", type: "food", cur: "NGN", period: "month", days: [4, 5, 6],
+    demo: true, name: "Mama Nkechi Akara", type: "food", cur: "NGN", period: "month", days: [4, 5, 6],
     salesMode: "items", items: [
       { name: "Akara", qty: "9000", price: "100" }, { name: "Agege bread", qty: "1200", price: "600" }, { name: "Sliced bread", qty: "600", price: "900" }],
     customers: "4500", costMode: "items", costs: [
@@ -250,6 +252,30 @@ Object.assign(I18N.en, {
     return out;
   }
 
+  // ---------- send a summary to the Scitylana Sheet ("Game Plays" tab) ----------
+  const endpoint = (window.DWT_CONFIG && window.DWT_CONFIG.surveyEndpoint) || "";
+  function logPlay(event) {
+    if (!endpoint) return;
+    let prof = {};
+    try { prof = JSON.parse(localStorage.getItem("dwt-profile") || "{}"); } catch (_) {}
+    if (!prof.email || !prof.phone) return;                      // only people who filled the form
+    if (event === "played" && g.demo) event = "example";
+    const r = calc();
+    const sig = [event, g.name, Math.round(r.S), Math.round(r.C), event === "report" ? g.target : ""].join("|");
+    let sent = [];
+    try { sent = JSON.parse(sessionStorage.getItem("dwt-game-sent") || "[]"); } catch (_) {}
+    if (sent.includes(sig)) return;                              // same numbers already sent this visit
+    sent.push(sig);
+    try { sessionStorage.setItem("dwt-game-sent", JSON.stringify(sent.slice(-20))); } catch (_) {}
+    const payload = {
+      type: "game", event, name: prof.name || "", email: prof.email, phone: prof.phone, country: prof.country || "", consent: true,
+      business: g.name, business_type: g.type, currency: g.cur, period: g.period,
+      sales: Math.round(r.S), costs: Math.round(r.C), profit: Math.round(r.P), margin: Math.round(r.margin * 10) / 10,
+      customers: r.cust, goal: g.target ? N(g.target) : "", health: score(r), language: lang, submitted_at: new Date().toISOString(),
+    };
+    fetch(endpoint, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) }).catch(() => {});
+  }
+
   // ---------- screens ----------
   const field = (label, html, wide) => `<label class="field${wide ? " wide" : ""}"><span>${esc(label)}</span>${html}</label>`;
   const inp = (k, val, extra = "") => `<input data-k="${k}" value="${esc(val ?? "")}" ${extra}>`;
@@ -268,6 +294,7 @@ Object.assign(I18N.en, {
       ${locked ? `<p class="qz-banner">${esc(t("gmLocked"))} <a class="mail" href="#start">↑</a></p>` : ""}
       <button type="button" class="btn" data-act="start"${locked ? " disabled" : ""}>${esc(saved && g.name ? t("gmResume") : t("gmStart"))}</button>
       <button type="button" class="btn ghost" data-act="demo"${locked ? " disabled" : ""}>${esc(t("gmDemo"))}</button>
+      <p class="muted small gm-share">${esc(t("gmShare"))}</p>
     </div>`;
   }
   function s1() {
@@ -495,6 +522,7 @@ ${wiOn ? `<h2>${esc(t("rpWhatIf"))}</h2><table>
       if (g.costMode === "items" && r.list.length >= 3) unlock("achDetective");
     }
     g.stage = stage; save(); render();
+    if (stage === "results") logPlay("played");
     box.closest("section").scrollIntoView({ block: "start" });
   }
   function seek(v) {
@@ -516,6 +544,7 @@ ${wiOn ? `<h2>${esc(t("rpWhatIf"))}</h2><table>
     if (el.dataset.k) {
       const v = el.type === "checkbox" ? el.checked : el.type === "range" ? +el.value : el.value;
       setPath(el.dataset.k, v);
+      if (el.dataset.k !== "target") g.demo = false;
       if (el.dataset.k === "varShare") $("gmVS").textContent = v + "%";
       if (el.dataset.k === "target") { save(); return; }
       if (el.dataset.k === "cur" && g.stage === "s1") { save(); return; }
@@ -569,8 +598,8 @@ ${wiOn ? `<h2>${esc(t("rpWhatIf"))}</h2><table>
         return;
       }
       case "wireset": g.wi = { price: 0, cust: 0, cut: 0 }; save(); render(); box.querySelector(".gm-whatif")?.scrollIntoView({ block: "center" }); return;
-      case "report": unlock("achReport"); save(); refreshAch(); return download();
-      case "print": unlock("achReport"); save(); refreshAch(); return printReport();
+      case "report": unlock("achReport"); save(); refreshAch(); logPlay("report"); return download();
+      case "print": unlock("achReport"); save(); refreshAch(); logPlay("report"); return printReport();
       case "again": g = blank(); save(); g.stage = "s1"; render(); return;
     }
   });
