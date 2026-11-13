@@ -1,6 +1,8 @@
-/* Quiz + monthly prize draw entry.
-   Score above 80% (9 or 10 out of 10) → enter the monthly draw.
-   Entries go to the same Apps Script as the survey (type: "quiz"). */
+/* Monthly quiz + prize.
+   - A bank of 30 questions; every 14 days a new set of 10 is drawn (answers shuffled too).
+   - Each person (email/phone from the sign-up form) can take it ONCE per month; the Sheet checks this.
+   - The FIRST person each month to score above 80% (9 or 10 of 10) wins.
+   Results go to the same Apps Script as the survey (type: "quiz"). */
 
 const PRIZE = Object.assign({ amount: "₦5,000", kind_pcm: "airtime or data", kind_en: "airtime or data", kind_sw: "muda wa maongezi au data" },
   (window.DWT_CONFIG || {}).quizPrize || {});
@@ -9,6 +11,15 @@ const PASS = 0.8; // must score ABOVE this
 Object.assign(I18N.pcm, {
   navQuiz: "Quiz & Prize",
   qzPrizeKind: "airtime or data",
+  qzOnceNote: "You fit take am ONCE every month — so prepare well before you start.",
+  qzNextSet: "New questions every 14 days. Next change: {date}.",
+  qzAs: "You dey take am as {name} ({email}).",
+  qzNeedForm: "Fill di short form for top first — di quiz go use your details.",
+  qzTaken: "You don take di quiz for {month}. Your next chance na {date}.",
+  qzFailOnce: "You need 9 or 10 to win. Go read di lessons well — your next chance na {date}.",
+  qzAlreadyTried: "Our record show say you don already take di quiz dis month, so dis one no count for di prize. Come back {date}.",
+  qzRuleOnce: "Each person fit take di quiz ONE time every month (same email or phone). Na only your first try count.",
+  qzRuleRotate: "Di questions dey change every 14 days.",
   qzEyebrow: "Test yourself · Win prize",
   qzTitle: "Take di quiz, win {amount} {kind}!",
   qzLede: "10 questions from di lessons and curriculum. Every month, di FIRST person wey score pass 80% (9 or 10 correct) go win {amount} {kind}. Quick-quick!",
@@ -50,6 +61,15 @@ Object.assign(I18N.pcm, {
 Object.assign(I18N.en, {
   navQuiz: "Quiz & Prize",
   qzPrizeKind: "airtime or data",
+  qzOnceNote: "You can take it ONCE a month — so prepare before you start.",
+  qzNextSet: "New questions every 14 days. Next change: {date}.",
+  qzAs: "Taking the quiz as {name} ({email}).",
+  qzNeedForm: "Fill in the short form at the top first — the quiz uses your details.",
+  qzTaken: "You've taken the {month} quiz. Your next chance is {date}.",
+  qzFailOnce: "You need 9 or 10 to win. Study the lessons — your next chance is {date}.",
+  qzAlreadyTried: "Our records show you already took the quiz this month, so this attempt doesn't count for the prize. Come back on {date}.",
+  qzRuleOnce: "Each person can take the quiz ONCE a month (same email or phone). Only your first attempt counts.",
+  qzRuleRotate: "The questions change every 14 days.",
   qzEyebrow: "Test yourself · Win a prize",
   qzTitle: "Take the quiz, win {amount} {kind}!",
   qzLede: "10 questions from the lessons and curriculum. Each month, the FIRST person to score above 80% (9 or 10 correct) wins {amount} {kind}. Be quick!",
@@ -116,156 +136,204 @@ const QUIZ = {
   ],
 };
 
+// ---------- question rotation ----------
+const QUIZ_LEN = 10, QUIZ_DAYS = 14, QUIZ_EPOCH = Date.UTC(2026, 0, 5);   // periods start on Mondays
+function quizPeriod(d = new Date()) { return Math.floor((d - QUIZ_EPOCH) / (QUIZ_DAYS * 864e5)); }
+function quizRng(seed) { let x = (seed >>> 0) || 1; return () => { x = (Math.imul(x, 1664525) + 1013904223) >>> 0; return x / 4294967296; }; }
+function quizShuffle(arr, rnd) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+// The same period gives everyone the same 10 questions and the same answer order, in every language.
+// The bank is shuffled once per 3 periods and cut into 3 sets, so back-to-back fortnights never repeat a question.
+// The right answer is spread evenly over positions A–D so guessing "always D" doesn't work.
+// Order of the bank for one 3-period block. The first set of a block avoids the last set of the block before
+// (blocks are built in order from the start date, so the "block before" is exactly what people saw).
+function quizBlock(block, bankLen, perSets) {
+  const raw = (b) => quizShuffle([...Array(bankLen).keys()], quizRng(b * 7919 + 104729));
+  let prev = raw(0);
+  for (let b = 1; b <= Math.max(0, block); b++) {
+    const perm = raw(b);
+    if (perSets < 2) { prev = perm; continue; }
+    const before = prev.slice((perSets - 1) * QUIZ_LEN, perSets * QUIZ_LEN);
+    const fresh = perm.filter((q) => !before.includes(q)), seen = perm.filter((q) => before.includes(q));
+    prev = fresh.slice(0, QUIZ_LEN).concat(quizShuffle(fresh.slice(QUIZ_LEN).concat(seen), quizRng(b * 31 + 7)));
+  }
+  return prev;
+}
+function quizSet(period, bankLen, correctOf) {
+  const perSets = Math.max(1, Math.floor(bankLen / QUIZ_LEN));
+  const block = Math.floor(period / perSets), slot = ((period % perSets) + perSets) % perSets;
+  const qs = quizBlock(block, bankLen, perSets).slice(slot * QUIZ_LEN, slot * QUIZ_LEN + QUIZ_LEN);
+  const rnd = quizRng(period * 6151 + 2909);
+  const targets = quizShuffle([...Array(QUIZ_LEN).keys()].map((i) => i % 4), rnd);
+  return qs.map((q, i) => {
+    const c = correctOf(q), others = quizShuffle([0, 1, 2, 3].filter((x) => x !== c), rnd);
+    others.splice(targets[i], 0, c);
+    return { q, order: others };
+  });
+}
+
 (function quiz() {
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (_) {} },
   };
   const endpoint = (window.DWT_CONFIG && window.DWT_CONFIG.surveyEndpoint) || "";
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-  const monthName = () => now.toLocaleString({ pcm: "en-NG", ar: "ar-u-nu-latn" }[lang] || lang, { month: "long", year: "numeric" });
-  const P = () => ({ amount: PRIZE.amount, kind: PRIZE["kind_" + lang] || t("qzPrizeKind"), month: monthName() });
+  const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const locale = () => ({ pcm: "en-NG", ar: "ar-u-nu-latn" }[lang] || lang);
+  const fmtDate = (d) => { try { return d.toLocaleDateString(locale(), { day: "numeric", month: "long", year: "numeric" }); } catch (_) { return d.toDateString(); } };
+  const monthName = () => { try { return now.toLocaleString(locale(), { month: "long", year: "numeric" }); } catch (_) { return monthKey; } };
+  const P = () => ({ amount: PRIZE.amount, kind: PRIZE["kind_" + lang] || t("qzPrizeKind"), month: monthName(), date: fmtDate(nextMonth) });
   const box = $("quizBox");
-  let qs = { i: 0, score: 0, answered: false, stage: "intro" };
-  let claimed = false;   // has someone already won this month? (asked from the Sheet)
-  let won = null;        // result of our own claim: true / false / null (unknown)
+  const PROG = "dwt-quiz-progress", TAKEN = "dwt-quiz-taken";
+  let claimed = false;                 // has someone already won this month? (asked from the Sheet)
+  let qs = { stage: "intro" };
+  // Resume an unfinished quiz (so a refresh can't be used to start over).
+  try {
+    const saved = JSON.parse(store.get(PROG) || "null");
+    if (saved && saved.month === monthKey && saved.stage === "q") qs = saved;
+  } catch (_) {}
 
-  function enteredThisMonth() { return store.get("dwt-quiz-entry") === monthKey; }
+  const bank = () => QUIZ[lang] || QUIZ.en;
+  const profile = () => { try { return JSON.parse(store.get("dwt-profile") || "{}"); } catch (_) { return {}; } };
+  const taken = () => { try { return JSON.parse(store.get(TAKEN) || "null"); } catch (_) { return null; } };
+  const saveProg = () => store.set(PROG, JSON.stringify(qs));
+  // Question n of the current attempt, in the current language, with shuffled options.
+  function question(n) {
+    const { q, order } = qs.set[n];
+    const [text, opts, correct, why] = bank()[q];
+    return { text, opts: order.map((i) => opts[i]), correct: order.indexOf(correct), why };
+  }
 
   function renderStatic() {
     $("qzTitle").textContent = t("qzTitle", P());
-    $("qzLede").textContent = t("qzLede", P());
+    $("qzLede").textContent = `${t("qzLede", P())} ${t("qzOnceNote")}`;
     $("qzRulesTitle").textContent = t("qzRulesTitle");
-    const rules = (I18N[lang] || I18N.en).qzRules;
+    const rules = ((I18N[lang] || I18N.en).qzRules || I18N.en.qzRules).slice();
+    rules.splice(2, 0, t("qzRuleOnce"), t("qzRuleRotate"));
     $("qzRules").innerHTML = rules.map((r) => `<li>${esc(r.replace(/\{(\w+)\}/g, (_, k) => P()[k] ?? ""))}</li>`).join("");
   }
 
   function render() {
     renderStatic();
-    const Q = QUIZ[lang] || QUIZ.en;
-    const banner = claimed && !won ? `<p class="qz-banner">${esc(t("qzClaimed", P()))}</p>` : "";
+    const banner = claimed && qs.stage !== "done" ? `<p class="qz-banner">${esc(t("qzClaimed", P()))}</p>` : "";
+    const nextSet = new Date(QUIZ_EPOCH + (quizPeriod() + 1) * QUIZ_DAYS * 864e5);
     if (qs.stage === "intro") {
-      box.innerHTML = `${banner}<button type="button" class="btn" data-act="start">${esc(t("qzStart"))}</button>`;
+      const tk = taken();
+      if (tk && tk.month === monthKey) {
+        box.innerHTML = `${banner}<p class="qz-score">${esc(t("qzScore", { score: tk.score, total: tk.total, pct: Math.round((tk.score / tk.total) * 100) }))}</p>
+          <p class="qz-ok">${esc(t("qzTaken", P()))}</p>`;
+        return;
+      }
+      const locked = window.dwtSurveyDone && !window.dwtSurveyDone();
+      const prof = profile();
+      if (locked || !prof.email) {
+        box.innerHTML = `${banner}<p class="qz-banner">${esc(t("qzNeedForm"))} <a class="mail" href="#start">↑</a></p>`;
+        return;
+      }
+      box.innerHTML = `${banner}
+        <p class="muted small">${esc(t("qzNextSet", { date: fmtDate(nextSet) }))}</p>
+        <p class="small">${esc(t("qzAs", { name: prof.name || "—", email: prof.email }))}</p>
+        <label class="check consent qz-agree"><input type="checkbox" id="qzAgree"><span>${esc(t("qzConsent"))}</span></label>
+        <p class="error" id="qzErr" role="alert" hidden></p>
+        <button type="button" class="btn" data-act="start">${esc(t("qzStart"))}</button>`;
       return;
     }
     if (qs.stage === "q") {
-      const [q, opts] = Q[qs.i];
+      const total = qs.set.length, cur = question(qs.i);
       box.innerHTML = `
-        <div class="qz-progress" aria-hidden="true"><span style="width:${(qs.i / Q.length) * 100}%"></span></div>
-        <p class="qz-count">${esc(t("qzOf", { n: qs.i + 1, total: Q.length }))}</p>
-        <fieldset class="qz-q"><legend>${esc(q)}</legend>
-          ${opts.map((o, j) => `<label class="check qz-opt"><input type="radio" name="qz" value="${j}"><span>${esc(o)}</span></label>`).join("")}
+        <div class="qz-progress" aria-hidden="true"><span style="width:${(qs.i / total) * 100}%"></span></div>
+        <p class="qz-count">${esc(t("qzOf", { n: qs.i + 1, total }))}</p>
+        <fieldset class="qz-q"><legend>${esc(cur.text)}</legend>
+          ${cur.opts.map((o, j) => `<label class="check qz-opt"><input type="radio" name="qz" value="${j}"><span>${esc(o)}</span></label>`).join("")}
         </fieldset>
         <p class="qz-feedback" id="qzFeedback" role="status"></p>
         <button type="button" class="btn" data-act="check">${esc(t("qzCheck"))}</button>`;
       return;
     }
-    if (qs.stage === "result") {
-      const total = Q.length, pct = Math.round((qs.score / total) * 100);
-      const passed = qs.score / total > PASS;
-      let html = `<p class="qz-score">${esc(t("qzScore", { score: qs.score, total, pct }))}</p>`;
-      if (!passed) {
-        html += `<p>${esc(t("qzFail"))}</p><button type="button" class="btn" data-act="retry">${esc(t("qzRetry"))}</button>`;
-      } else if (enteredThisMonth()) {
-        html += `<p class="qz-ok">${esc(t("qzAlready", P()))}</p>`;
-      } else if (claimed) {
-        html += `<p class="qz-ok">${esc(t("qzLate", P()))}</p>`;
-      } else {
-        let prof = {};
-        try { prof = JSON.parse(store.get("dwt-profile") || "{}"); } catch (_) {}
-        html += `<p class="qz-ok">${esc(t("qzPass", P()))}</p>
-          <form class="qz-entry" id="qzEntry" novalidate>
-            <h3>${esc(t("qzEnterTitle", P()))}</h3>
-            <div class="grid2">
-              <label class="field"><span>${esc(t("svName"))}</span><input name="name" maxlength="100" autocomplete="name" value="${esc(prof.name || "")}"></label>
-              <label class="field"><span>${esc(t("svEmail"))} *</span><input name="email" type="email" maxlength="120" autocomplete="email" value="${esc(prof.email || "")}"></label>
-              <label class="field wide"><span>${esc(t("svPhone"))} *</span><input name="phone" type="tel" maxlength="24" autocomplete="tel" placeholder="+234 803 123 4567" value="${esc(prof.phone || "")}"></label>
-            </div>
-            <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
-            <label class="check consent"><input type="checkbox" name="consent"><span>${esc(t("qzConsent"))}</span></label>
-            <p class="error" id="qzErr" role="alert" hidden></p>
-            <button type="submit" class="btn">${esc(t("qzSubmit"))}</button>
-          </form>`;
-      }
-      box.innerHTML = html;
+    if (qs.stage === "sending") {
+      box.innerHTML = `<p class="qz-score">${esc(t("qzScore", { score: qs.score, total: qs.set.length, pct: Math.round((qs.score / qs.set.length) * 100) }))}</p><p>${esc(t("qzSending"))}</p>`;
       return;
     }
-    if (qs.stage === "entered") {
-      box.innerHTML = `<p class="qz-score">${esc(t("qzScore", { score: qs.score, total: Q.length, pct: Math.round((qs.score / Q.length) * 100) }))}</p>
-        <p class="qz-ok${won ? " qz-won" : ""}">${esc(t(won === true ? "qzWon" : won === false ? "qzLate" : "qzEntered", P()))}</p>`;
+    if (qs.stage === "done") {
+      const total = qs.set.length, passed = qs.score / total > PASS;
+      let msg;
+      if (qs.result === "already") msg = t("qzAlreadyTried", P());
+      else if (!passed) msg = t("qzFailOnce", P());
+      else if (qs.result === "won") msg = t("qzWon", P());
+      else if (qs.result === "late") msg = t("qzLate", P());
+      else msg = t("qzEntered", P());
+      box.innerHTML = `<p class="qz-score">${esc(t("qzScore", { score: qs.score, total, pct: Math.round((qs.score / total) * 100) }))}</p>
+        <p class="qz-ok${qs.result === "won" ? " qz-won" : ""}">${esc(msg)}</p>`;
     }
+  }
+
+  async function finish() {
+    qs.stage = "sending"; render();
+    store.set(TAKEN, JSON.stringify({ month: monthKey, score: qs.score, total: qs.set.length }));
+    store.del(PROG);
+    const prof = profile();
+    const payload = {
+      type: "quiz", month: monthKey, name: prof.name || "", email: prof.email || "", phone: prof.phone || "",
+      score: qs.score, total: qs.set.length, set: qs.period, language: lang, consent: true, submitted_at: new Date().toISOString(),
+    };
+    qs.result = "unknown";
+    try {
+      if (!endpoint) throw new Error("no endpoint");
+      const opts = { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) };
+      try {
+        const res = await fetch(endpoint, opts);              // readable reply: { ok, winner, passed, already }
+        const data = await res.json();
+        if (data && data.ok) qs.result = data.already ? "already" : data.winner ? "won" : data.passed ? "late" : "sent";
+        if (data && data.winner === false && data.passed) claimed = true;
+      } catch (_) {
+        await fetch(endpoint, { ...opts, mode: "no-cors" });   // sent, but the reply can't be read
+      }
+    } catch (_) {
+      try {   // offline: keep it for the survey queue to send on the next visit
+        const q = JSON.parse(store.get("dwt-survey-queue") || "[]"); q.push(payload);
+        store.set("dwt-survey-queue", JSON.stringify(q.slice(-5)));
+      } catch (_) {}
+    }
+    qs.stage = "done"; render();
   }
 
   box.addEventListener("click", (e) => {
     const act = e.target.closest("[data-act]")?.dataset.act;
     if (!act) return;
-    const Q = QUIZ[lang] || QUIZ.en;
-    if (act === "start" || act === "retry") { qs = { i: 0, score: 0, answered: false, stage: "q" }; render(); box.scrollIntoView({ block: "nearest" }); return; }
+    if (act === "start") {
+      if (!$("qzAgree").checked) { const err = $("qzErr"); err.textContent = t("qzErr"); err.hidden = false; return; }
+      const period = quizPeriod();
+      qs = { stage: "q", month: monthKey, period, set: quizSet(period, bank().length, (q) => bank()[q][2]), i: 0, score: 0 };
+      saveProg(); render(); box.scrollIntoView({ block: "nearest" });
+      return;
+    }
     if (act === "check") {
       const picked = box.querySelector('input[name="qz"]:checked');
       const fb = $("qzFeedback");
       if (!picked) { fb.textContent = t("qzPick"); fb.className = "qz-feedback bad"; return; }
-      const [, opts, correct, why] = Q[qs.i];
-      const ok = +picked.value === correct;
+      const cur = question(qs.i);
+      const ok = +picked.value === cur.correct;
       if (ok) qs.score++;
+      qs.i++;                       // move on now, so a refresh can't re-answer this question
+      saveProg();
       box.querySelectorAll('input[name="qz"]').forEach((r) => {
         r.disabled = true;
         const lab = r.closest(".qz-opt");
-        if (+r.value === correct) lab.classList.add("right");
+        if (+r.value === cur.correct) lab.classList.add("right");
         else if (r.checked) lab.classList.add("wrong");
       });
-      fb.innerHTML = `<b>${esc(ok ? t("qzRight") : t("qzWrong", { ans: opts[correct] }))}</b><br><span class="why">${esc(why)}</span>`;
+      fb.innerHTML = `<b>${esc(ok ? t("qzRight") : t("qzWrong", { ans: cur.opts[cur.correct] }))}</b><br><span class="why">${esc(cur.why)}</span>`;
       fb.className = "qz-feedback " + (ok ? "good" : "bad");
-      const last = qs.i === Q.length - 1;
+      const last = qs.i >= qs.set.length;
       e.target.outerHTML = `<button type="button" class="btn" data-act="next">${esc(last ? t("qzFinish") : t("qzNext"))}</button>`;
       return;
     }
     if (act === "next") {
-      qs.i++;
-      qs.stage = qs.i >= Q.length ? "result" : "q";
-      render();
-      box.scrollIntoView({ block: "nearest" });
+      if (qs.i >= qs.set.length) return finish();
+      render(); box.scrollIntoView({ block: "nearest" });
     }
-  });
-
-  box.addEventListener("submit", async (e) => {
-    if (e.target.id !== "qzEntry") return;
-    e.preventDefault();
-    const f = e.target, err = $("qzErr");
-    const email = f.email.value.trim(), phone = f.phone.value.trim();
-    const digits = phone.replace(/[^\d]/g, "");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || digits.length < 7 || digits.length > 15 || !f.consent.checked) {
-      err.textContent = t("qzErr"); err.hidden = false; return;
-    }
-    const Q = QUIZ[lang] || QUIZ.en;
-    const payload = {
-      type: "quiz", month: monthKey, name: f.name.value.trim(), email, phone,
-      score: qs.score, total: Q.length, language: lang, consent: true,
-      website: f.website.value, submitted_at: new Date().toISOString(),
-    };
-    const btn = f.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = t("qzSending");
-    try {
-      if (!endpoint) throw new Error("no endpoint");
-      const opts = { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) };
-      try {
-        const res = await fetch(endpoint, opts);              // readable reply: { ok, winner }
-        const data = await res.json();
-        if (data && data.ok) { won = !!data.winner; if (!won) claimed = true; }
-      } catch (_) {
-        await fetch(endpoint, { ...opts, mode: "no-cors" });   // fallback: sent, but reply unreadable
-      }
-    } catch (_) {
-      // Keep it for the survey queue to retry next visit.
-      try {
-        const q = JSON.parse(store.get("dwt-survey-queue") || "[]"); q.push(payload);
-        store.set("dwt-survey-queue", JSON.stringify(q.slice(-5)));
-      } catch (_) {}
-    }
-    store.set("dwt-quiz-entry", monthKey);
-    qs.stage = "entered";
-    render();
   });
 
   async function checkStatus() {
@@ -273,11 +341,11 @@ const QUIZ = {
     try {
       const res = await fetch(endpoint + (endpoint.includes("?") ? "&" : "?") + "status=1");
       const data = await res.json();
-      if (data && data.ok) { claimed = !!data.claimed; render(); }
-    } catch (_) { /* offline: assume still open; the Sheet decides anyway */ }
+      if (data && data.ok) { claimed = !!data.claimed; if (qs.stage !== "q") render(); }
+    } catch (_) { /* offline: the Sheet decides anyway */ }
   }
 
-  document.addEventListener("dwt:lang", render);
+  document.addEventListener("dwt:lang", () => { if (qs.stage !== "q" || !box.querySelector(".qz-feedback.good, .qz-feedback.bad")) render(); else renderStatic(); });
   render();
   checkStatus();
 })();

@@ -1,5 +1,6 @@
 /**
  * Data Wey Talk — survey + quiz + Business Boss game receiver.
+ * Quiz: each person can take it ONCE a month (checked by email/phone). Every attempt is recorded.
  * Quiz prize: ONE winner per month = the FIRST person that month to score above 80%.
  * The winner is recorded automatically in the "Winners" tab and you get an email.
  *
@@ -71,21 +72,28 @@ function doPost(e) {
     if (d.type === "quiz") {
       const score = Number(d.score), total = Number(d.total);
       if (!(total > 0) || !(score >= 0) || score > total) return json({ ok: false, error: "bad score" });
-      if (score / total <= PASS_MARK) return json({ ok: false, error: "score not above pass mark" });
 
       const month = thisMonth_();               // server decides the month, not the visitor's device
-      const isWinner = !monthWinner_(month);
+      // ONE attempt per person per month: same email or same phone number = already tried.
+      const email = String(d.email).trim().toLowerCase(), phone = digits_(d.phone);
+      const tried = sheet_("quiz").getDataRange().getValues().slice(1).some((r) =>
+        monthOf_(r[1]) === month && (String(r[3]).trim().toLowerCase() === email || (phone && digits_(r[4]) === phone)));
+      if (tried) return json({ ok: true, already: true, winner: false, month: month });
+
+      const passed = score / total > PASS_MARK;
+      const isWinner = passed && !monthWinner_(month);
       const now = new Date();
       sheet_("quiz").appendRow([
         now, monthCell_(month), clean(d.name), clean(d.email), clean(d.phone), score, total,
-        Math.round((score / total) * 100) + "%", clean(d.language), "Yes", isWinner ? "WINNER" : "", clean(d.submitted_at),
+        Math.round((score / total) * 100) + "%", clean(d.language) + (d.set != null ? " · set " + clean(d.set) : ""), "Yes",
+        isWinner ? "WINNER" : passed ? "Passed (not first)" : "Not passed", clean(d.submitted_at),
       ]);
       let emailStatus;
       if (isWinner) {
         sheet_("winners").appendRow([now, monthCell_(month), clean(d.name), clean(d.email), clean(d.phone), score + "/" + total, ""]);
         emailStatus = notifyOwner_(month, d, score, total);
       }
-      return json({ ok: true, winner: isWinner, month: month, email: emailStatus });
+      return json({ ok: true, winner: isWinner, passed: passed, month: month, email: emailStatus });
     }
 
     // Business Boss game: one row when someone reaches the scoreboard, one when they download the report.
@@ -154,6 +162,9 @@ function clean(v) {
   v = String(v == null ? "" : v).slice(0, 200).trim();
   return /^[=+\-@]/.test(v) ? "'" + v : v;
 }
+
+// Last 9 digits of a phone number, so "+234 803…" and "0803…" match.
+function digits_(v) { return String(v == null ? "" : v).replace(/\D/g, "").slice(-9); }
 
 function json(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
