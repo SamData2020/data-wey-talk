@@ -9,9 +9,8 @@
  */
 const PASS_MARK = 0.8;            // must score ABOVE this
 const TZ = "Africa/Lagos";        // month boundaries use Lagos time
-// Who gets the "we have a winner" email. Leave "" to use the Google account that owns this script.
-// You can list several, separated by commas.
-const NOTIFY_EMAIL = "";
+// Who gets the "we have a winner" email. You can list several, separated by commas.
+const NOTIFY_EMAIL = "scitylanaltd@gmail.com";
 
 const SHEETS = {
   survey: {
@@ -91,7 +90,7 @@ function doPost(e) {
   }
 }
 
-function notifyTo_() { return NOTIFY_EMAIL || Session.getEffectiveUser().getEmail(); }
+function notifyTo_() { return NOTIFY_EMAIL; }
 
 /** Emails you when a month's winner comes in. Returns "sent" or the reason it failed. */
 function notifyOwner_(month, d, score, total) {
