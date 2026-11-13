@@ -45,6 +45,11 @@ function monthWinner_(month) {
 
 /** GET ?status=1 → { month, claimed } so the site can say if this month's prize is gone. */
 function doGet(e) {
+  // ?check=mail → is this deployment allowed to send email? (sends nothing, writes nothing)
+  if (e && e.parameter && e.parameter.check === "mail") {
+    try { return json({ ok: true, mail: "allowed", quotaLeft: MailApp.getRemainingDailyQuota() }); }
+    catch (err) { return json({ ok: true, mail: "NOT allowed", error: String(err).slice(0, 120) }); }
+  }
   const month = thisMonth_();
   return json({ ok: true, month: month, claimed: !!monthWinner_(month) });
 }
