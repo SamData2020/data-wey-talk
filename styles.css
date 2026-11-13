@@ -19,6 +19,7 @@
   --accent: #760308;
   --accent-ink: #ffffff;
   --series: #8a1018;
+  --neg: #2a78d6;
   --link: #760308;
   --up: #006300;
   --down: #b3261e;
@@ -39,6 +40,7 @@
     --accent: #debb79;
     --accent-ink: #3a0204;
     --series: #debb79;
+    --neg: #5598e7;
     --link: #debb79;
     --up: #0ca30c;
     --down: #ef6b5f;
@@ -57,6 +59,7 @@
   --accent: #debb79;
   --accent-ink: #3a0204;
   --series: #debb79;
+  --neg: #5598e7;
   --link: #debb79;
   --up: #0ca30c;
   --down: #ef6b5f;
@@ -421,3 +424,43 @@ a.btn { display: inline-block; text-decoration: none; }
 .quiz-rules li { margin: 4px 0; }
 .qz-banner { background: var(--page); border: 1px solid var(--gold); border-radius: 12px; padding: 10px 14px; margin: 0 0 14px; font-weight: 600; }
 .qz-won { font-size: 18px; color: var(--up); }
+
+/* ---------- Correlation ---------- */
+.corr-list { display: grid; gap: 8px; margin: 10px 0 16px; }
+.corr-row {
+  display: grid; grid-template-columns: 1fr 120px auto; gap: 4px 12px; align-items: center; text-align: left;
+  font: inherit; color: var(--ink); background: var(--page); border: 1px solid var(--border);
+  border-radius: 12px; padding: 10px 12px; cursor: pointer; min-height: 44px;
+}
+.corr-row:hover { border-color: var(--gold); }
+.corr-row.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.corr-names { font-weight: 700; font-size: 15px; }
+.corr-meter { position: relative; height: 10px; background: var(--grid); border-radius: 99px; }
+.corr-meter .mid { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
+.corr-meter .fill { position: absolute; top: 0; bottom: 0; }
+.corr-meter .fill.pos { background: var(--series); border-radius: 0 99px 99px 0; }
+.corr-meter .fill.neg { background: var(--neg); border-radius: 99px 0 0 99px; }
+.corr-r { font-size: 13px; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.corr-say { grid-column: 1 / -1; font-size: 14px; color: var(--ink-2); }
+.scatter-title { margin: 0 0 6px; font-size: 15px; }
+.scatter-wrap .dot-s { fill: var(--series); fill-opacity: .55; stroke: var(--surface); stroke-width: 1; }
+.scatter-wrap .trend { stroke-width: 2; stroke-dasharray: 6 4; }
+.scatter-wrap .trend.pos { stroke: var(--ink); }
+.scatter-wrap .trend.neg { stroke: var(--neg); }
+.scatter-wrap .axis-label { fill: var(--ink-2); font-size: 12px; font-weight: 600; }
+.caution { margin: 12px 0 0; padding: 8px 12px; border-radius: 10px; background: var(--page); color: var(--ink-2); }
+@media (max-width: 520px) {
+  .corr-row { grid-template-columns: 1fr auto; }
+  .corr-meter { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* ---------- Email Scitylana CTA ---------- */
+.help-cta {
+  margin-top: 20px; border-radius: 16px; padding: 20px; color: var(--cream);
+  background: radial-gradient(ellipse at 100% 0%, rgba(222, 187, 121, .22), transparent 60%), linear-gradient(160deg, var(--maroon), var(--maroon-deep));
+  display: grid; gap: 12px; text-align: center; justify-items: center;
+}
+.help-cta h3 { font-family: var(--slab); font-size: 22px; color: var(--gold-light); }
+.help-cta p { margin: 6px 0 0; max-width: 560px; }
+.btn.gold { background: var(--gold-grad); color: var(--maroon-deep); }
+.help-note { opacity: .8; margin: 0 !important; }

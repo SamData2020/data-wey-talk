@@ -319,6 +319,9 @@ function render() {
     `<div class="tile"><div class="label">${esc(tl.label)}</div><div class="value">${esc(tl.value)}</div><div class="explain">${esc(tl.x)}</div></div>`
   ).join("");
 
+  // Summary for other features (correlation, "email Scitylana" button).
+  const summary = { file: state.name, rows: rows.length, numName, groupName, money, total, avg, top: null, trend: null };
+
   const insights = [];
   insights.push(["🧾", t("insCount", { rows: recs.length.toLocaleString("en"), avg: esc(F(avg)) })]);
 
@@ -351,6 +354,7 @@ function render() {
     if (sorted.length >= 2 && total > 0) {
       const [topK, topV] = sorted[0];
       const [botK, botV] = sorted[sorted.length - 1];
+      summary.top = { name: topK, value: topV, pct: (topV / total) * 100 };
       insights.push(["🏆", t("insTop", { top: esc(topK), value: esc(F(topV)), pct: fmtPct((topV / total) * 100) })]);
       insights.push(["🐢", t("insBottom", { bottom: esc(botK), value: esc(F(botV)) })]);
       if (sorted.length >= 5) {
@@ -373,6 +377,7 @@ function render() {
     const first = pts[0], last = pts[pts.length - 1];
     const change = first.v !== 0 ? ((last.v - first.v) / Math.abs(first.v)) * 100 : null;
     const vars = { first: first.label, last: last.label, num: esc(numName), pct: change === null ? "" : fmtPct(Math.abs(change)) };
+    summary.trend = { first: first.label, last: last.label, change };
     if (change === null || Math.abs(change) < 3) insights.push(["➖", t("insFlat", vars)]);
     else if (change > 0) insights.push(["📈", t("insUp", vars)]);
     else insights.push(["📉", t("insDown", vars)]);
@@ -393,6 +398,9 @@ function render() {
     `<thead><tr>${headers.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead>` +
     `<tbody>${rows.slice(0, N).map((r) => `<tr>${r.map((v, i) => `<td${state.types[i] === "number" ? ' class="num"' : ""}>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody>`;
   $("tableNote").textContent = rows.length > N ? t("tableNote", { n: N }) : "";
+
+  state.summary = summary;
+  document.dispatchEvent(new Event("dwt:rendered"));
 }
 
 function buildSeries(recs, dateIdx) {

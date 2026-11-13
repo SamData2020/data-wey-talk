@@ -184,11 +184,29 @@
         </div>
       </div>
 
+      <div class="card" id="corrCard" hidden>
+        <h3 data-i18n="corrTitle"></h3>
+        <p class="muted small" data-i18n="corrLede"></p>
+        <p class="muted small" id="corrPick" data-i18n="corrPick"></p>
+        <div class="corr-list" id="corrList"></div>
+        <div class="scatter-wrap line-wrap" id="scatterWrap"></div>
+        <p class="caution small" data-i18n="corrCaution"></p>
+      </div>
+
       <details class="card table-card">
         <summary data-i18n="seeTable"></summary>
         <div class="table-scroll"><table id="table"></table></div>
         <p class="muted small" id="tableNote"></p>
       </details>
+
+      <div class="help-cta">
+        <div>
+          <h3 data-i18n="helpTitle"></h3>
+          <p data-i18n="helpBody"></p>
+        </div>
+        <a class="btn gold" id="helpBtn" href="mailto:scitylanaltd@gmail.com" data-i18n="helpBtn"></a>
+        <p class="small help-note" data-i18n="helpNote"></p>
+      </div>
     </section>
 
     <!-- Quick lessons -->
@@ -258,6 +276,7 @@
   <script src="app.js"></script>
   <script src="survey.js"></script>
   <script src="quiz.js"></script>
+  <script src="correlate.js"></script>
   <script src="curriculum.js"></script>
 </body>
 </html>
