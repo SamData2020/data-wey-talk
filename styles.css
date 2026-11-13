@@ -93,9 +93,22 @@ h1, h2 { font-family: var(--slab); font-weight: 700; }
 .lang { display: flex; border: 1px solid rgba(222, 187, 121, .45); border-radius: 999px; padding: 3px; }
 .lang button {
   border: 0; background: none; color: var(--cream); font: inherit; font-size: 14px;
-  padding: 6px 12px; border-radius: 999px; cursor: pointer; min-height: 32px;
+  padding: 6px 11px; border-radius: 999px; cursor: pointer; min-height: 32px;
 }
 .lang button[aria-pressed="true"] { background: var(--gold-light); color: var(--maroon-deep); font-weight: 700; }
+.brand-name { white-space: nowrap; }
+.lang .short { display: none; }
+/* Three language buttons: keep them and the brand on one row on phones */
+@media (max-width: 440px) {
+  .brand { gap: 8px; }
+  .brand img { width: 32px; height: 32px; }
+  .brand-name { font-size: 16px; }
+  .brand-by { font-size: 9.5px; }
+  .lang button { font-size: 13px; padding: 6px 9px; }
+  .lang .full { display: none; }
+  .lang .short { display: inline; }
+}
+@media (max-width: 360px) { .brand-by { display: none; } .brand-name { font-size: 15px; } .lang button { padding: 6px 7px; } }
 
 .hero-band {
   background:

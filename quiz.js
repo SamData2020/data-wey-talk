@@ -2,7 +2,7 @@
    Score above 80% (9 or 10 out of 10) → enter the monthly draw.
    Entries go to the same Apps Script as the survey (type: "quiz"). */
 
-const PRIZE = Object.assign({ amount: "₦5,000", kind_pcm: "airtime or data", kind_en: "airtime or data" },
+const PRIZE = Object.assign({ amount: "₦5,000", kind_pcm: "airtime or data", kind_en: "airtime or data", kind_sw: "muda wa maongezi au data" },
   (window.DWT_CONFIG || {}).quizPrize || {});
 const PASS = 0.8; // must score ABOVE this
 
@@ -122,8 +122,8 @@ const QUIZ = {
   const endpoint = (window.DWT_CONFIG && window.DWT_CONFIG.surveyEndpoint) || "";
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-  const monthName = () => now.toLocaleString(lang === "pcm" ? "en-NG" : "en", { month: "long", year: "numeric" });
-  const P = () => ({ amount: PRIZE.amount, kind: lang === "pcm" ? PRIZE.kind_pcm : PRIZE.kind_en, month: monthName() });
+  const monthName = () => now.toLocaleString({ pcm: "en-NG", sw: "sw" }[lang] || "en", { month: "long", year: "numeric" });
+  const P = () => ({ amount: PRIZE.amount, kind: lang === "pcm" ? PRIZE.kind_pcm : lang === "sw" ? PRIZE.kind_sw : PRIZE.kind_en, month: monthName() });
   const box = $("quizBox");
   let qs = { i: 0, score: 0, answered: false, stage: "intro" };
   let claimed = false;   // has someone already won this month? (asked from the Sheet)

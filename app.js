@@ -524,7 +524,7 @@ function sampleCSV() {
 
 // ---------- Wiring ----------
 function applyLang() {
-  document.documentElement.lang = lang === "pcm" ? "pcm" : "en";
+  document.documentElement.lang = lang; // pcm, en or sw
   document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   if (state.headers.length) { buildSelects(); render(); }
