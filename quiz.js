@@ -8,6 +8,7 @@ const PASS = 0.8; // must score ABOVE this
 
 Object.assign(I18N.pcm, {
   navQuiz: "Quiz & Prize",
+  qzPrizeKind: "airtime or data",
   qzEyebrow: "Test yourself · Win prize",
   qzTitle: "Take di quiz, win {amount} {kind}!",
   qzLede: "10 questions from di lessons and curriculum. Every month, di FIRST person wey score pass 80% (9 or 10 correct) go win {amount} {kind}. Quick-quick!",
@@ -48,6 +49,7 @@ Object.assign(I18N.pcm, {
 
 Object.assign(I18N.en, {
   navQuiz: "Quiz & Prize",
+  qzPrizeKind: "airtime or data",
   qzEyebrow: "Test yourself · Win a prize",
   qzTitle: "Take the quiz, win {amount} {kind}!",
   qzLede: "10 questions from the lessons and curriculum. Each month, the FIRST person to score above 80% (9 or 10 correct) wins {amount} {kind}. Be quick!",
@@ -122,8 +124,8 @@ const QUIZ = {
   const endpoint = (window.DWT_CONFIG && window.DWT_CONFIG.surveyEndpoint) || "";
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-  const monthName = () => now.toLocaleString({ pcm: "en-NG", sw: "sw" }[lang] || "en", { month: "long", year: "numeric" });
-  const P = () => ({ amount: PRIZE.amount, kind: lang === "pcm" ? PRIZE.kind_pcm : lang === "sw" ? PRIZE.kind_sw : PRIZE.kind_en, month: monthName() });
+  const monthName = () => now.toLocaleString({ pcm: "en-NG", ar: "ar-u-nu-latn" }[lang] || lang, { month: "long", year: "numeric" });
+  const P = () => ({ amount: PRIZE.amount, kind: PRIZE["kind_" + lang] || t("qzPrizeKind"), month: monthName() });
   const box = $("quizBox");
   let qs = { i: 0, score: 0, answered: false, stage: "intro" };
   let claimed = false;   // has someone already won this month? (asked from the Sheet)

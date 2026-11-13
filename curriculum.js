@@ -164,5 +164,4 @@ document.addEventListener("click", (e) => {
       </article>`).join("");
   }
   document.addEventListener("dwt:lang", renderCurriculum);
-  applyLang(); // apply the newly added words (also renders the curriculum)
 })();

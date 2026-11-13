@@ -121,6 +121,7 @@ I18N.sw = {
   vidPlay: "Cheza video",
 
   // ----- Quiz (quiz.js) -----
+  qzPrizeKind: "muda wa maongezi au data",
   qzEyebrow: "Jipime · Shinda zawadi",
   qzTitle: "Fanya jaribio, ushinde {amount} {kind}!",
   qzLede: "Maswali 10 kutoka kwenye masomo na mtaala. Kila mwezi, mtu WA KWANZA kupata zaidi ya 80% (9 au 10 sahihi) anashinda {amount} {kind}. Wahi!",
@@ -241,4 +242,4 @@ SECTORS.sw = [
   ["📱", "Simu na vifaa vya umeme", "Bidhaa zipi zinauzika haraka na zipi zinaleta faida?", "Fuatilia faida kwa kila bidhaa na idadi zinazorudishwa."],
 ];
 
-applyLang(); // apply Swahili now that the words are loaded
+

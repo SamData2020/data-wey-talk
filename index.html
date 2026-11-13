@@ -22,11 +22,20 @@
           <span class="brand-by">by Scitylana</span>
         </span>
       </a>
-      <div class="lang" role="group" aria-label="Language">
-        <button type="button" data-lang="pcm" aria-pressed="true">Pidgin</button>
-        <button type="button" data-lang="en" aria-pressed="false" aria-label="English"><span class="full">English</span><span class="short" aria-hidden="true">Eng</span></button>
-        <button type="button" data-lang="sw" aria-pressed="false" aria-label="Kiswahili" lang="sw"><span class="full">Kiswahili</span><span class="short" aria-hidden="true">Swa</span></button>
-      </div>
+      <label class="lang">
+        <span class="globe" aria-hidden="true">🌐</span>
+        <select id="langSel" aria-label="Language · Langue · اللغة">
+          <option value="pcm">Pidgin</option>
+          <option value="en">English</option>
+          <option value="fr" lang="fr">Français</option>
+          <option value="sw" lang="sw">Kiswahili</option>
+          <option value="ar" lang="ar">العربية</option>
+          <option value="ha" lang="ha">Hausa</option>
+          <option value="yo" lang="yo">Yorùbá</option>
+          <option value="ig" lang="ig">Igbo</option>
+          <option value="zu" lang="zu">isiZulu</option>
+        </select>
+      </label>
     </div>
     <nav class="subnav" aria-label="Sections">
       <a href="#start" data-i18n="navTool"></a>
@@ -279,6 +288,14 @@
   <script src="quiz.js"></script>
   <script src="correlate.js"></script>
   <script src="curriculum.js"></script>
-  <script src="sw.js"></script>
+  <!-- Languages: one file each; a missing word falls back to English -->
+  <script src="lang/sw.js"></script>
+  <script src="lang/fr.js"></script>
+  <script src="lang/ar.js"></script>
+  <script src="lang/ha.js"></script>
+  <script src="lang/yo.js"></script>
+  <script src="lang/ig.js"></script>
+  <script src="lang/zu.js"></script>
+  <script>applyLang();</script>
 </body>
 </html>

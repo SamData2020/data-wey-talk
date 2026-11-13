@@ -524,18 +524,21 @@ function sampleCSV() {
 
 // ---------- Wiring ----------
 function applyLang() {
-  document.documentElement.lang = lang; // pcm, en or sw
+  document.documentElement.lang = lang;
+  document.documentElement.dir = RTL.includes(lang) ? "rtl" : "ltr";
+  const sel = document.getElementById("langSel");
+  if (sel) sel.value = lang;
   document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
-  document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   if (state.headers.length) { buildSelects(); render(); }
   document.dispatchEvent(new Event("dwt:lang"));
 }
 
-document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => {
-  lang = b.dataset.lang;
+const RTL = ["ar"]; // right-to-left languages
+document.getElementById("langSel").addEventListener("change", (e) => {
+  lang = e.target.value;
   try { localStorage.setItem("dwt-lang", lang); } catch (_) {}
   applyLang();
-}));
+});
 
 function readFile(file) {
   if (!file) return;

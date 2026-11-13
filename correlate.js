@@ -146,7 +146,7 @@ function corrSentence(p) {
       return `<button type="button" class="corr-row${i === selected ? " on" : ""}" data-i="${i}" aria-pressed="${i === selected}">
         <span class="corr-names">${esc(p.a.name)} <span aria-hidden="true">↔</span> ${esc(p.b.name)}</span>
         <span class="corr-meter" aria-hidden="true"><span class="mid"></span><span class="fill ${p.r >= 0 ? "pos" : "neg"}" style="${side}"></span></span>
-        <span class="corr-r">${sign}${Math.abs(p.r).toFixed(2)} · ${esc(t(strengthKey(p.r)))}</span>
+        <span class="corr-r"><bdi>${sign}${Math.abs(p.r).toFixed(2)}</bdi> · ${esc(t(strengthKey(p.r)))}</span>
         <span class="corr-say">${esc(corrSentence(p))}</span>
       </button>`;
     }).join("");
@@ -204,7 +204,7 @@ function corrSentence(p) {
       `<circle class="dot-s" cx="${X(x).toFixed(1)}" cy="${Y(y).toFixed(1)}" r="4"><title>${esc(p.a.name)}: ${esc(p.a.isTime ? fmtVar(x, true) : fmt(x, moneyA))} · ${esc(p.b.name)}: ${esc(fmt(y, moneyB))}</title></circle>`).join("");
     const trend = `<line class="trend ${p.r >= 0 ? "pos" : "neg"}" x1="${X(x0)}" y1="${Y(clampY(b0 + slope * x0))}" x2="${X(x1)}" y2="${Y(clampY(b0 + slope * x1))}"/>`;
 
-    wrap.innerHTML = `<p class="scatter-title"><b>${esc(p.a.name)}</b> ↔ <b>${esc(p.b.name)}</b> · r = ${p.r >= 0 ? "+" : "−"}${Math.abs(p.r).toFixed(2)}</p>
+    wrap.innerHTML = `<p class="scatter-title"><b>${esc(p.a.name)}</b> ↔ <b>${esc(p.b.name)}</b> · <bdi>r = ${p.r >= 0 ? "+" : "−"}${Math.abs(p.r).toFixed(2)}</bdi></p>
       <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(p.a.name)} vs ${esc(p.b.name)}: ${esc(corrSentence(p))}">${g}<g class="dots">${dots}</g>${trend}</svg>
       <p class="muted small">${esc(t("scatterHint"))}</p>`;
   }
@@ -246,7 +246,7 @@ function corrSentence(p) {
     if (best) {
       const li = document.createElement("li");
       li.innerHTML = `<span class="icon" aria-hidden="true">🔗</span><span>${t(best.r >= 0 ? "insCorr" : "insCorrNeg", {
-        a: esc(best.a.name), b: esc(best.b.name), strength: esc(t(strengthKey(best.r))), r: (best.r >= 0 ? "+" : "−") + Math.abs(best.r).toFixed(2),
+        a: esc(best.a.name), b: esc(best.b.name), strength: esc(t(strengthKey(best.r))), r: "<bdi>" + (best.r >= 0 ? "+" : "−") + Math.abs(best.r).toFixed(2) + "</bdi>",
       })}</span>`;
       $("insights").appendChild(li);
     }
