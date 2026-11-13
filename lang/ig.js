@@ -125,7 +125,7 @@ I18N.ig = {
   vidPlay: "Kpọọ vidiyo",
 
   // ----- Quiz -----
-  qzPrizeKind: "nke kaadị oku ma ọ bụ data",
+  qzPrizeKind: "nke voucher / kaadị onyinye",
   qzEyebrow: "Nwalee onwe gị · Nweta onyinye",
   qzTitle: "Mee ule a, nweta {amount} {kind}!",
   qzLede: "Ajụjụ 10 sitere na nkuzi na usoro ọmụmụ. Kwa ọnwa, onye MBỤ nwetara karịa 80% (9 ma ọ bụ 10 ziri ezi) ga-enweta {amount} {kind}. Mee ngwa ngwa!",
@@ -156,7 +156,7 @@ I18N.ig = {
     "Ịbanye bụ n'efu. Ọ dịghị ịkwụ ụgwọ ma ọ bụ ịzụ ihe ọ bụla.",
     "Otu onye mmeri kwa ọnwa: onye MBỤ nwetara karịa 80% (9 ma ọ bụ 10 n'ime 10) wee rịọ ya.",
     "Anyị na-eji oge sistemụ anyị natara arịrịọ ahụ (oge Naịjirịa). Ọnwa ọ bụla na-amalite n'ụbọchị 1 n'etiti abalị.",
-    "Onye mmeri ga-enweta {amount} {kind}, nke a ga-ezigara nọmba ekwentị o ji rịọ.",
+    "Onye mmeri ga-enweta {amount} {kind}, nke a ga-ezite site na email ma ọ bụ WhatsApp.",
     "Otu onyinye maka otu onye kwa ọnwa. Anyị nwere ike ịchọpụta na onye mmeri bụ ezigbo mmadụ tupu anyị ezipu onyinye ahụ.",
     "Anyị na-akpọtụrụ onye mmeri site na email ma ọ bụ ekwentị. Ọ bụrụ na ọ zaghị n'ime ụbọchị 7, onyinye ahụ ga-aga n'aka onye ọzọ ruru eru n'ọnwa ahụ.",
     "Ndị ọrụ Scitylana na ezinụlọ ha enweghị ike ịbanye.",

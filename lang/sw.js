@@ -125,7 +125,7 @@ I18N.sw = {
   vidPlay: "Cheza video",
 
   // ----- Quiz (quiz.js) -----
-  qzPrizeKind: "muda wa maongezi au data",
+  qzPrizeKind: "vocha / kadi ya zawadi",
   qzEyebrow: "Jipime · Shinda zawadi",
   qzTitle: "Fanya jaribio, ushinde {amount} {kind}!",
   qzLede: "Maswali 10 kutoka kwenye masomo na mtaala. Kila mwezi, mtu WA KWANZA kupata zaidi ya 80% (9 au 10 sahihi) anashinda {amount} {kind}. Wahi!",
@@ -156,7 +156,7 @@ I18N.sw = {
     "Ni bure kushiriki. Hakuna malipo wala ununuzi unaohitajika.",
     "Mshindi mmoja kila mwezi: mtu WA KWANZA kupata zaidi ya 80% (9 au 10 kati ya 10) na kudai.",
     "Tunatumia muda ambao mfumo wetu umepokea dai (saa za Nigeria). Kila mwezi unaanza tarehe 1 saa sita usiku.",
-    "Mshindi anapata {amount} {kind}, inayotumwa kwa namba ya simu aliyotumia kudai.",
+    "Mshindi anapata {amount} {kind}, inayotumwa kwa barua pepe au WhatsApp.",
     "Zawadi moja kwa mtu mmoja kila mwezi. Tunaweza kuthibitisha kuwa mshindi ni mtu halisi kabla ya kutuma zawadi.",
     "Tunawasiliana na mshindi kwa barua pepe au simu. Asipojibu ndani ya siku 7, zawadi inaenda kwa mtu anayefuata aliyefuzu mwezi huo.",
     "Wafanyakazi wa Scitylana na familia zao hawawezi kushiriki.",

@@ -124,7 +124,7 @@ I18N.zu = {
   vidPlay: "Dlala ividiyo",
 
   // ----- Quiz -----
-  qzPrizeKind: "lwe-airtime noma idatha",
+  qzPrizeKind: "we-voucher / ikhadi lesipho",
   qzEyebrow: "Zihlole · Wina umklomelo",
   qzTitle: "Phendula isivivinyo, uwine u-{amount} {kind}!",
   qzLede: "Imibuzo eyi-10 evela ezifundweni nasohlelweni lokufunda. Inyanga ngayinye, umuntu WOKUQALA othola ngaphezu kwama-80% (9 noma 10 okulungile) uwina u-{amount} {kind}. Shesha!",
@@ -155,7 +155,7 @@ I18N.zu = {
     "Ukungena kumahhala. Akudingeki ukukhokha noma ukuthenga.",
     "Owinile oyedwa inyanga ngayinye: umuntu WOKUQALA othola ngaphezu kwama-80% (9 noma 10 kwayi-10) futhi awufune.",
     "Sisebenzisa isikhathi uhlelo lwethu oluthole ngaso isicelo (isikhathi saseNigeria). Inyanga ngayinye iqala mhla lu-1 phakathi kwamabili.",
-    "Owinile uthola u-{amount} {kind}, othunyelwa kunombolo yocingo ayisebenzisile ukufuna.",
+    "Owinile uthola u-{amount} {kind}, othunyelwa nge-imeyili noma nge-WhatsApp.",
     "Umklomelo owodwa umuntu ngamunye ngenyanga. Singaqinisekisa ukuthi owinile ungumuntu wangempela ngaphambi kokuthumela umklomelo.",
     "Sixhumana nowinile nge-imeyili noma ngocingo. Uma engaphenduli zingakapheli izinsuku eziyi-7, umklomelo uya kumuntu olandelayo ofanelekayo ngaleyo nyanga.",
     "Abasebenzi be-Scitylana nemindeni yabo abavunyelwe ukungena.",

@@ -29,5 +29,5 @@ The **first** person each month to score above 80% (9 or 10 out of 10) wins. It'
 **Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy**. The URL stays the same.
 Google will ask for one extra permission (sending email). Allow it.
 
-**When you get the winner email:** send their airtime/data, then write "Yes" in **Prize sent?** in the Winners tab.
+**When you get the winner email:** send their $5 voucher / gift card by email or WhatsApp, then write "Yes" in **Prize sent?** in the Winners tab.
 If the winner doesn't reply within 7 days, the rules say the prize goes to the next qualifying person. That's the next row for that month in **Quiz Entries**.

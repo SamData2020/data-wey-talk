@@ -4,13 +4,13 @@
    - The FIRST person each month to score above 80% (9 or 10 of 10) wins.
    Results go to the same Apps Script as the survey (type: "quiz"). */
 
-const PRIZE = Object.assign({ amount: "₦5,000", kind_pcm: "airtime or data", kind_en: "airtime or data", kind_sw: "muda wa maongezi au data" },
+const PRIZE = Object.assign({ amount: "$5" },
   (window.DWT_CONFIG || {}).quizPrize || {});
 const PASS = 0.8; // must score ABOVE this
 
 Object.assign(I18N.pcm, {
   navQuiz: "Quiz & Prize",
-  qzPrizeKind: "airtime or data",
+  qzPrizeKind: "voucher / gift card",
   qzOnceNote: "You fit take am ONCE every month — so prepare well before you start.",
   qzNextSet: "New questions every 14 days. Next change: {date}.",
   qzAs: "You dey take am as {name} ({email}).",
@@ -50,7 +50,7 @@ Object.assign(I18N.pcm, {
     "E free. You no need to pay or buy anything.",
     "One winner every month: di FIRST person wey score pass 80% (9 or 10 out of 10) and claim am.",
     "We dey use di time wey our system receive di claim (Nigeria time). Month start 1st, 12 midnight.",
-    "Di winner go get {amount} {kind}, sent to di phone number wey dem use claim.",
+    "Di winner go get {amount} {kind}, we go send am by email or WhatsApp.",
     "One prize per person every month. We fit check say na real person before we send di prize.",
     "We go contact di winner by email or phone. If dem no answer within 7 days, di prize go to di next person wey qualify dat month.",
     "Scitylana staff and their family no fit enter.",
@@ -60,7 +60,7 @@ Object.assign(I18N.pcm, {
 
 Object.assign(I18N.en, {
   navQuiz: "Quiz & Prize",
-  qzPrizeKind: "airtime or data",
+  qzPrizeKind: "voucher / gift card",
   qzOnceNote: "You can take it ONCE a month — so prepare before you start.",
   qzNextSet: "New questions every 14 days. Next change: {date}.",
   qzAs: "Taking the quiz as {name} ({email}).",
@@ -71,8 +71,8 @@ Object.assign(I18N.en, {
   qzRuleOnce: "Each person can take the quiz ONCE a month (same email or phone). Only your first attempt counts.",
   qzRuleRotate: "The questions change every 14 days.",
   qzEyebrow: "Test yourself · Win a prize",
-  qzTitle: "Take the quiz, win {amount} {kind}!",
-  qzLede: "10 questions from the lessons and curriculum. Each month, the FIRST person to score above 80% (9 or 10 correct) wins {amount} {kind}. Be quick!",
+  qzTitle: "Take the quiz, win a {amount} {kind}!",
+  qzLede: "10 questions from the lessons and curriculum. Each month, the FIRST person to score above 80% (9 or 10 correct) wins a {amount} {kind}. Be quick!",
   qzStart: "Start the quiz",
   qzOf: "Question {n} of {total}",
   qzCheck: "Check answer",
@@ -90,7 +90,7 @@ Object.assign(I18N.en, {
   qzSubmit: "Claim the prize",
   qzSending: "Sending…",
   qzEntered: "✅ We've received your entry. If you're the first in {month}, we'll contact you by email or phone.",
-  qzWon: "🏆 Congratulations! You're the FIRST in {month} — you've won {amount} {kind}! Scitylana will contact you by email or phone.",
+  qzWon: "🏆 Congratulations! You're the FIRST in {month} — you've won a {amount} {kind}! Scitylana will contact you by email or phone.",
   qzLate: "Someone has already won the {month} prize. Great score though! Come back early next month and try again.",
   qzClaimed: "🏆 The {month} prize has been won. You can still take the quiz to practise — the next prize opens on the 1st of next month.",
   qzAlready: "✅ You've already claimed for {month}. Come back next month!",
@@ -100,7 +100,7 @@ Object.assign(I18N.en, {
     "Free to enter. No payment or purchase needed.",
     "One winner each month: the FIRST person to score above 80% (9 or 10 out of 10) and claim.",
     "We go by the time our system receives the claim (Nigeria time). Each month starts on the 1st at midnight.",
-    "The winner receives {amount} {kind}, sent to the phone number they claimed with.",
+    "The winner receives a {amount} {kind}, sent by email or WhatsApp.",
     "One prize per person per month. We may check that the winner is a real person before sending the prize.",
     "We contact the winner by email or phone. If they don't reply within 7 days, the prize goes to the next qualifying person that month.",
     "Scitylana staff and their families can't enter.",

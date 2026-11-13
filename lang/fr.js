@@ -124,7 +124,7 @@ I18N.fr = {
   vidPlay: "Lire la vidéo",
 
   // ----- Quiz -----
-  qzPrizeKind: "en crédit d'appel ou data",
+  qzPrizeKind: "en bon d'achat / carte cadeau",
   qzEyebrow: "Testez-vous · Gagnez un prix",
   qzTitle: "Faites le quiz, gagnez {amount} {kind} !",
   qzLede: "10 questions tirées des leçons et du programme. Chaque mois, la PREMIÈRE personne qui obtient plus de 80 % (9 ou 10 bonnes réponses) gagne {amount} {kind}. Soyez rapide !",
@@ -155,7 +155,7 @@ I18N.fr = {
     "Participation gratuite. Aucun paiement ni achat nécessaire.",
     "Un gagnant par mois : la PREMIÈRE personne à obtenir plus de 80 % (9 ou 10 sur 10) et à réclamer.",
     "L'heure qui compte est celle de réception de la demande par notre système (heure du Nigeria). Chaque mois commence le 1er à minuit.",
-    "Le gagnant reçoit {amount} {kind}, envoyés au numéro utilisé pour réclamer.",
+    "Le gagnant reçoit {amount} {kind}, envoyé par e-mail ou WhatsApp.",
     "Un prix par personne et par mois. Nous pouvons vérifier que le gagnant est une vraie personne avant l'envoi.",
     "Nous contactons le gagnant par e-mail ou téléphone. Sans réponse sous 7 jours, le prix va à la personne qualifiée suivante du mois.",
     "Le personnel de Scitylana et leurs familles ne peuvent pas participer.",

@@ -124,7 +124,7 @@ I18N.ha = {
   vidPlay: "Kunna bidiyo",
 
   // ----- Quiz -----
-  qzPrizeKind: "na katin waya ko data",
+  qzPrizeKind: "na takardar sayayya / katin kyauta",
   qzEyebrow: "Gwada kanka · Ci kyauta",
   qzTitle: "Yi jarrabawar, ka ci {amount} {kind}!",
   qzLede: "Tambayoyi 10 daga darussa da manhaja. Kowane wata, mutum NA FARKO da ya samu sama da 80% (9 ko 10 daidai) zai ci {amount} {kind}. Yi sauri!",
@@ -155,7 +155,7 @@ I18N.ha = {
     "Shiga kyauta ne. Ba a buƙatar biya ko saye.",
     "Mai nasara ɗaya kowane wata: mutum NA FARKO da ya samu sama da 80% (9 ko 10 cikin 10) ya nema.",
     "Muna amfani da lokacin da tsarinmu ya karɓi buƙatar (lokacin Najeriya). Kowane wata yana farawa ranar 1 da tsakar dare.",
-    "Mai nasara zai samu {amount} {kind}, wanda za a tura zuwa lambar wayar da ya yi amfani da ita.",
+    "Mai nasara zai samu {amount} {kind}, wanda za a aika ta imel ko WhatsApp.",
     "Kyauta ɗaya ga mutum ɗaya kowane wata. Za mu iya tabbatar cewa mai nasara mutum ne na gaske kafin mu tura kyautar.",
     "Za mu tuntuɓi mai nasara ta imel ko waya. Idan bai amsa ba cikin kwana 7, kyautar za ta tafi ga wanda ya cancanta na gaba a watan.",
     "Ma'aikatan Scitylana da iyalansu ba za su iya shiga ba.",

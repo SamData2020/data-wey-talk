@@ -125,7 +125,7 @@ I18N.yo = {
   vidPlay: "Ṣe fidio",
 
   // ----- Quiz -----
-  qzPrizeKind: "ti kaadi ipe tabi data",
+  qzPrizeKind: "ti voucher / kaadi ẹbun",
   qzEyebrow: "Dan ara rẹ wo · Gba ẹbun",
   qzTitle: "Ṣe idanwo naa, gba {amount} {kind}!",
   qzLede: "Ibeere mẹwa lati inu ẹkọ ati eto ẹkọ. Oṣu kọọkan, ẸNI AKỌKỌ to ba gba ju 80% lọ (9 tabi 10 to tọ) yoo gba {amount} {kind}. Yara!",
@@ -156,7 +156,7 @@ I18N.yo = {
     "Ọfẹ ni lati wọle. Ko si isanwo tabi rira kankan.",
     "Ẹni kan ṣoṣo lo n gba ẹbun loṣooṣu: ẸNI AKỌKỌ to ba gba ju 80% lọ (9 tabi 10 ninu 10) to si beere.",
     "A n lo akoko ti eto wa gba ibeere naa (aago Naijiria). Oṣu kọọkan bẹrẹ ni ọjọ kini ni ọganjọ.",
-    "Ẹni to gba ẹbun yoo gba {amount} {kind}, ti a o fi ranṣẹ si nọmba foonu to fi beere.",
+    "Ẹni to gba ẹbun yoo gba {amount} {kind}, ti a o fi ranṣẹ nipasẹ imeeli tabi WhatsApp.",
     "Ẹbun kan fun eniyan kan loṣooṣu. A le ṣayẹwo pe ẹni to gba ẹbun jẹ eniyan gidi ki a to fi ẹbun ranṣẹ.",
     "A o kan si ẹni to gba ẹbun nipasẹ imeeli tabi foonu. Ti ko ba dahun laarin ọjọ meje, ẹbun naa yoo lọ si ẹni to tẹle to yege ninu oṣu naa.",
     "Awọn oṣiṣẹ Scitylana ati idile wọn ko le wọle.",

@@ -131,7 +131,7 @@ function notifyOwner_(month, d, score, total) {
     MailApp.sendEmail(to, "🎉 Data Wey Talk quiz winner for " + month,
       "First person to score above 80% this month:\n\n" +
       "Name: " + clean(d.name) + "\nEmail: " + clean(d.email) + "\nPhone: " + clean(d.phone) +
-      "\nScore: " + score + "/" + total + "\n\nSend their airtime/data, then mark 'Prize sent?' in the Winners tab.");
+      "\nScore: " + score + "/" + total + "\n\nSend their $5 voucher / gift card by email or WhatsApp, then mark 'Prize sent?' in the Winners tab.");
     return "sent";
   } catch (err) {
     return "failed: " + String(err).slice(0, 150);   // never block the entry because of email

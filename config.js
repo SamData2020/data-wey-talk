@@ -6,6 +6,6 @@
 window.DWT_CONFIG = {
   surveyEndpoint: "https://script.google.com/macros/s/AKfycbw4d1c00RbQ2TsL80uypr3xGqEPvzgDjqFNjg8IYsiYRwAbztdWw2IEJgybHuQ6HLigRA/exec",
   videos: {},
-  // Quiz prize: one winner a month — the first person to score above 80%.
-  quizPrize: { amount: "₦5,000", kind_pcm: "airtime or data", kind_en: "airtime or data", kind_sw: "muda wa maongezi au data" },
+  // Quiz prize: one winner a month — the first person to score above 80%. Change the amount here.
+  quizPrize: { amount: "$5" },
 };
