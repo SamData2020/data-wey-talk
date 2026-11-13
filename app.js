@@ -13,6 +13,10 @@ const I18N = {
     downloadHint: "Open am for Excel, change am, come put am back here.",
     privacy: "🔒 Your file no dey comot from your phone or computer. We no dey send am go anywhere.",
     newFile: "Use another file",
+    pickCurrency: "Which money (currency)?",
+    curNone: "No currency (na just numbers)",
+    curFromFile: "we see am for your file",
+    curFromCountry: "from your country",
     pickNumber: "Which number you wan check?",
     pickGroup: "Group am by wetin?",
     glance: "Wetin dey your data",
@@ -80,6 +84,10 @@ const I18N = {
     downloadHint: "Open it in Excel, play with it, then upload it here.",
     privacy: "🔒 Your file never leaves your phone or computer. Nothing is uploaded.",
     newFile: "Use another file",
+    pickCurrency: "Currency",
+    curNone: "No currency (just numbers)",
+    curFromFile: "found in your file",
+    curFromCountry: "from your country",
     pickNumber: "Which number do you want to check?",
     pickGroup: "Group it by?",
     glance: "Your data at a glance",
@@ -183,7 +191,10 @@ function parseNum(s) {
   if (!v) return null;
   let neg = false;
   if (/^\(.*\)$/.test(v)) { neg = true; v = v.slice(1, -1); }
-  v = v.replace(/[₦$€£,\s]|NGN|naira|^N(?=\d)/gi, "");
+  v = v.replace(CUR_STRIP, "").replace(/\s/g, "");
+  // Decimal comma (French style): "12,50" or "1.200,50" → 12.50 / 1200.50. "1,200" stays twelve hundred.
+  if (/,\d{1,2}$/.test(v)) v = v.replace(/\./g, "").replace(",", ".");
+  v = v.replace(/,/g, "");
   if (!/^-?\d*\.?\d+$/.test(v)) return null;
   const n = Number(v);
   return Number.isFinite(n) ? (neg ? -n : n) : null;
@@ -222,26 +233,90 @@ function detectTypes(headers, rows) {
   });
 }
 
+// ---------- Currency ----------
+// Order matters: more specific marks first (GH₵ before ₵, E£ before £, N$ before $).
+// after: true → written after the number (e.g. 12,500 CFA). c: countries from the survey.
+const CURRENCIES = [
+  { code: "NGN", sym: "₦", re: /₦|\bNGN\b|naira/i, c: ["Nigeria"] },
+  { code: "GHS", sym: "GH₵", re: /GH[₵¢]|₵|\bGHS\b|\bcedis?\b/i, c: ["Ghana"] },
+  { code: "KES", sym: "KSh", re: /\bKShs?|\bKES\b/i, c: ["Kenya"] },
+  { code: "TZS", sym: "TSh", re: /\bTShs?|\bTZS\b/i, c: ["Tanzania"] },
+  { code: "UGX", sym: "USh", re: /\bUShs?|\bUGX\b/i, c: ["Uganda"] },
+  { code: "RWF", sym: "FRw", after: true, re: /\bRWF\b|FRw/i, c: ["Rwanda"] },
+  { code: "ZAR", sym: "R", re: /\bZAR\b|\brand\b|\(R\)|^R\s?\d/i, c: ["South Africa", "Lesotho", "Eswatini"] },
+  { code: "NAD", sym: "N$", re: /N\$|\bNAD\b/, c: ["Namibia"] },
+  { code: "EGP", sym: "E£", re: /E£|\bEGP\b|\bLE\s?\d|ج\.م/i, c: ["Egypt"] },
+  { code: "MAD", sym: "DH", after: true, re: /\bMAD\b|\bDHS?\b|dirham|د\.م/i, c: ["Morocco"] },
+  { code: "DZD", sym: "DA", after: true, re: /\bDZD\b|\bDA\b|دج/, c: ["Algeria"] },
+  { code: "TND", sym: "DT", after: true, re: /\bTND\b|\bDT\b|د\.ت/, c: ["Tunisia"] },
+  { code: "XOF", sym: "CFA", after: true, re: /\bXOF\b|\bF?CFA\b/i,
+    c: ["Senegal", "Côte d'Ivoire", "Mali", "Burkina Faso", "Niger", "Togo", "Benin", "Guinea-Bissau"] },
+  { code: "XAF", sym: "FCFA", after: true, re: /\bXAF\b/,
+    c: ["Cameroon", "Gabon", "Chad", "Central African Republic", "Congo (Brazzaville)", "Equatorial Guinea"] },
+  { code: "CDF", sym: "FC", after: true, re: /\bCDF\b/, c: ["Congo (DRC)"] },
+  { code: "ETB", sym: "Br", re: /\bETB\b|\bbirr\b/i, c: ["Ethiopia"] },
+  { code: "ZMW", sym: "K", re: /\bZMW\b|kwacha/i, c: ["Zambia"] },
+  { code: "MWK", sym: "MK", re: /\bMWK\b/, c: ["Malawi"] },
+  { code: "BWP", sym: "P", re: /\bBWP\b|\bpula\b/i, c: ["Botswana"] },
+  { code: "MZN", sym: "MT", after: true, re: /\bMZN\b|metical/i, c: ["Mozambique"] },
+  { code: "AOA", sym: "Kz", re: /\bAOA\b|\bKz\b/, c: ["Angola"] },
+  { code: "GMD", sym: "D", re: /\bGMD\b|dalasi/i, c: ["Gambia"] },
+  { code: "SLE", sym: "Le", re: /\bSL[LE]\b|\bleones?\b/i, c: ["Sierra Leone"] },
+  { code: "LRD", sym: "L$", re: /L\$|\bLRD\b/, c: ["Liberia"] },
+  { code: "MUR", sym: "Rs", re: /\bMUR\b/, c: ["Mauritius"] },
+  { code: "MGA", sym: "Ar", after: true, re: /\bMGA\b|ariary/i, c: ["Madagascar"] },
+  { code: "SDG", sym: "SDG", after: true, re: /\bSDG\b/, c: ["Sudan"] },
+  { code: "LYD", sym: "LD", after: true, re: /\bLYD\b/, c: ["Libya"] },
+  { code: "USD", sym: "$", re: /US\$|\$|\bUSD\b|dollars?/i, c: ["Zimbabwe", "Liberia", "Somalia", "South Sudan"] },
+  { code: "EUR", sym: "€", re: /€|\bEUR\b|\beuros?\b/i, c: [] },
+  { code: "GBP", sym: "£", re: /£|\bGBP\b|\bpounds?\b/i, c: [] },
+];
+// Everything that can sit around a money number, removed before reading the number.
+const CUR_STRIP = /US\$|[NL]\$|GH[₵¢]|E£|[KTU]?Shs?|F?CFA|FRw|[₦$€£₵¢]|ج\.م|د\.م|دج|د\.ت|\b(?:NGN|GHS|KES|TZS|UGX|RWF|ZAR|NAD|EGP|MAD|DZD|TND|XOF|XAF|CDF|ETB|ZMW|MWK|BWP|MZN|AOA|GMD|SLE|SLL|LRD|MUR|MGA|SDG|LYD|USD|EUR|GBP|DHS?|DA|DT|Br|Kz|MT|Rs|LE|Ar|FC|Le|naira|cedis?)\b|^[RNK](?=\s?\d)/gi;
+const CUR_BY_CODE = Object.fromEntries(CURRENCIES.map((c) => [c.code, c]));
+
+function curIn(text) { const s = String(text || ""); return s ? CURRENCIES.find((c) => c.re.test(s)) || null : null; }
+
+// Which currency does this file use? Count marks in headers and number cells; else use the survey country.
+function detectCurrency(headers, rows, types) {
+  const count = {};
+  const add = (c) => { if (c) count[c.code] = (count[c.code] || 0) + 1; };
+  headers.forEach((h) => add(curIn(h)));
+  rows.slice(0, 300).forEach((r) => types.forEach((tp, i) => { if (tp === "number") add(curIn(r[i])); }));
+  const best = Object.keys(count).sort((a, b) => count[b] - count[a])[0];
+  if (best) return { cur: CUR_BY_CODE[best], how: "file" };
+  let country = "";
+  try { country = JSON.parse(localStorage.getItem("dwt-profile") || "{}").country || ""; } catch (_) {}
+  const byCountry = CURRENCIES.find((c) => c.c.includes(country));
+  return byCountry ? { cur: byCountry, how: "country" } : { cur: null, how: "none" };
+}
+
 function isMoneyCol(header, rows, i) {
-  if (/₦|naira|ngn|amount|price|sales|revenue|cost|profit|income|money|kudi|owo|ego/i.test(header)) return true;
-  return rows.slice(0, 50).some((r) => /₦|NGN/i.test(r[i]));
+  if (/amount|price|sales|revenue|cost|profit|income|money|total|value|kudi|owo|ego|montant|prix|vente|chiffre|bei|mauzo|pesa|faida|gharama|imali|intengo|المبلغ|السعر|المبيعات/i.test(header)) return true;
+  if (curIn(header)) return true;
+  return rows.slice(0, 50).some((r) => curIn(r[i]));
 }
 
 // ---------- Formatting ----------
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function withCur(s, money) {
+  const c = money && state.cur;
+  if (!c) return s;
+  if (c.after) return `${s} ${c.sym}`;
+  return /[A-Za-z]$/.test(c.sym) ? `${c.sym} ${s}` : c.sym + s;   // "KSh 1,200" but "₦1,200"
+}
 function fmt(n, money) {
   const abs = Math.abs(n);
   const s = abs.toLocaleString("en-NG", { maximumFractionDigits: abs < 100 && abs % 1 ? 2 : 0 });
-  return (n < 0 ? "-" : "") + (money ? "₦" : "") + s;
+  return (n < 0 ? "-" : "") + withCur(s, money);
 }
 function fmtShort(n, money) {
-  const s = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(n);
-  return (money ? "₦" : "") + s;
+  return withCur(new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(n), money);
 }
 function fmtPct(p) { return (Math.round(p * 10) / 10).toLocaleString("en"); }
 
 // ---------- State ----------
-const state = { name: "", headers: [], rows: [], types: [], num: -1, group: -1, date: -1 };
+const state = { name: "", headers: [], rows: [], types: [], num: -1, group: -1, date: -1, cur: null, curHow: "none" };
 
 function load(name, text) {
   $("error").hidden = true;
@@ -251,6 +326,8 @@ function load(name, text) {
   if (!types.includes("number")) return showError(t("errNoNum"));
   Object.assign(state, { name, ...parsed, types });
   state.date = types.indexOf("date");
+  const dc = detectCurrency(parsed.headers, parsed.rows, types);
+  state.cur = dc.cur; state.curHow = dc.how;
   // Prefer a total-money column (Amount/Sales), then any money-like column, else the last number column.
   const numIdx = types.map((tp, i) => (tp === "number" ? i : -1)).filter((i) => i >= 0);
   state.num = numIdx.find((i) => /amount|sales|revenue|total|income/i.test(parsed.headers[i]))
@@ -281,6 +358,10 @@ function buildSelects() {
     ? `<option value="${i}"${i === state.num ? " selected" : ""}>${esc(h)}</option>` : "").join("");
   grpSel.innerHTML = `<option value="-1">${esc(t("none"))}</option>` + state.headers.map((h, i) => state.types[i] === "text"
     ? `<option value="${i}"${i === state.group ? " selected" : ""}>${esc(h)}</option>` : "").join("");
+  const cur = state.cur ? state.cur.code : "";
+  const tag = (code) => code === cur && state.curHow !== "manual" && state.curHow !== "none" ? ` · ${t(state.curHow === "file" ? "curFromFile" : "curFromCountry")}` : "";
+  $("curSel").innerHTML = `<option value="">${esc(t("curNone"))}</option>` +
+    CURRENCIES.map((c) => `<option value="${c.code}"${c.code === cur ? " selected" : ""}>${c.code} · ${esc(c.sym)}${esc(tag(c.code))}</option>`).join("");
 }
 
 // ---------- Analysis + rendering ----------
@@ -570,6 +651,7 @@ $("reset").addEventListener("click", () => {
 });
 $("numCol").addEventListener("change", (e) => { state.num = +e.target.value; render(); });
 $("groupCol").addEventListener("change", (e) => { state.group = +e.target.value; render(); });
+$("curSel").addEventListener("change", (e) => { state.cur = CUR_BY_CODE[e.target.value] || null; state.curHow = "manual"; buildSelects(); render(); });
 
 let rt;
 window.addEventListener("resize", () => {

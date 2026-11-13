@@ -176,7 +176,7 @@ svg, .corr-meter, .line-wrap { direction: ltr; }
   flex-wrap: wrap; padding-block: 20px 8px;
 }
 .file-bar h2 { font-size: 22px; word-break: break-word; }
-.controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-block: 12px 8px; }
+.controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-block: 12px 8px; }
 .controls label { display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--ink-2); }
 select {
   font: inherit; color: var(--ink); background: var(--surface);
