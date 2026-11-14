@@ -614,3 +614,33 @@ span.chip.on { opacity: 1; }
   .bk-price-tiles { grid-template-columns: 1fr !important; }
 }
 .vid-book { display: inline-flex; margin-top: 10px; text-decoration: none; }
+
+/* ---------- Upload / type switch + typed-data table ---------- */
+.tool-mode { display: flex; width: fit-content; margin: 0 auto 16px; }
+.tool-mode button { font-size: 15px; padding: 9px 16px; }
+.tool-mode button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+#modeType { text-align: start; }
+.entry h3 { margin: 0 0 4px; }
+.en-head, .en-row { display: grid; grid-template-columns: 1.25fr 2fr .9fr 1fr 1.1fr 40px; gap: 6px; align-items: end; }
+.en-head { font-size: 13px; font-weight: 700; color: var(--ink-2); margin: 10px 0 4px; padding: 0 2px; }
+.en-rows { display: grid; gap: 6px; }
+.en-cell { display: flex; flex-direction: column; min-width: 0; }
+.en-lab { display: none; font-size: 12px; font-weight: 600; color: var(--ink-2); margin-bottom: 2px; }
+.en-cell input { font: inherit; font-size: 15px; width: 100%; min-width: 0; padding: 9px 10px; min-height: 42px;
+  border: 1px solid var(--axis); border-radius: 9px; background: var(--surface); color: var(--ink); }
+.en-cell input:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+.en-amt input { font-weight: 700; }
+.en-amt input::placeholder { color: var(--ink); opacity: .55; }
+.en-row .gm-x { height: 42px; width: 40px; }
+.en-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 6px; }
+.en-sum { margin-inline-start: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) {
+  .en-head { display: none; }
+  .en-lab { display: block; }
+  .en-row { grid-template-columns: 1fr 1fr; padding: 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--page); }
+  .en-item { grid-column: 1 / -1; order: -1; }
+  .en-d { grid-column: 1 / -1; }
+  .en-row .gm-x { grid-column: 2; justify-self: end; }
+  .en-sum { margin-inline-start: 0; width: 100%; }
+  .tool-mode button { padding: 8px 12px; font-size: 14px; }
+}

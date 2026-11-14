@@ -140,12 +140,19 @@
       <!-- Step 2: the tool -->
       <div id="tool" hidden>
         <p class="thanks" id="svThanks" hidden></p>
+        <div class="seg tool-mode" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-mode="upload" data-i18n="tmUpload"></button>
+          <button type="button" role="tab" aria-selected="false" data-mode="type" data-i18n="tmType"></button>
+        </div>
+        <div id="modeType" hidden><div id="entryBox"></div></div>
+        <div id="modeUpload">
         <label class="drop" id="drop" for="file">
           <input type="file" id="file" accept=".csv,text/csv,.txt">
           <span class="drop-icon" aria-hidden="true">⬆️</span>
           <strong data-i18n="dropTitle"></strong>
           <span class="muted" data-i18n="dropHint"></span>
         </label>
+        </div>
         <div class="hero-actions">
           <button type="button" class="btn" id="sample" data-i18n="trySample"></button>
           <a class="btn ghost" href="#book" data-i18n="bkToolBtn"></a>
@@ -322,6 +329,7 @@
   <script src="curriculum.js"></script>
   <script src="game.js"></script>
   <script src="book.js"></script>
+  <script src="entry.js"></script>
   <!-- Languages: one file each; a missing word falls back to English -->
   <script src="lang/sw.js"></script>
   <script src="lang/fr.js"></script>
@@ -333,6 +341,7 @@
   <script src="lang/game-i18n.js"></script>
   <script src="lang/quiz-more.js"></script>
   <script src="lang/book-i18n.js"></script>
+  <script src="lang/entry-i18n.js"></script>
   <script>applyLang();</script>
 </body>
 </html>

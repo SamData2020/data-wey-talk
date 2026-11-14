@@ -320,7 +320,7 @@ function fmtPct(p) { return (Math.round(p * 10) / 10).toLocaleString("en"); }
 // ---------- State ----------
 const state = { name: "", headers: [], rows: [], types: [], num: -1, group: -1, date: -1, cur: null, curHow: "none" };
 
-function load(name, text) {
+function load(name, text, prefer) {
   $("error").hidden = true;
   const parsed = parseCSV(text);
   if (!parsed || !parsed.rows.length) return showError(t("errEmpty"));
@@ -335,6 +335,7 @@ function load(name, text) {
   state.num = numIdx.find((i) => /amount|sales|revenue|total|income/i.test(parsed.headers[i]))
     ?? numIdx.find((i) => isMoneyCol(parsed.headers[i], parsed.rows, i))
     ?? numIdx[numIdx.length - 1];
+  if (prefer && types[prefer.num] === "number") state.num = prefer.num;
   // Group by the text column with a useful number of distinct values.
   const textIdx = types.map((tp, i) => (tp === "text" ? i : -1)).filter((i) => i >= 0);
   const scored = textIdx.map((i) => ({ i, n: new Set(parsed.rows.map((r) => r[i])).size }))
