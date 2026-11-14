@@ -2,26 +2,50 @@
 """Build the curriculum draft videos from video/scripts.json.
 
 For each module it makes:
-  video/module-NN.mp4   narrated slide video (computer voice)
+  video/module-NN.mp4   narrated slide video
   video/module-NN.jpg   poster image
   video/module-NN.vtt   Pidgin captions
   video/scripts/module-NN.md   recording script for a real presenter
 
-Needs: macOS `say` + `afinfo`, Google Chrome, and ffmpeg
+Voice for each slide, in this order:
+  1. a real recording: video/recordings/module-NN-slide-K.(mp3|m4a|wav)   (K = 1, 2, 3 …)
+  2. Microsoft Azure Nigerian-English AI voice (default en-NG-EzinneNeural), if a key is set:
+       env AZURE_SPEECH_KEY + AZURE_SPEECH_REGION, or a file video/.azure-key with the key on
+       line 1 and the region (e.g. uksouth) on line 2. That file is never committed.
+       AI audio is cached in video/.tts-cache so rebuilding doesn't use the free allowance again.
+  3. macOS `say` (fallback only — no Nigerian voice on macOS).
+
+Needs: macOS `afinfo`, Google Chrome, and ffmpeg
 (set FFMPEG=/path/to/ffmpeg, or `pip install imageio-ffmpeg`).
 
 Usage: python3 video/build_videos.py [module ids...]
 """
-import html, json, os, re, shutil, subprocess, sys, tempfile
+import hashlib, html, json, os, re, shutil, subprocess, sys, tempfile, urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 VID = ROOT / "video"
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-VOICE = os.environ.get("VOICE", "Tessa")   # closest available voice; no Nigerian voice on macOS
-RATE = os.environ.get("RATE", "160")       # words per minute — a bit slow for clarity
+VOICE = os.environ.get("VOICE", "Tessa")   # macOS fallback voice (no Nigerian voice on macOS)
+RATE = os.environ.get("RATE", "160")       # words per minute for the fallback voice
+AZ_VOICE = os.environ.get("AZURE_VOICE", "en-NG-EzinneNeural")   # Nigerian-English female; male: en-NG-AbeoNeural
+AZ_RATE = os.environ.get("AZURE_RATE", "-6%")                    # a little slower for clarity
+REC = ROOT / "video" / "recordings"
+CACHE = ROOT / "video" / ".tts-cache"
 W, H = 1280, 720
-SITE = "samdata2020.github.io/data-wey-talk"
+SITE = "www.datalization.co.uk"
+
+
+def azure_creds():
+    key, region = os.environ.get("AZURE_SPEECH_KEY"), os.environ.get("AZURE_SPEECH_REGION")
+    f = ROOT / "video" / ".azure-key"
+    if not key and f.exists():
+        lines = [l.strip() for l in f.read_text().splitlines() if l.strip()]
+        key, region = lines[0], (lines[1] if len(lines) > 1 else region)
+    return (key, region) if key and region else (None, None)
+
+
+AZ_KEY, AZ_REGION = azure_creds()
 
 
 def ffmpeg_path():
@@ -102,6 +126,38 @@ def audio_duration(path):
     return float(m.group(1))
 
 
+def azure_text(text):
+    # "₦15,700" → "15,700 naira" so it is read the Nigerian way; everything else stays real Pidgin.
+    t = re.sub(r"₦\s?([\d,]+(?:\.\d+)?)", r"\1 naira", text).replace("₦", " naira ")
+    return html.escape(t, quote=False)
+
+
+def azure_tts(text, out_wav):
+    ssml = (f"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-NG'>"
+            f"<voice name='{AZ_VOICE}'><prosody rate='{AZ_RATE}'>{azure_text(text)}</prosody></voice></speak>")
+    CACHE.mkdir(exist_ok=True)
+    cached = CACHE / (hashlib.sha256((AZ_VOICE + AZ_RATE + ssml).encode()).hexdigest()[:24] + ".wav")
+    if not cached.exists():
+        req = urllib.request.Request(
+            f"https://{AZ_REGION}.tts.speech.microsoft.com/cognitiveservices/v1", data=ssml.encode("utf-8"), method="POST",
+            headers={"Ocp-Apim-Subscription-Key": AZ_KEY, "Content-Type": "application/ssml+xml",
+                     "X-Microsoft-OutputFormat": "riff-24khz-16bit-mono-pcm", "User-Agent": "data-wey-talk-video-builder"})
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                cached.write_bytes(r.read())
+        except urllib.error.HTTPError as e:
+            sys.exit(f"Azure speech error {e.code}: {e.read()[:300]!r} — check the key and region in video/.azure-key")
+    shutil.copy(cached, out_wav)
+
+
+def recording_for(n, k):
+    for ext in ("mp3", "m4a", "wav", "aac", "ogg"):
+        f = REC / f"module-{n}-slide-{k}.{ext}"
+        if f.exists():
+            return f
+    return None
+
+
 def say_text(text):
     # Help the English voice with a few Pidgin/Naira spellings. Captions keep the real Pidgin.
     t = text.replace("₦", " naira ").replace("di ", "dee ").replace("Di ", "Dee ")
@@ -123,14 +179,20 @@ def build(mod, tmp):
     work.mkdir()
     mark = (ROOT / "assets/scitylana-mark.jpg").as_uri()
     full = (ROOT / "assets/scitylana-logo.jpg").as_uri()
-    parts, cues, t = [], [], 0.0
+    parts, cues, t, sources = [], [], 0.0, []
     PAD = 0.7
     for i, seg in enumerate(mod["segments"]):
-        hp, png, aiff, mp4 = work / f"s{i}.html", work / f"s{i}.png", work / f"s{i}.aiff", work / f"s{i}.mp4"
+        hp, png, mp4 = work / f"s{i}.html", work / f"s{i}.png", work / f"s{i}.mp4"
         hp.write_text(slide_html(mod, seg["slide"], mark, full), encoding="utf-8")
         run([CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--window-size={W},{H}",
              "--virtual-time-budget=2500", f"--screenshot={png}", hp.as_uri()])
-        run(["say", "-v", VOICE, "-r", RATE, "-o", str(aiff), say_text(seg["say"])])
+        rec = recording_for(n, i + 1)
+        if rec:
+            aiff = rec; sources.append("recording")
+        elif AZ_KEY:
+            aiff = work / f"s{i}.wav"; azure_tts(seg["say"], aiff); sources.append("azure")
+        else:
+            aiff = work / f"s{i}.aiff"; run(["say", "-v", VOICE, "-r", RATE, "-o", str(aiff), say_text(seg["say"])]); sources.append("mac")
         d = audio_duration(aiff) + PAD
         run([FF, "-y", "-loop", "1", "-framerate", "12", "-i", str(png), "-i", str(aiff),
              "-af", f"apad=pad_dur={PAD}", "-t", f"{d:.3f}",
@@ -155,7 +217,9 @@ def build(mod, tmp):
         "WEBVTT\n\n" + "\n".join(f"{ts(a)} --> {ts(b)}\n{s}\n" for a, b, s in cues), encoding="utf-8")
     # human recording script
     md = [f"# Module {mod['id']}: {mod['title']}", "",
-          "_Recording script for Scitylana Academy. Read naturally in your own Pidgin — change words if e no sound right._", ""]
+          "_Recording script for Scitylana Academy. Read naturally in your own Pidgin — change words if e no sound right._", "",
+          f"_Record each slide as its own file and name it `module-{n}-slide-1.mp3`, `module-{n}-slide-2.mp3` … "
+          "Put the files in `video/recordings/` and rebuild — your voice replaces the AI voice for those slides._", ""]
     for i, seg in enumerate(mod["segments"], 1):
         sl = seg["slide"]
         label = sl.get("heading") or sl.get("text") or mod["title"]
@@ -163,7 +227,8 @@ def build(mod, tmp):
     (VID / "scripts").mkdir(exist_ok=True)
     (VID / "scripts" / f"module-{n}.md").write_text("\n".join(md), encoding="utf-8")
     size = (VID / f"module-{n}.mp4").stat().st_size / 1e6
-    print(f"module {n}: {t:.0f}s, {size:.1f} MB")
+    used = ", ".join(f"{sources.count(k)} {k}" for k in ("recording", "azure", "mac") if k in sources)
+    print(f"module {n}: {t:.0f}s, {size:.1f} MB  (voice: {used})")
 
 
 def main():
