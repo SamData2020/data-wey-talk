@@ -13,6 +13,7 @@ I18N.sw = {
   downloadHint: "Ifungue kwenye Excel, ichezee, kisha uipakie hapa.",
   privacy: "🔒 Faili lako halitoki kwenye simu au kompyuta yako. Hakuna kinachopakiwa.",
   newFile: "Tumia faili jingine",
+  privacyLink: "Sera ya faragha",
   pickCurrency: "Sarafu",
   curNone: "Hakuna sarafu (namba tu)",
   curFromFile: "imepatikana kwenye faili lako",

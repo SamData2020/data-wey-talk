@@ -13,6 +13,7 @@ I18N.yo = {
   downloadHint: "Ṣi i ni Excel, ṣere pẹlu rẹ, lẹyin naa gbe e soke nibi.",
   privacy: "🔒 Faili rẹ ko kuro lori foonu tabi kọmputa rẹ rara. A ko gbe nkankan soke.",
   newFile: "Lo faili miiran",
+  privacyLink: "Ilana aṣiri",
   pickCurrency: "Owo ilu (currency)",
   curNone: "Ko si owo (nọmba nikan)",
   curFromFile: "a ri i ninu faili rẹ",

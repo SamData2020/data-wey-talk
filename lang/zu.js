@@ -12,6 +12,7 @@ I18N.zu = {
   downloadHint: "Livule ku-Excel, udlale ngalo, bese ulilayisha lapha.",
   privacy: "🔒 Ifayela lakho alilokothi lishiye ifoni noma ikhompyutha yakho. Akukho okulayishwayo.",
   newFile: "Sebenzisa elinye ifayela",
+  privacyLink: "Inqubomgomo yobumfihlo",
   pickCurrency: "Imali (currency)",
   curNone: "Ayikho imali (izinombolo kuphela)",
   curFromFile: "itholakale efayeleni lakho",

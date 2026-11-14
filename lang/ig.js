@@ -13,6 +13,7 @@ I18N.ig = {
   downloadHint: "Mepee ya na Excel, jiri ya mee egwuregwu, wee bulite ya ebe a.",
   privacy: "🔒 Faịlụ gị anaghị apụ na ekwentị ma ọ bụ kọmputa gị. Ọ dịghị ihe a na-ebulite.",
   newFile: "Jiri faịlụ ọzọ",
+  privacyLink: "Iwu nzuzo",
   pickCurrency: "Ego (currency)",
   curNone: "Enweghị ego (naanị ọnụọgụ)",
   curFromFile: "ahụrụ ya na faịlụ gị",

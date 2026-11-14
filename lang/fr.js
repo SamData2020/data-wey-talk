@@ -12,6 +12,7 @@ I18N.fr = {
   downloadHint: "Ouvrez-le dans Excel, manipulez-le, puis chargez-le ici.",
   privacy: "🔒 Votre fichier ne quitte jamais votre téléphone ou votre ordinateur. Rien n'est envoyé.",
   newFile: "Utiliser un autre fichier",
+  privacyLink: "Politique de confidentialité",
   pickCurrency: "Devise",
   curNone: "Aucune devise (chiffres seuls)",
   curFromFile: "trouvée dans votre fichier",
