@@ -124,10 +124,11 @@ function videoBlock(n, title) {
     return `<div class="vid"><button type="button" class="yt" data-yt="${yt}" aria-label="${esc(t("vidPlay"))}: ${esc(title)}">
       <img src="https://i.ytimg.com/vi/${yt}/hqdefault.jpg" alt="" loading="lazy"><span class="play" aria-hidden="true">▶</span></button>${extra}</div>`;
   }
+  const v = ((window.DWT_VIDEO_V || {})[n]) ? `?v=${window.DWT_VIDEO_V[n]}` : "";   // new tag after each rebuild
   return `<div class="vid">
-      <video controls playsinline preload="none" poster="video/module-${nn}.jpg" aria-label="${esc(title)}">
-        <source src="video/module-${nn}.mp4" type="video/mp4">
-        <track kind="captions" srclang="pcm" label="Pidgin" src="video/module-${nn}.vtt" default>
+      <video controls playsinline preload="none" poster="video/module-${nn}.jpg${v}" aria-label="${esc(title)}">
+        <source src="video/module-${nn}.mp4${v}" type="video/mp4">
+        <track kind="captions" srclang="pcm" label="Pidgin" src="video/module-${nn}.vtt${v}" default>
       </video>
       <p class="vid-note">🤖 ${esc(t("vidDraft"))}</p>${extra}
     </div>`;

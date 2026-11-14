@@ -262,6 +262,15 @@ def build(mod, tmp):
     print(f"module {n}: {t:.0f}s, {size:.1f} MB  (voice: {used})")
 
 
+def write_versions():
+    # A fingerprint per video, so browsers fetch a rebuilt video instead of an old saved copy.
+    v = {}
+    for f in sorted(VID.glob("module-*.mp4")):
+        v[int(f.stem.split("-")[1])] = hashlib.sha256(f.read_bytes()).hexdigest()[:10]
+    (VID / "versions.js").write_text("// Written by build_videos.py — do not edit by hand.\nwindow.DWT_VIDEO_V = "
+                                     + json.dumps(v) + ";\n", encoding="utf-8")
+
+
 def main():
     mods = json.loads((VID / "scripts.json").read_text(encoding="utf-8"))
     want = {int(a) for a in sys.argv[1:]}
@@ -269,6 +278,7 @@ def main():
         for m in mods:
             if not want or m["id"] in want:
                 build(m, Path(tmp))
+    write_versions()
 
 
 if __name__ == "__main__":
