@@ -13,7 +13,9 @@ Voice for each slide, in this order:
        env AZURE_SPEECH_KEY + AZURE_SPEECH_REGION, or a file video/.azure-key with the key on
        line 1 and the region (e.g. uksouth) on line 2. That file is never committed.
        AI audio is cached in video/.tts-cache so rebuilding doesn't use the free allowance again.
-  3. macOS `say` (fallback only — no Nigerian voice on macOS).
+  3. Free Nigerian-English voice via `edge-tts` (pip install edge-tts) — same Ezinne voice, no account.
+     Note: uses the Microsoft Edge read-aloud service; it may change or stop working.
+  4. macOS `say` (last fallback — no Nigerian voice on macOS).
 
 Needs: macOS `afinfo`, Google Chrome, and ffmpeg
 (set FFMPEG=/path/to/ffmpeg, or `pip install imageio-ffmpeg`).
@@ -150,6 +152,33 @@ def azure_tts(text, out_wav):
     shutil.copy(cached, out_wav)
 
 
+def edge_available():
+    try:
+        import edge_tts  # noqa: F401
+        return True
+    except ImportError:
+        return False
+
+
+EDGE = edge_available() and os.environ.get("NO_EDGE") != "1"
+
+
+def edge_tts_say(text, out_mp3):
+    import asyncio, edge_tts
+    plain = re.sub(r"₦\s?([\d,]+(?:\.\d+)?)", r"\1 naira", text).replace("₦", " naira ")
+    CACHE.mkdir(exist_ok=True)
+    cached = CACHE / ("edge-" + hashlib.sha256((AZ_VOICE + AZ_RATE + plain).encode()).hexdigest()[:24] + ".mp3")
+    if not cached.exists():
+        for attempt in range(3):
+            try:
+                asyncio.run(edge_tts.Communicate(plain, AZ_VOICE, rate=AZ_RATE).save(str(cached)))
+                break
+            except Exception as e:  # network hiccup: try again
+                if attempt == 2:
+                    sys.exit(f"edge-tts failed: {e}")
+    shutil.copy(cached, out_mp3)
+
+
 def recording_for(n, k):
     for ext in ("mp3", "m4a", "wav", "aac", "ogg"):
         f = REC / f"module-{n}-slide-{k}.{ext}"
@@ -191,6 +220,8 @@ def build(mod, tmp):
             aiff = rec; sources.append("recording")
         elif AZ_KEY:
             aiff = work / f"s{i}.wav"; azure_tts(seg["say"], aiff); sources.append("azure")
+        elif EDGE:
+            aiff = work / f"s{i}.mp3"; edge_tts_say(seg["say"], aiff); sources.append("edge")
         else:
             aiff = work / f"s{i}.aiff"; run(["say", "-v", VOICE, "-r", RATE, "-o", str(aiff), say_text(seg["say"])]); sources.append("mac")
         d = audio_duration(aiff) + PAD
@@ -227,7 +258,7 @@ def build(mod, tmp):
     (VID / "scripts").mkdir(exist_ok=True)
     (VID / "scripts" / f"module-{n}.md").write_text("\n".join(md), encoding="utf-8")
     size = (VID / f"module-{n}.mp4").stat().st_size / 1e6
-    used = ", ".join(f"{sources.count(k)} {k}" for k in ("recording", "azure", "mac") if k in sources)
+    used = ", ".join(f"{sources.count(k)} {k}" for k in ("recording", "azure", "edge", "mac") if k in sources)
     print(f"module {n}: {t:.0f}s, {size:.1f} MB  (voice: {used})")
 
 

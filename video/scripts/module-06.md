@@ -2,6 +2,8 @@
 
 _Recording script for Scitylana Academy. Read naturally in your own Pidgin — change words if e no sound right._
 
+_Record each slide as its own file and name it `module-06-slide-1.mp3`, `module-06-slide-2.mp3` … Put the files in `video/recordings/` and rebuild — your voice replaces the AI voice for those slides._
+
 ## Slide 1 — Find di pattern
 
 Welcome to Module 6. Today we go find di pattern wey dey hide inside your data.

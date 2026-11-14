@@ -2,6 +2,8 @@
 
 _Recording script for Scitylana Academy. Read naturally in your own Pidgin — change words if e no sound right._
 
+_Record each slide as its own file and name it `module-01-slide-1.mp3`, `module-01-slide-2.mp3` … Put the files in `video/recordings/` and rebuild — your voice replaces the AI voice for those slides._
+
 ## Slide 1 — Data na wetin? Start to dey write your records
 
 How you dey! Welcome to Scitylana Academy. Today, we go talk about data — wetin e be, and how you go take start to dey write your records.

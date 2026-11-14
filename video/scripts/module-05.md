@@ -2,6 +2,8 @@
 
 _Recording script for Scitylana Academy. Read naturally in your own Pidgin — change words if e no sound right._
 
+_Record each slide as its own file and name it `module-05-slide-1.mp3`, `module-05-slide-2.mp3` … Put the files in `video/recordings/` and rebuild — your voice replaces the AI voice for those slides._
+
 ## Slide 1 — Charts and simple dashboard
 
 Welcome to Module 5. Today we go turn our numbers into pictures — charts and dashboard.

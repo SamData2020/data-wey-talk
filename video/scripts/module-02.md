@@ -2,6 +2,8 @@
 
 _Recording script for Scitylana Academy. Read naturally in your own Pidgin — change words if e no sound right._
 
+_Record each slide as its own file and name it `module-02-slide-1.mp3`, `module-02-slide-2.mp3` … Put the files in `video/recordings/` and rebuild — your voice replaces the AI voice for those slides._
+
 ## Slide 1 — Excel and Google Sheets from zero
 
 Welcome back! For dis lesson, we go learn Excel and Google Sheets from zero. No fear, e no hard.
