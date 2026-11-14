@@ -613,3 +613,4 @@ span.chip.on { opacity: 1; }
   .bk-line { grid-template-columns: 1fr 1fr; }
   .bk-price-tiles { grid-template-columns: 1fr !important; }
 }
+.vid-book { display: inline-flex; margin-top: 10px; text-decoration: none; }

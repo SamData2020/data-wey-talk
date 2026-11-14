@@ -3,144 +3,551 @@
     "id": 1,
     "title": "Data na wetin? Start to dey write your records",
     "segments": [
-      { "slide": { "kind": "title" },
-        "say": "How you dey! Welcome to Scitylana Academy. Today, we go talk about data — wetin e be, and how you go take start to dey write your records." },
-      { "slide": { "kind": "big", "heading": "Everything wey happen for your business na data", "text": "Every sale · Every expense · Every customer" },
-        "say": "Data no be big grammar. Every time you sell something, na data. Every money wey you spend, na data. Every customer wey buy from you, na data." },
-      { "slide": { "kind": "bullets", "heading": "Where you go write am?", "items": ["📒 Notebook — e easy, e cheap", "📱 Phone — e dey with you everywhere", "💻 Excel or Google Sheets — e fit calculate for you"] },
-        "say": "You fit write am for notebook, for your phone, or for Excel. Any one wey you choose, di important thing na say make you dey write am every day." },
-      { "slide": { "kind": "table", "heading": "Simple daily record", "cols": ["Date", "Wetin you sell", "How many", "Amount (₦)"], "rows": [["01/09", "Akara", "157", "15,700"], ["01/09", "Agege Bread", "21", "25,200"], ["01/09", "Fuel for frying", "—", "-3,000"]] },
-        "say": "See am like dis. Date, wetin you sell, how many, and di amount. Your expense too — like di money for fuel or oil — write am, put minus for front." },
-      { "slide": { "kind": "big", "heading": "How e go help you", "text": "Akara seller wey dey write daily sales go know which day e suppose fry more — and which day e suppose rest." },
-        "say": "When you don write for two or three weeks, you go begin see pattern. You go know which day market dey move, and which day e dey slow. Na dis one go help you plan." },
-      { "slide": { "kind": "outro", "text": "Next: Module 2 — Excel and Google Sheets from zero" },
-        "say": "Your homework: start your record today. For di next lesson, we go put am inside Excel. Thank you, see you for Module 2!" }
+      {
+        "slide": {
+          "kind": "title"
+        },
+        "say": "How you dey! Welcome to Scitylana Academy. Today, we go talk about data — wetin e be, and how you go take start to dey write your records."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "Everything wey happen for your business na data",
+          "text": "Every sale · Every expense · Every customer"
+        },
+        "say": "Data no be big grammar. Every time you sell something, na data. Every money wey you spend, na data. Every customer wey buy from you, na data."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Where you go write am?",
+          "items": [
+            "📒 Notebook — e easy, e cheap",
+            "📱 Phone — e dey with you everywhere",
+            "💻 Excel or Google Sheets — e fit calculate for you"
+          ]
+        },
+        "say": "You fit write am for notebook, for your phone, or for Excel. Any one wey you choose, di important thing na say make you dey write am every day."
+      },
+      {
+        "slide": {
+          "kind": "table",
+          "heading": "Simple daily record",
+          "cols": [
+            "Date",
+            "Wetin you sell",
+            "How many",
+            "Amount (₦)"
+          ],
+          "rows": [
+            [
+              "01/09",
+              "Akara",
+              "157",
+              "15,700"
+            ],
+            [
+              "01/09",
+              "Agege Bread",
+              "21",
+              "25,200"
+            ],
+            [
+              "01/09",
+              "Fuel for frying",
+              "—",
+              "-3,000"
+            ]
+          ]
+        },
+        "say": "See am like dis. Date, wetin you sell, how many, and di amount. Your expense too — like di money for fuel or oil — write am, put minus for front."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "How e go help you",
+          "text": "Akara seller wey dey write daily sales go know which day e suppose fry more — and which day e suppose rest."
+        },
+        "say": "When you don write for two or three weeks, you go begin see pattern. You go know which day market dey move, and which day e dey slow. Na dis one go help you plan."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Use My Book for Data Wey Talk",
+          "items": [
+            "Press ➕ Record — choose wetin you sell, put di amount, save",
+            "E go add am up: today, dis week, dis month",
+            "E go show who still owe you — and e dey work without data",
+            "Di link to My Book dey under dis video 👇"
+          ]
+        },
+        "say": "You no get notebook? No wahala. Data Wey Talk get one feature wey we call My Book. Na your business book for your phone. Press Record, choose wetin you sell, put di amount, and save — e no go reach five seconds. E go add everything for you: today, dis week, and dis month. E go even show you who still owe you money, and e dey work without data. Di link to My Book dey under dis video. Press am and start today!"
+      },
+      {
+        "slide": {
+          "kind": "outro",
+          "text": "Next: Module 2 — Excel and Google Sheets from zero"
+        },
+        "say": "Your homework: start your record today — for notebook, or for My Book. For di next lesson, we go put am inside Excel. Thank you, see you for Module 2!"
+      }
     ]
   },
   {
     "id": 2,
     "title": "Excel and Google Sheets from zero",
     "segments": [
-      { "slide": { "kind": "title" },
-        "say": "Welcome back! For dis lesson, we go learn Excel and Google Sheets from zero. No fear, e no hard." },
-      { "slide": { "kind": "bullets", "heading": "Rows, columns and cells", "items": ["Row = di line wey dey go across (1, 2, 3…)", "Column = di line wey dey go down (A, B, C…)", "Cell = di small box wey dem meet, like B2"] },
-        "say": "Excel na like big table. Row dey go across, column dey go down. Di small box wey dem meet, na im we dey call cell. Like B2." },
-      { "slide": { "kind": "bullets", "heading": "Four formula wey you must sabi", "items": ["=SUM(D2:D30) → add everything join", "=AVERAGE(D2:D30) → di normal level", "=MAX(D2:D30) → di one wey high pass", "=MIN(D2:D30) → di one wey low pass"] },
-        "say": "Dis four formula go do plenty work for you. SUM go add everything. AVERAGE go show you di normal level. MAX na di highest, MIN na di lowest." },
-      { "slide": { "kind": "bullets", "heading": "Save am as CSV", "items": ["Excel: File → Save As → CSV", "Google Sheets: File → Download → CSV", "Send am for WhatsApp or put am inside Data Wey Talk"] },
-        "say": "When you finish, save your file as CSV. Na dis kind file you go put inside Data Wey Talk, and e go show you wetin your numbers dey talk." },
-      { "slide": { "kind": "big", "heading": "How e go help you", "text": "You go stop to dey calculate with hand — di sheet go do am for you, no mistake." },
-        "say": "No more calculator and headache. Di sheet go calculate for you, fast, and e no go make mistake." },
-      { "slide": { "kind": "outro", "text": "Next: Module 3 — Clean your data" },
-        "say": "Try am today: put one week of your sales for Excel and use SUM. See you for Module 3!" }
+      {
+        "slide": {
+          "kind": "title"
+        },
+        "say": "Welcome back! For dis lesson, we go learn Excel and Google Sheets from zero. No fear, e no hard."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Rows, columns and cells",
+          "items": [
+            "Row = di line wey dey go across (1, 2, 3…)",
+            "Column = di line wey dey go down (A, B, C…)",
+            "Cell = di small box wey dem meet, like B2"
+          ]
+        },
+        "say": "Excel na like big table. Row dey go across, column dey go down. Di small box wey dem meet, na im we dey call cell. Like B2."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Four formula wey you must sabi",
+          "items": [
+            "=SUM(D2:D30) → add everything join",
+            "=AVERAGE(D2:D30) → di normal level",
+            "=MAX(D2:D30) → di one wey high pass",
+            "=MIN(D2:D30) → di one wey low pass"
+          ]
+        },
+        "say": "Dis four formula go do plenty work for you. SUM go add everything. AVERAGE go show you di normal level. MAX na di highest, MIN na di lowest."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Save am as CSV",
+          "items": [
+            "Excel: File → Save As → CSV",
+            "Google Sheets: File → Download → CSV",
+            "Send am for WhatsApp or put am inside Data Wey Talk"
+          ]
+        },
+        "say": "When you finish, save your file as CSV. Na dis kind file you go put inside Data Wey Talk, and e go show you wetin your numbers dey talk."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "How e go help you",
+          "text": "You go stop to dey calculate with hand — di sheet go do am for you, no mistake."
+        },
+        "say": "No more calculator and headache. Di sheet go calculate for you, fast, and e no go make mistake."
+      },
+      {
+        "slide": {
+          "kind": "outro",
+          "text": "Next: Module 3 — Clean your data"
+        },
+        "say": "Try am today: put one week of your sales for Excel and use SUM. See you for Module 3!"
+      }
     ]
   },
   {
     "id": 3,
     "title": "Clean your data",
     "segments": [
-      { "slide": { "kind": "title" },
-        "say": "Welcome to Module 3. Today we go clean our data. Dirty data dey give wrong answer — make we fix am." },
-      { "slide": { "kind": "bullets", "heading": "Remove di ones wey repeat", "items": ["Same sale wey you write two times = wrong total", "Excel: Data → Remove Duplicates", "Check am before you analyse"] },
-        "say": "If you write di same sale two times, your total go big pass wetin you really make. For Excel, go Data, then Remove Duplicates." },
-      { "slide": { "kind": "bullets", "heading": "Make names dey di same", "items": ["✗ Agege bread · agege brd · AGEGE", "✓ Agege Bread", "One name for one product, every time"] },
-        "say": "Agege bread, agege b-r-d, all capital AGEGE — computer go think say na three different products. Choose one name and use am every time." },
-      { "slide": { "kind": "bullets", "heading": "Dates and money", "items": ["Write date di same way: 01/09/2026", "Amount: only number — 15700, no \"15k\"", "Empty box? Find di correct number or leave am clear"] },
-        "say": "Write your dates di same way every time. For amount, put only number, no write fifteen k. And if box empty, try find di correct number." },
-      { "slide": { "kind": "big", "heading": "How e go help you", "text": "Clean data mean say di decision wey you take go correct." },
-        "say": "When your data clean, di answer wey you get go correct, and di decision wey you take go correct too." },
-      { "slide": { "kind": "outro", "text": "Next: Module 4 — Di numbers wey matter" },
-        "say": "Go check your sheet now and clean am. See you for Module 4!" }
+      {
+        "slide": {
+          "kind": "title"
+        },
+        "say": "Welcome to Module 3. Today we go clean our data. Dirty data dey give wrong answer — make we fix am."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Remove di ones wey repeat",
+          "items": [
+            "Same sale wey you write two times = wrong total",
+            "Excel: Data → Remove Duplicates",
+            "Check am before you analyse"
+          ]
+        },
+        "say": "If you write di same sale two times, your total go big pass wetin you really make. For Excel, go Data, then Remove Duplicates."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Make names dey di same",
+          "items": [
+            "✗ Agege bread · agege brd · AGEGE",
+            "✓ Agege Bread",
+            "One name for one product, every time"
+          ]
+        },
+        "say": "Agege bread, agege b-r-d, all capital AGEGE — computer go think say na three different products. Choose one name and use am every time."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Dates and money",
+          "items": [
+            "Write date di same way: 01/09/2026",
+            "Amount: only number — 15700, no \"15k\"",
+            "Empty box? Find di correct number or leave am clear"
+          ]
+        },
+        "say": "Write your dates di same way every time. For amount, put only number, no write fifteen k. And if box empty, try find di correct number."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "How e go help you",
+          "text": "Clean data mean say di decision wey you take go correct."
+        },
+        "say": "When your data clean, di answer wey you get go correct, and di decision wey you take go correct too."
+      },
+      {
+        "slide": {
+          "kind": "outro",
+          "text": "Next: Module 4 — Di numbers wey matter"
+        },
+        "say": "Go check your sheet now and clean am. See you for Module 4!"
+      }
     ]
   },
   {
     "id": 4,
     "title": "Di numbers wey matter",
     "segments": [
-      { "slide": { "kind": "title" },
-        "say": "Welcome to Module 4. Today we go talk about di numbers wey really matter for your business." },
-      { "slide": { "kind": "big", "heading": "Sales no be profit", "text": "Sales ₦100,000 − Cost ₦70,000 = Profit ₦30,000" },
-        "say": "Plenty people dey confuse sales with profit. If you sell one hundred thousand naira, but you spend seventy thousand, your profit na only thirty thousand." },
-      { "slide": { "kind": "big", "heading": "Profit margin", "text": "₦30,000 ÷ ₦100,000 = 30%\nFrom every ₦100 you sell, you keep ₦30" },
-        "say": "Profit margin tell you how much you dey keep from every one hundred naira. Thirty percent mean say from every hundred naira, thirty naira na your own." },
-      { "slide": { "kind": "bullets", "heading": "Other numbers to watch", "items": ["Average sale — how much one customer dey spend", "% share — which product carry di business", "Growth — dis month vs last month"] },
-        "say": "Watch your average sale, which product dey carry di biggest share, and how dis month take compare with last month." },
-      { "slide": { "kind": "big", "heading": "How e go help you", "text": "You go know if di price wey you increase dey help you — or e dey drive customers go." },
-        "say": "With dis numbers, when you increase price, you go see whether profit go up, or customers don begin run." },
-      { "slide": { "kind": "outro", "text": "Next: Module 5 — Charts and simple dashboard" },
-        "say": "Calculate your profit margin for last month. See you for Module 5!" }
+      {
+        "slide": {
+          "kind": "title"
+        },
+        "say": "Welcome to Module 4. Today we go talk about di numbers wey really matter for your business."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "Sales no be profit",
+          "text": "Sales ₦100,000 − Cost ₦70,000 = Profit ₦30,000"
+        },
+        "say": "Plenty people dey confuse sales with profit. If you sell one hundred thousand naira, but you spend seventy thousand, your profit na only thirty thousand."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "Profit margin",
+          "text": "₦30,000 ÷ ₦100,000 = 30%\nFrom every ₦100 you sell, you keep ₦30"
+        },
+        "say": "Profit margin tell you how much you dey keep from every one hundred naira. Thirty percent mean say from every hundred naira, thirty naira na your own."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Other numbers to watch",
+          "items": [
+            "Average sale — how much one customer dey spend",
+            "% share — which product carry di business",
+            "Growth — dis month vs last month"
+          ]
+        },
+        "say": "Watch your average sale, which product dey carry di biggest share, and how dis month take compare with last month."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "How e go help you",
+          "text": "You go know if di price wey you increase dey help you — or e dey drive customers go."
+        },
+        "say": "With dis numbers, when you increase price, you go see whether profit go up, or customers don begin run."
+      },
+      {
+        "slide": {
+          "kind": "outro",
+          "text": "Next: Module 5 — Charts and simple dashboard"
+        },
+        "say": "Calculate your profit margin for last month. See you for Module 5!"
+      }
     ]
   },
   {
     "id": 5,
     "title": "Charts and simple dashboard",
     "segments": [
-      { "slide": { "kind": "title" },
-        "say": "Welcome to Module 5. Today we go turn our numbers into pictures — charts and dashboard." },
-      { "slide": { "kind": "bullets", "heading": "Bar chart", "items": ["Use am to compare things", "Akara vs Agege Bread vs Sliced Bread", "Di longer di bar, di bigger di number"] },
-        "say": "Bar chart na for comparing. Di longer di bar, di bigger di number. E go show you quick-quick which product dey lead." },
-      { "slide": { "kind": "bullets", "heading": "Line chart", "items": ["Use am to see change over time", "Line dey climb = things dey go up", "Line dey fall = check wetin happen"] },
-        "say": "Line chart show you how things dey change from day to day, or month to month. If di line dey climb, e good. If e dey fall, check wetin happen." },
-      { "slide": { "kind": "bullets", "heading": "One-page dashboard", "items": ["Total sales for di week", "Best product", "Bar chart + line chart", "Look am every morning"] },
-        "say": "Dashboard na one page wey carry di important things: total, best product, and your two charts. Look am every morning with your tea." },
-      { "slide": { "kind": "big", "heading": "How e go help you", "text": "One look for your dashboard every morning and you go know how business dey." },
-        "say": "No need to read long list of numbers. One look, and you don know how your business dey." },
-      { "slide": { "kind": "outro", "text": "Next: Module 6 — Find di pattern" },
-        "say": "Put your data inside Data Wey Talk and see your own charts. See you for Module 6!" }
+      {
+        "slide": {
+          "kind": "title"
+        },
+        "say": "Welcome to Module 5. Today we go turn our numbers into pictures — charts and dashboard."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Bar chart",
+          "items": [
+            "Use am to compare things",
+            "Akara vs Agege Bread vs Sliced Bread",
+            "Di longer di bar, di bigger di number"
+          ]
+        },
+        "say": "Bar chart na for comparing. Di longer di bar, di bigger di number. E go show you quick-quick which product dey lead."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Line chart",
+          "items": [
+            "Use am to see change over time",
+            "Line dey climb = things dey go up",
+            "Line dey fall = check wetin happen"
+          ]
+        },
+        "say": "Line chart show you how things dey change from day to day, or month to month. If di line dey climb, e good. If e dey fall, check wetin happen."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "One-page dashboard",
+          "items": [
+            "Total sales for di week",
+            "Best product",
+            "Bar chart + line chart",
+            "Look am every morning"
+          ]
+        },
+        "say": "Dashboard na one page wey carry di important things: total, best product, and your two charts. Look am every morning with your tea."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "How e go help you",
+          "text": "One look for your dashboard every morning and you go know how business dey."
+        },
+        "say": "No need to read long list of numbers. One look, and you don know how your business dey."
+      },
+      {
+        "slide": {
+          "kind": "outro",
+          "text": "Next: Module 6 — Find di pattern"
+        },
+        "say": "Put your data inside Data Wey Talk and see your own charts. See you for Module 6!"
+      }
     ]
   },
   {
     "id": 6,
     "title": "Find di pattern",
     "segments": [
-      { "slide": { "kind": "title" },
-        "say": "Welcome to Module 6. Today we go find di pattern wey dey hide inside your data." },
-      { "slide": { "kind": "bullets", "heading": "Your best days and time", "items": ["Saturday dey busy pass?", "Morning or evening?", "Plan your stock and staff for dat time"] },
-        "say": "Check which day and which time dey busy pass. For akara seller, Saturday morning fit be di best time. Plan for am." },
-      { "slide": { "kind": "bullets", "heading": "Fast movers and slow movers", "items": ["Fast: e dey finish quick — no let am finish", "Slow: e dey sit down — e dey hold your money", "Buy more of di fast, reduce di slow"] },
-        "say": "Some goods dey finish quick, some dey sit down for shelf. Di ones wey dey sit down dey hold your money. Buy more of di fast ones." },
-      { "slide": { "kind": "bullets", "heading": "Seasons", "items": ["🎄 Festive period", "🎒 School resumption", "🌧️ Rainy season", "Compare your shops or locations too"] },
-        "say": "Season dey matter. Festive period, school resumption, rainy season — each one dey change how people dey buy. Compare your locations too." },
-      { "slide": { "kind": "big", "heading": "How e go help you", "text": "You go buy more stock before di busy period come — not after e don pass." },
-        "say": "When you sabi di pattern, you go prepare before di busy time reach, instead of to dey regret after." },
-      { "slide": { "kind": "outro", "text": "Next: Module 7 — Stock, customers and money wey dem owe you" },
-        "say": "Look your last two months and find your best day. See you for Module 7!" }
+      {
+        "slide": {
+          "kind": "title"
+        },
+        "say": "Welcome to Module 6. Today we go find di pattern wey dey hide inside your data."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Your best days and time",
+          "items": [
+            "Saturday dey busy pass?",
+            "Morning or evening?",
+            "Plan your stock and staff for dat time"
+          ]
+        },
+        "say": "Check which day and which time dey busy pass. For akara seller, Saturday morning fit be di best time. Plan for am."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Fast movers and slow movers",
+          "items": [
+            "Fast: e dey finish quick — no let am finish",
+            "Slow: e dey sit down — e dey hold your money",
+            "Buy more of di fast, reduce di slow"
+          ]
+        },
+        "say": "Some goods dey finish quick, some dey sit down for shelf. Di ones wey dey sit down dey hold your money. Buy more of di fast ones."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Seasons",
+          "items": [
+            "🎄 Festive period",
+            "🎒 School resumption",
+            "🌧️ Rainy season",
+            "Compare your shops or locations too"
+          ]
+        },
+        "say": "Season dey matter. Festive period, school resumption, rainy season — each one dey change how people dey buy. Compare your locations too."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "How e go help you",
+          "text": "You go buy more stock before di busy period come — not after e don pass."
+        },
+        "say": "When you sabi di pattern, you go prepare before di busy time reach, instead of to dey regret after."
+      },
+      {
+        "slide": {
+          "kind": "outro",
+          "text": "Next: Module 7 — Stock, customers and money wey dem owe you"
+        },
+        "say": "Look your last two months and find your best day. See you for Module 7!"
+      }
     ]
   },
   {
     "id": 7,
     "title": "Stock, customers and money wey dem owe you",
     "segments": [
-      { "slide": { "kind": "title" },
-        "say": "Welcome to Module 7. Today: your stock, your customers, and di money wey people dey owe you." },
-      { "slide": { "kind": "bullets", "heading": "Track your stock", "items": ["Write how many you get, how many you sell", "Reorder level: when e reach dis number, buy more", "No let am finish before you know"] },
-        "say": "Write how many you get and how many you don sell. Set reorder level — when stock reach dat number, go buy more before e finish." },
-      { "slide": { "kind": "bullets", "heading": "Know your customers", "items": ["Name and phone number", "Who dey come back?", "Treat your regular customers well"] },
-        "say": "Keep list of your customers. Know di ones wey dey come back. Na dem be di backbone of your business." },
-      { "slide": { "kind": "table", "heading": "Who dey owe you?", "cols": ["Customer", "Amount (₦)", "Date", "Paid?"], "rows": [["Mama Chika", "4,500", "02/10", "No"], ["Bro Tunde", "2,000", "05/10", "Yes"], ["Iya Basira", "6,200", "07/10", "No"]] },
-        "say": "Credit na where plenty small business dey lose money. Write who owe, how much, and when. Check am every week and collect your money." },
-      { "slide": { "kind": "big", "heading": "How e go help you", "text": "Your money no go tie down for goods wey no dey move, and you go collect your debt on time." },
-        "say": "Your cash go dey flow, your stock go dey correct, and nobody go chop your money." },
-      { "slide": { "kind": "outro", "text": "Next: Module 8 — Become remote business analyst" },
-        "say": "Start your debt list today. See you for di last module!" }
+      {
+        "slide": {
+          "kind": "title"
+        },
+        "say": "Welcome to Module 7. Today: your stock, your customers, and di money wey people dey owe you."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Track your stock",
+          "items": [
+            "Write how many you get, how many you sell",
+            "Reorder level: when e reach dis number, buy more",
+            "No let am finish before you know"
+          ]
+        },
+        "say": "Write how many you get and how many you don sell. Set reorder level — when stock reach dat number, go buy more before e finish."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Know your customers",
+          "items": [
+            "Name and phone number",
+            "Who dey come back?",
+            "Treat your regular customers well"
+          ]
+        },
+        "say": "Keep list of your customers. Know di ones wey dey come back. Na dem be di backbone of your business."
+      },
+      {
+        "slide": {
+          "kind": "table",
+          "heading": "Who dey owe you?",
+          "cols": [
+            "Customer",
+            "Amount (₦)",
+            "Date",
+            "Paid?"
+          ],
+          "rows": [
+            [
+              "Mama Chika",
+              "4,500",
+              "02/10",
+              "No"
+            ],
+            [
+              "Bro Tunde",
+              "2,000",
+              "05/10",
+              "Yes"
+            ],
+            [
+              "Iya Basira",
+              "6,200",
+              "07/10",
+              "No"
+            ]
+          ]
+        },
+        "say": "Credit na where plenty small business dey lose money. Write who owe, how much, and when. Check am every week and collect your money."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "How e go help you",
+          "text": "Your money no go tie down for goods wey no dey move, and you go collect your debt on time."
+        },
+        "say": "Your cash go dey flow, your stock go dey correct, and nobody go chop your money."
+      },
+      {
+        "slide": {
+          "kind": "outro",
+          "text": "Next: Module 8 — Become remote business analyst"
+        },
+        "say": "Start your debt list today. See you for di last module!"
+      }
     ]
   },
   {
     "id": 8,
     "title": "Become remote business analyst",
     "segments": [
-      { "slide": { "kind": "title" },
-        "say": "Welcome to di last module! Today we go talk about how you fit turn dis skill into work — as remote business analyst." },
-      { "slide": { "kind": "bullets", "heading": "Di tools", "items": ["Excel and Google Sheets", "Power BI or Looker Studio for dashboard", "Small SQL to pull data", "Your phone and data — you fit start small"] },
-        "say": "You go need Excel and Google Sheets, one dashboard tool like Power BI or Looker Studio, and small SQL. You fit start with wetin you get." },
-      { "slide": { "kind": "bullets", "heading": "Build your portfolio", "items": ["Help 2 or 3 small businesses near you", "Show before and after", "Put am online: LinkedIn, GitHub"] },
-        "say": "Before anybody go pay you, dem go wan see your work. Help two or three small businesses near you, show di before and after, and put am online." },
-      { "slide": { "kind": "bullets", "heading": "Find clients and get paid", "items": ["Local businesses, LinkedIn, Upwork and others", "Charge per project or per month", "Explain your findings simple — no big grammar"] },
-        "say": "Find clients for your area, for LinkedIn, Upwork and other places. Charge per project or per month. And always explain your result simple." },
-      { "slide": { "kind": "big", "heading": "How e go help you", "text": "You fit work from anywhere for Africa, and help businesses home and abroad understand their numbers." },
-        "say": "With dis skill, you fit work from anywhere, for clients for Africa and abroad." },
-      { "slide": { "kind": "outro", "text": "You don finish di curriculum — congratulations! 🎉" },
-        "say": "Congratulations! You don finish di Scitylana Academy curriculum. Go use am, and remodel your future!" }
+      {
+        "slide": {
+          "kind": "title"
+        },
+        "say": "Welcome to di last module! Today we go talk about how you fit turn dis skill into work — as remote business analyst."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Di tools",
+          "items": [
+            "Excel and Google Sheets",
+            "Power BI or Looker Studio for dashboard",
+            "Small SQL to pull data",
+            "Your phone and data — you fit start small"
+          ]
+        },
+        "say": "You go need Excel and Google Sheets, one dashboard tool like Power BI or Looker Studio, and small SQL. You fit start with wetin you get."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Build your portfolio",
+          "items": [
+            "Help 2 or 3 small businesses near you",
+            "Show before and after",
+            "Put am online: LinkedIn, GitHub"
+          ]
+        },
+        "say": "Before anybody go pay you, dem go wan see your work. Help two or three small businesses near you, show di before and after, and put am online."
+      },
+      {
+        "slide": {
+          "kind": "bullets",
+          "heading": "Find clients and get paid",
+          "items": [
+            "Local businesses, LinkedIn, Upwork and others",
+            "Charge per project or per month",
+            "Explain your findings simple — no big grammar"
+          ]
+        },
+        "say": "Find clients for your area, for LinkedIn, Upwork and other places. Charge per project or per month. And always explain your result simple."
+      },
+      {
+        "slide": {
+          "kind": "big",
+          "heading": "How e go help you",
+          "text": "You fit work from anywhere for Africa, and help businesses home and abroad understand their numbers."
+        },
+        "say": "With dis skill, you fit work from anywhere, for clients for Africa and abroad."
+      },
+      {
+        "slide": {
+          "kind": "outro",
+          "text": "You don finish di curriculum — congratulations! 🎉"
+        },
+        "say": "Congratulations! You don finish di Scitylana Academy curriculum. Go use am, and remodel your future!"
+      }
     ]
   }
 ]

@@ -24,6 +24,10 @@ See am like dis. Date, wetin you sell, how many, and di amount. Your expense too
 
 When you don write for two or three weeks, you go begin see pattern. You go know which day market dey move, and which day e dey slow. Na dis one go help you plan.
 
-## Slide 6 — Next: Module 2 — Excel and Google Sheets from zero
+## Slide 6 — Use My Book for Data Wey Talk
 
-Your homework: start your record today. For di next lesson, we go put am inside Excel. Thank you, see you for Module 2!
+You no get notebook? No wahala. Data Wey Talk get one feature wey we call My Book. Na your business book for your phone. Press Record, choose wetin you sell, put di amount, and save — e no go reach five seconds. E go add everything for you: today, dis week, and dis month. E go even show you who still owe you money, and e dey work without data. Di link to My Book dey under dis video. Press am and start today!
+
+## Slide 7 — Next: Module 2 — Excel and Google Sheets from zero
+
+Your homework: start your record today — for notebook, or for My Book. For di next lesson, we go put am inside Excel. Thank you, see you for Module 2!

@@ -118,16 +118,18 @@ function youtubeId(v) {
 function videoBlock(n, title) {
   const nn = String(n).padStart(2, "0");
   const yt = youtubeId(((window.DWT_CONFIG || {}).videos || {})[n]);
+  // Module 1 talks about keeping records — link straight to My Book under its video.
+  const extra = n === 1 ? `<a class="btn vid-book" href="#book">${esc(t("bkToolBtn"))}</a>` : "";
   if (yt) {
     return `<div class="vid"><button type="button" class="yt" data-yt="${yt}" aria-label="${esc(t("vidPlay"))}: ${esc(title)}">
-      <img src="https://i.ytimg.com/vi/${yt}/hqdefault.jpg" alt="" loading="lazy"><span class="play" aria-hidden="true">▶</span></button></div>`;
+      <img src="https://i.ytimg.com/vi/${yt}/hqdefault.jpg" alt="" loading="lazy"><span class="play" aria-hidden="true">▶</span></button>${extra}</div>`;
   }
   return `<div class="vid">
       <video controls playsinline preload="none" poster="video/module-${nn}.jpg" aria-label="${esc(title)}">
         <source src="video/module-${nn}.mp4" type="video/mp4">
         <track kind="captions" srclang="pcm" label="Pidgin" src="video/module-${nn}.vtt" default>
       </video>
-      <p class="vid-note">🤖 ${esc(t("vidDraft"))}</p>
+      <p class="vid-note">🤖 ${esc(t("vidDraft"))}</p>${extra}
     </div>`;
 }
 document.addEventListener("click", (e) => {
