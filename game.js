@@ -1,5 +1,5 @@
 /* "Business Boss" game: a business owner enters sales and costs, sees profit, plays with
-   what-if sliders, uses goal seek ("I want ₦X profit"), and downloads an analyst report.
+   what-if sliders, sets a Business Target ("I want ₦X profit"), and downloads an analyst report.
    Everything stays on the visitor's device (saved in localStorage "dwt-game"). */
 
 Object.assign(I18N.pcm, {
@@ -46,7 +46,7 @@ Object.assign(I18N.pcm, {
   gmWhatIf: "What if…? Play with am",
   gmWiPrice: "Change your prices", gmWiCust: "Change number of customers", gmWiCut: "Cut your costs",
   gmWiNew: "New profit", gmWiVs: "{d} compared to now", gmReset: "Reset",
-  gmGoal: "🎯 Goal seek: how much profit you want ({per})?",
+  gmGoal: "🎯 Business Target: how much profit you want ({per})?",
   gmGoalBtn: "Show me di road", gmQ_be: "Just break even", gmQ_20: "+20% profit", gmQ_x2: "Double my profit",
   gmGoalDone: "🎉 You don already reach dis goal! Set a bigger one.",
   gmGap: "You need {gap} more profit. Choose your road:",
@@ -70,7 +70,7 @@ Object.assign(I18N.pcm, {
   gmReport: "📄 Download my business report", gmPrint: "🖨️ Print / save as PDF", gmEdit: "✏️ Change my numbers", gmAgain: "Start again",
   rpTitle: "Business Analysis Report", rpFor: "Prepared for", rpDate: "Date", rpBy: "Made with Data Wey Talk by Scitylana — free data education for African businesses.",
   rpNumbers: "Key numbers", rpCosts: "Cost breakdown", rpSales: "Sales", rpItem: "Item", rpAmount: "Amount", rpShare: "Share",
-  rpGoal: "Goal: {target} profit ({per})", rpWhatIf: "What-if scenario", rpBusiest: "Busiest days", rpPeriod: "Period",
+  rpGoal: "Business Target: {target} profit ({per})", rpWhatIf: "What-if scenario", rpBusiest: "Busiest days", rpPeriod: "Period",
   rpNote: "These are estimates from the numbers you entered. For deeper analysis, email scitylanaltd@gmail.com.",
 });
 
@@ -118,7 +118,7 @@ Object.assign(I18N.en, {
   gmWhatIf: "What if…? Try it",
   gmWiPrice: "Change your prices", gmWiCust: "Change number of customers", gmWiCut: "Cut your costs",
   gmWiNew: "New profit", gmWiVs: "{d} compared to now", gmReset: "Reset",
-  gmGoal: "🎯 Goal seek: how much profit do you want ({per})?",
+  gmGoal: "🎯 Business Target: how much profit do you want ({per})?",
   gmGoalBtn: "Show me the way", gmQ_be: "Just break even", gmQ_20: "+20% profit", gmQ_x2: "Double my profit",
   gmGoalDone: "🎉 You've already reached this goal! Set a bigger one.",
   gmGap: "You need {gap} more profit. Pick your route:",
@@ -142,7 +142,7 @@ Object.assign(I18N.en, {
   gmReport: "📄 Download my business report", gmPrint: "🖨️ Print / save as PDF", gmEdit: "✏️ Change my numbers", gmAgain: "Start again",
   rpTitle: "Business Analysis Report", rpFor: "Prepared for", rpDate: "Date", rpBy: "Made with Data Wey Talk by Scitylana — free data education for African businesses.",
   rpNumbers: "Key numbers", rpCosts: "Cost breakdown", rpSales: "Sales", rpItem: "Item", rpAmount: "Amount", rpShare: "Share",
-  rpGoal: "Goal: {target} profit ({per})", rpWhatIf: "What-if scenario", rpBusiest: "Busiest days", rpPeriod: "Period",
+  rpGoal: "Business Target: {target} profit ({per})", rpWhatIf: "What-if scenario", rpBusiest: "Busiest days", rpPeriod: "Period",
   rpNote: "These are estimates from the numbers you entered. For deeper analysis, email scitylanaltd@gmail.com.",
 });
 

@@ -26,7 +26,7 @@ Object.assign(I18N.fr, {
   gmCostsT: "Où va votre argent", gmVarCosts: "Coûts qui suivent les ventes", gmFixedCosts: "Coûts fixes",
   gmWhatIf: "Et si… ? Essayez", gmWiPrice: "Changer vos prix", gmWiCust: "Changer le nombre de clients", gmWiCut: "Réduire vos coûts",
   gmWiNew: "Nouveau bénéfice", gmWiVs: "{d} par rapport à maintenant", gmReset: "Réinitialiser",
-  gmGoal: "🎯 Valeur cible : quel bénéfice voulez-vous ({per}) ?", gmGoalBtn: "Montrez-moi le chemin",
+  gmGoal: "🎯 Objectif d'entreprise : quel bénéfice voulez-vous ({per}) ?", gmGoalBtn: "Montrez-moi le chemin",
   gmQ_be: "Juste à l'équilibre", gmQ_20: "+20 % de bénéfice", gmQ_x2: "Doubler mon bénéfice",
   gmGoalDone: "🎉 Objectif déjà atteint ! Fixez-en un plus grand.", gmGap: "Il vous faut {gap} de bénéfice en plus. Choisissez votre voie :",
   gmRCut: "✂️ Réduire les coûts de {amt} ({pct} % de vos coûts). Commencez par {item} — votre plus gros coût.",
@@ -46,7 +46,7 @@ Object.assign(I18N.fr, {
   gmReport: "📄 Télécharger mon rapport", gmPrint: "🖨️ Imprimer / PDF", gmEdit: "✏️ Modifier mes chiffres", gmAgain: "Recommencer",
   rpTitle: "Rapport d'analyse d'activité", rpFor: "Préparé pour", rpDate: "Date", rpBy: "Réalisé avec Data Wey Talk par Scitylana — formation gratuite aux données pour les entreprises africaines.",
   rpNumbers: "Chiffres clés", rpCosts: "Répartition des coûts", rpSales: "Ventes", rpItem: "Élément", rpAmount: "Montant", rpShare: "Part",
-  rpGoal: "Objectif : {target} de bénéfice ({per})", rpWhatIf: "Scénario « et si »", rpBusiest: "Jours les plus chargés", rpPeriod: "Période",
+  rpGoal: "Objectif d'entreprise : {target} de bénéfice ({per})", rpWhatIf: "Scénario « et si »", rpBusiest: "Jours les plus chargés", rpPeriod: "Période",
   rpNote: "Ce sont des estimations basées sur vos chiffres. Pour une analyse approfondie, écrivez à scitylanaltd@gmail.com.",
 });
 
@@ -75,7 +75,7 @@ Object.assign(I18N.sw, {
   gmCostsT: "Pesa yako inaenda wapi", gmVarCosts: "Gharama zinazofuata mauzo", gmFixedCosts: "Gharama za kudumu",
   gmWhatIf: "Itakuwaje kama…? Jaribu", gmWiPrice: "Badilisha bei zako", gmWiCust: "Badilisha idadi ya wateja", gmWiCut: "Punguza gharama zako",
   gmWiNew: "Faida mpya", gmWiVs: "{d} ukilinganisha na sasa", gmReset: "Anza upya",
-  gmGoal: "🎯 Tafuta lengo: unataka faida kiasi gani ({per})?", gmGoalBtn: "Nionyeshe njia",
+  gmGoal: "🎯 Lengo la biashara: unataka faida kiasi gani ({per})?", gmGoalBtn: "Nionyeshe njia",
   gmQ_be: "Kurudisha gharama tu", gmQ_20: "Faida +20%", gmQ_x2: "Faida mara mbili",
   gmGoalDone: "🎉 Tayari umefikia lengo hili! Weka kubwa zaidi.", gmGap: "Unahitaji faida zaidi ya {gap}. Chagua njia yako:",
   gmRCut: "✂️ Punguza gharama kwa {amt} ({pct}% ya gharama zote). Anza na {item} — gharama yako kubwa zaidi.",
@@ -95,7 +95,7 @@ Object.assign(I18N.sw, {
   gmReport: "📄 Pakua ripoti ya biashara yangu", gmPrint: "🖨️ Chapisha / hifadhi PDF", gmEdit: "✏️ Badilisha namba zangu", gmAgain: "Anza upya",
   rpTitle: "Ripoti ya Uchambuzi wa Biashara", rpFor: "Imeandaliwa kwa", rpDate: "Tarehe", rpBy: "Imetengenezwa kwa Data Wey Talk na Scitylana — elimu ya data bure kwa biashara za Kiafrika.",
   rpNumbers: "Namba muhimu", rpCosts: "Mgawanyo wa gharama", rpSales: "Mauzo", rpItem: "Kipengele", rpAmount: "Kiasi", rpShare: "Sehemu",
-  rpGoal: "Lengo: faida ya {target} ({per})", rpWhatIf: "Hali ya 'itakuwaje kama'", rpBusiest: "Siku zenye shughuli nyingi", rpPeriod: "Kipindi",
+  rpGoal: "Lengo la biashara: faida ya {target} ({per})", rpWhatIf: "Hali ya 'itakuwaje kama'", rpBusiest: "Siku zenye shughuli nyingi", rpPeriod: "Kipindi",
   rpNote: "Haya ni makadirio kutoka kwa namba ulizoweka. Kwa uchambuzi wa kina, tuma barua pepe kwa scitylanaltd@gmail.com.",
 });
 
@@ -124,7 +124,7 @@ Object.assign(I18N.ar, {
   gmCostsT: "أين يذهب مالك", gmVarCosts: "تكاليف تتبع المبيعات", gmFixedCosts: "تكاليف ثابتة",
   gmWhatIf: "ماذا لو…؟ جرّب", gmWiPrice: "غيّر أسعارك", gmWiCust: "غيّر عدد الزبائن", gmWiCut: "خفّض تكاليفك",
   gmWiNew: "الربح الجديد", gmWiVs: "{d} مقارنة بالآن", gmReset: "إعادة ضبط",
-  gmGoal: "🎯 البحث عن الهدف: كم ربحًا تريد ({per})؟", gmGoalBtn: "أرني الطريق",
+  gmGoal: "🎯 هدف التجارة: كم ربحًا تريد ({per})؟", gmGoalBtn: "أرني الطريق",
   gmQ_be: "التعادل فقط", gmQ_20: "+20% ربح", gmQ_x2: "ضاعف ربحي",
   gmGoalDone: "🎉 لقد بلغت هذا الهدف بالفعل! ضع هدفًا أكبر.", gmGap: "تحتاج إلى {gap} ربحًا إضافيًا. اختر طريقك:",
   gmRCut: "✂️ خفّض التكاليف بمقدار {amt} ({pct}% من كل تكاليفك). ابدأ بـ {item} — أكبر تكاليفك.",
@@ -144,7 +144,7 @@ Object.assign(I18N.ar, {
   gmReport: "📄 نزّل تقرير تجارتي", gmPrint: "🖨️ اطبع / احفظ PDF", gmEdit: "✏️ غيّر أرقامي", gmAgain: "ابدأ من جديد",
   rpTitle: "تقرير تحليل الأعمال", rpFor: "أُعدّ لـ", rpDate: "التاريخ", rpBy: "أُنجز بواسطة Data Wey Talk من Scitylana — تعليم بيانات مجاني للأعمال الأفريقية.",
   rpNumbers: "الأرقام الرئيسية", rpCosts: "توزيع التكاليف", rpSales: "المبيعات", rpItem: "البند", rpAmount: "المبلغ", rpShare: "الحصة",
-  rpGoal: "الهدف: ربح {target} ({per})", rpWhatIf: "سيناريو «ماذا لو»", rpBusiest: "أكثر الأيام ازدحامًا", rpPeriod: "الفترة",
+  rpGoal: "هدف التجارة: ربح {target} ({per})", rpWhatIf: "سيناريو «ماذا لو»", rpBusiest: "أكثر الأيام ازدحامًا", rpPeriod: "الفترة",
   rpNote: "هذه تقديرات من الأرقام التي أدخلتها. لتحليل أعمق، راسل scitylanaltd@gmail.com.",
 });
 
@@ -173,7 +173,7 @@ Object.assign(I18N.ha, {
   gmCostsT: "Ina kuɗinka ke tafiya", gmVarCosts: "Kashewar da ke bin ciniki", gmFixedCosts: "Kashewa na dindindin",
   gmWhatIf: "Idan…? Gwada", gmWiPrice: "Canza farashinka", gmWiCust: "Canza yawan abokan ciniki", gmWiCut: "Rage kashe kuɗinka",
   gmWiNew: "Sabuwar riba", gmWiVs: "{d} idan aka kwatanta da yanzu", gmReset: "Sake saiti",
-  gmGoal: "🎯 Neman buri: riba nawa kake so ({per})?", gmGoalBtn: "Nuna mini hanya",
+  gmGoal: "🎯 Burin kasuwanci: riba nawa kake so ({per})?", gmGoalBtn: "Nuna mini hanya",
   gmQ_be: "Mayar da kuɗi kawai", gmQ_20: "Riba +20%", gmQ_x2: "Ninka ribata",
   gmGoalDone: "🎉 Ka riga ka kai wannan buri! Saita wani mafi girma.", gmGap: "Kana buƙatar ƙarin riba ta {gap}. Zaɓi hanyarka:",
   gmRCut: "✂️ Rage kashewa da {amt} ({pct}% na duk kashewarka). Fara da {item} — kashewarka mafi girma.",
@@ -193,7 +193,7 @@ Object.assign(I18N.ha, {
   gmReport: "📄 Sauke rahoton kasuwancina", gmPrint: "🖨️ Buga / ajiye PDF", gmEdit: "✏️ Canza lambobina", gmAgain: "Sake farawa",
   rpTitle: "Rahoton Nazarin Kasuwanci", rpFor: "An shirya don", rpDate: "Kwanan wata", rpBy: "An yi da Data Wey Talk ta Scitylana — ilimin bayanai kyauta ga kasuwancin Afirka.",
   rpNumbers: "Muhimman lambobi", rpCosts: "Rabon kashewa", rpSales: "Ciniki", rpItem: "Abu", rpAmount: "Kuɗi", rpShare: "Kashi",
-  rpGoal: "Buri: ribar {target} ({per})", rpWhatIf: "Yanayin 'idan'", rpBusiest: "Ranakun hada-hada", rpPeriod: "Lokaci",
+  rpGoal: "Burin kasuwanci: ribar {target} ({per})", rpWhatIf: "Yanayin 'idan'", rpBusiest: "Ranakun hada-hada", rpPeriod: "Lokaci",
   rpNote: "Waɗannan ƙiyasi ne daga lambobin da ka saka. Don zurfafa nazari, aika imel zuwa scitylanaltd@gmail.com.",
 });
 
@@ -222,7 +222,7 @@ Object.assign(I18N.yo, {
   gmCostsT: "Ibi ti owo rẹ n lọ", gmVarCosts: "Inawo to n tẹle tita", gmFixedCosts: "Inawo to duro",
   gmWhatIf: "Ti o ba jẹ pe…? Gbiyanju", gmWiPrice: "Yi iye owo rẹ pada", gmWiCust: "Yi iye onibaara pada", gmWiCut: "Din inawo rẹ ku",
   gmWiNew: "Ere tuntun", gmWiVs: "{d} ti a ba fi we bayi", gmReset: "Tun ṣeto",
-  gmGoal: "🎯 Wiwa afojusun: elo ni ere ti o fẹ ({per})?", gmGoalBtn: "Fi ọna han mi",
+  gmGoal: "🎯 Afojusun iṣowo: elo ni ere ti o fẹ ({per})?", gmGoalBtn: "Fi ọna han mi",
   gmQ_be: "Ko ni adanu nikan", gmQ_20: "Ere +20%", gmQ_x2: "Ṣe ere mi ni ilọpo meji",
   gmGoalDone: "🎉 O ti de afojusun yii! Ṣeto eyi to tobi ju.", gmGap: "O nilo afikun ere {gap}. Yan ọna rẹ:",
   gmRCut: "✂️ Din inawo ku ni {amt} ({pct}% gbogbo inawo rẹ). Bẹrẹ pẹlu {item} — inawo rẹ to tobi julọ.",
@@ -242,7 +242,7 @@ Object.assign(I18N.yo, {
   gmReport: "📄 Ṣe igbasilẹ ijabọ iṣowo mi", gmPrint: "🖨️ Tẹ jade / fi pamọ bi PDF", gmEdit: "✏️ Yi awọn nọmba mi pada", gmAgain: "Bẹrẹ lẹẹkansi",
   rpTitle: "Ijabọ Itupalẹ Iṣowo", rpFor: "A pese fun", rpDate: "Ọjọ", rpBy: "A ṣe e pẹlu Data Wey Talk lati ọwọ Scitylana — ẹkọ data ọfẹ fun awọn iṣowo Afrika.",
   rpNumbers: "Awọn nọmba pataki", rpCosts: "Pipin inawo", rpSales: "Tita", rpItem: "Nkan", rpAmount: "Iye owo", rpShare: "Ipin",
-  rpGoal: "Afojusun: ere {target} ({per})", rpWhatIf: "Ipo 'ti o ba jẹ pe'", rpBusiest: "Awọn ọjọ to kun julọ", rpPeriod: "Akoko",
+  rpGoal: "Afojusun iṣowo: ere {target} ({per})", rpWhatIf: "Ipo 'ti o ba jẹ pe'", rpBusiest: "Awọn ọjọ to kun julọ", rpPeriod: "Akoko",
   rpNote: "Iṣiro ni awọn wọnyi lati inu awọn nọmba ti o fi sii. Fun itupalẹ to jinlẹ, fi imeeli ranṣẹ si scitylanaltd@gmail.com.",
 });
 
@@ -271,7 +271,7 @@ Object.assign(I18N.ig, {
   gmCostsT: "Ebe ego gị na-aga", gmVarCosts: "Mmefu na-eso ire ahịa", gmFixedCosts: "Mmefu kwụ ọtọ",
   gmWhatIf: "Ọ bụrụ na…? Nwaa ya", gmWiPrice: "Gbanwee ọnụ ahịa gị", gmWiCust: "Gbanwee ọnụ ọgụgụ ndị ahịa", gmWiCut: "Belata mmefu gị",
   gmWiNew: "Uru ọhụrụ", gmWiVs: "{d} ma e jiri ya tụnyere ugbu a", gmReset: "Malitegharịa",
-  gmGoal: "🎯 Ịchọ ebumnuche: uru ole ka ị chọrọ ({per})?", gmGoalBtn: "Gosi m ụzọ",
+  gmGoal: "🎯 Ebumnuche azụmahịa: uru ole ka ị chọrọ ({per})?", gmGoalBtn: "Gosi m ụzọ",
   gmQ_be: "Naanị nhazi", gmQ_20: "Uru +20%", gmQ_x2: "Mee uru m okpukpu abụọ",
   gmGoalDone: "🎉 Ị ruola ebumnuche a! Tọọ nke ka ukwuu.", gmGap: "Ị chọrọ uru ọzọ nke {gap}. Họrọ ụzọ gị:",
   gmRCut: "✂️ Belata mmefu site na {amt} ({pct}% nke mmefu gị niile). Malite na {item} — mmefu gị kachasị ukwuu.",
@@ -291,7 +291,7 @@ Object.assign(I18N.ig, {
   gmReport: "📄 Budata akụkọ azụmahịa m", gmPrint: "🖨️ Bipụta / chekwaa PDF", gmEdit: "✏️ Gbanwee ọnụọgụ m", gmAgain: "Malite ọzọ",
   rpTitle: "Akụkọ Nyocha Azụmahịa", rpFor: "E kwadoro maka", rpDate: "Ụbọchị", rpBy: "E ji Data Wey Talk nke Scitylana mee ya — mmụta data n'efu maka azụmahịa Afrịka.",
   rpNumbers: "Ọnụọgụ ndị dị mkpa", rpCosts: "Nkewa mmefu", rpSales: "Ire ahịa", rpItem: "Ihe", rpAmount: "Ego", rpShare: "Òkè",
-  rpGoal: "Ebumnuche: uru {target} ({per})", rpWhatIf: "Ọnọdụ 'ọ bụrụ na'", rpBusiest: "Ụbọchị kachasị jupụta", rpPeriod: "Oge",
+  rpGoal: "Ebumnuche azụmahịa: uru {target} ({per})", rpWhatIf: "Ọnọdụ 'ọ bụrụ na'", rpBusiest: "Ụbọchị kachasị jupụta", rpPeriod: "Oge",
   rpNote: "Ndị a bụ atụmatụ sitere n'ọnụọgụ i tinyere. Maka nyocha miri emi, zitere email na scitylanaltd@gmail.com.",
 });
 
@@ -320,7 +320,7 @@ Object.assign(I18N.zu, {
   gmCostsT: "Lapho imali yakho iya khona", gmVarCosts: "Izindleko ezilandela ukuthengisa", gmFixedCosts: "Izindleko ezingaguquki",
   gmWhatIf: "Kuthiwani uma…? Zama", gmWiPrice: "Shintsha amanani akho", gmWiCust: "Shintsha inani lamakhasimende", gmWiCut: "Nciphisa izindleko zakho",
   gmWiNew: "Inzuzo entsha", gmWiVs: "{d} uma kuqhathaniswa namanje", gmReset: "Setha kabusha",
-  gmGoal: "🎯 Funa umgomo: ufuna inzuzo engakanani ({per})?", gmGoalBtn: "Ngikhombise indlela",
+  gmGoal: "🎯 Umgomo webhizinisi: ufuna inzuzo engakanani ({per})?", gmGoalBtn: "Ngikhombise indlela",
   gmQ_be: "Ukulingana nje", gmQ_20: "Inzuzo +20%", gmQ_x2: "Phinda kabili inzuzo yami",
   gmGoalDone: "🎉 Usuwufinyelelile lo mgomo! Beka omkhulu.", gmGap: "Udinga inzuzo eyengeziwe engu-{gap}. Khetha indlela yakho:",
   gmRCut: "✂️ Nciphisa izindleko ngo-{amt} ({pct}% wazo zonke izindleko). Qala ngo-{item} — izindleko zakho ezinkulu kunazo zonke.",
@@ -340,6 +340,6 @@ Object.assign(I18N.zu, {
   gmReport: "📄 Dawuniloda umbiko webhizinisi lami", gmPrint: "🖨️ Phrinta / londoloza i-PDF", gmEdit: "✏️ Shintsha izinombolo zami", gmAgain: "Qala kabusha",
   rpTitle: "Umbiko Wokuhlaziywa Kwebhizinisi", rpFor: "Ulungiselelwe", rpDate: "Usuku", rpBy: "Wenziwe nge-Data Wey Talk ngu-Scitylana — imfundo yedatha yamahhala yamabhizinisi ase-Afrika.",
   rpNumbers: "Izinombolo ezibalulekile", rpCosts: "Ukwahlukaniswa kwezindleko", rpSales: "Ukuthengisa", rpItem: "Into", rpAmount: "Inani", rpShare: "Isabelo",
-  rpGoal: "Umgomo: inzuzo engu-{target} ({per})", rpWhatIf: "Isimo sokuthi 'kuthiwani uma'", rpBusiest: "Izinsuku ezimatasa", rpPeriod: "Isikhathi",
+  rpGoal: "Umgomo webhizinisi: inzuzo engu-{target} ({per})", rpWhatIf: "Isimo sokuthi 'kuthiwani uma'", rpBusiest: "Izinsuku ezimatasa", rpPeriod: "Isikhathi",
   rpNote: "Lezi yizilinganiso ezivela ezinombolweni ozifakile. Ukuze uthole ukuhlaziywa okujulile, thumela i-imeyili ku-scitylanaltd@gmail.com.",
 });
