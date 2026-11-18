@@ -1,10 +1,10 @@
 /* Offline support for Data Wey Talk.
    Network first (so updates show up straight away), saved copy when there's no internet.
    Videos and other websites (Google Sheet, fonts) are not cached. */
-const CACHE = "dwt-v5";
+const CACHE = "dwt-v6";
 const CORE = [
   "./", "index.html", "privacy.html", "styles.css", "config.js", "app.js", "survey.js", "quiz.js", "correlate.js", "curriculum.js",
-  "game.js", "book.js", "entry.js", "lang/entry-i18n.js", "video/versions.js", "lang/sw.js", "lang/fr.js", "lang/ar.js", "lang/ha.js", "lang/yo.js", "lang/ig.js", "lang/zu.js", "lang/pt.js", "lang/ss.js", "lang/sn.js", "lang/ts.js", "lang/tn.js",
+  "game.js", "book.js", "entry.js", "lang/entry-i18n.js", "video/versions.js", "lang/sw.js", "lang/fr.js", "lang/ar.js", "lang/ha.js", "lang/yo.js", "lang/ig.js", "lang/zu.js", "lang/pt.js", "lang/ss.js", "lang/sn.js", "lang/ts.js", "lang/tn.js", "lang/af.js", "lang/ur.js", "lang/tr.js",
   "lang/game-i18n.js", "lang/quiz-more.js", "lang/book-i18n.js",
   "assets/scitylana-mark.jpg", "assets/scitylana-logo.jpg", "assets/favicon.png", "assets/icon-192.png",
   "data/akara-and-bread-sales.csv", "manifest.webmanifest",

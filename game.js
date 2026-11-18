@@ -186,7 +186,7 @@ Object.assign(I18N.en, {
   // ---------- helpers ----------
   const N = (v) => { const n = parseNum(v); return n === null ? 0 : n; };
   const per = () => t("gmPer_" + g.period);
-  const loc = () => (lang === "pcm" ? "en-NG" : lang === "ar" ? "ar-u-nu-latn" : lang);
+  const loc = () => (lang === "pcm" ? "en-NG" : lang === "ar" ? "ar-u-nu-latn" : lang === "ur" ? "ur-u-nu-latn" : lang);
   function dayName(i, style = "long") {
     try { return new Intl.DateTimeFormat(loc(), { weekday: style }).format(new Date(2026, 0, 5 + i)); }   // 5 Jan 2026 = Monday
     catch (_) { return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][i]; }

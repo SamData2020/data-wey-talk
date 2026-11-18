@@ -269,12 +269,15 @@ const CURRENCIES = [
   { code: "MGA", sym: "Ar", after: true, re: /\bMGA\b|ariary/i, c: ["Madagascar"] },
   { code: "SDG", sym: "SDG", after: true, re: /\bSDG\b/, c: ["Sudan"] },
   { code: "LYD", sym: "LD", after: true, re: /\bLYD\b/, c: ["Libya"] },
+  { code: "TRY", sym: "₺", re: /₺|\bTRY\b|\bTL\b|türk lirası|lira/i, c: ["Turkey"] },
+  { code: "PKR", sym: "Rs", re: /\bPKR\b|pakistani rupees?|روپے/i, c: ["Pakistan"] },
+  { code: "INR", sym: "₹", re: /₹|\bINR\b|indian rupees?/i, c: ["India"] },
   { code: "USD", sym: "$", re: /US\$|\$|\bUSD\b|dollars?/i, c: ["Zimbabwe", "Liberia", "Somalia", "South Sudan"] },
   { code: "EUR", sym: "€", re: /€|\bEUR\b|\beuros?\b/i, c: [] },
   { code: "GBP", sym: "£", re: /£|\bGBP\b|\bpounds?\b/i, c: [] },
 ];
 // Everything that can sit around a money number, removed before reading the number.
-const CUR_STRIP = /US\$|[NL]\$|GH[₵¢]|E£|[KTU]?Shs?|F?CFA|FRw|[₦$€£₵¢]|ج\.م|د\.م|دج|د\.ت|\b(?:NGN|GHS|KES|TZS|UGX|RWF|ZAR|NAD|EGP|MAD|DZD|TND|XOF|XAF|CDF|ETB|ZMW|MWK|BWP|MZN|AOA|GMD|SLE|SLL|LRD|MUR|MGA|SDG|LYD|USD|EUR|GBP|DHS?|DA|DT|Br|Kz|MT|Rs|LE|Ar|FC|Le|naira|cedis?)\b|^[RNK](?=\s?\d)/gi;
+const CUR_STRIP = /US\$|[NL]\$|GH[₵¢]|E£|[KTU]?Shs?|F?CFA|FRw|[₦$€£₵¢₺₹]|ج\.م|د\.م|دج|د\.ت|\b(?:NGN|GHS|KES|TZS|UGX|RWF|ZAR|NAD|EGP|MAD|DZD|TND|XOF|XAF|CDF|ETB|ZMW|MWK|BWP|MZN|AOA|GMD|SLE|SLL|LRD|MUR|MGA|SDG|LYD|TRY|PKR|INR|TL|USD|EUR|GBP|DHS?|DA|DT|Br|Kz|MT|Rs|LE|Ar|FC|Le|naira|cedis?)\b|^[RNK](?=\s?\d)/gi;
 const CUR_BY_CODE = Object.fromEntries(CURRENCIES.map((c) => [c.code, c]));
 
 function curIn(text) { const s = String(text || ""); return s ? CURRENCIES.find((c) => c.re.test(s)) || null : null; }
@@ -617,7 +620,7 @@ function applyLang() {
   document.dispatchEvent(new Event("dwt:lang"));
 }
 
-const RTL = ["ar"]; // right-to-left languages
+const RTL = ["ar", "ur"]; // right-to-left languages
 document.getElementById("langSel").addEventListener("change", (e) => {
   lang = e.target.value;
   try { localStorage.setItem("dwt-lang", lang); } catch (_) {}

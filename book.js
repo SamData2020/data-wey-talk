@@ -134,7 +134,7 @@ const BOOK_EXPENSES = ["materials", "transport", "rent", "data", "power", "tools
   let flash = "";
   let lastImg = null;   // { blob, url, name }
 
-  const loc = () => (lang === "pcm" ? "en-NG" : lang === "ar" ? "ar-u-nu-latn" : lang);
+  const loc = () => (lang === "pcm" ? "en-NG" : lang === "ar" ? "ar-u-nu-latn" : lang === "ur" ? "ur-u-nu-latn" : lang);
   const isRTL = () => typeof RTL !== "undefined" && RTL.includes(lang);
   function money(n) {
     const c = CUR_BY_CODE[B.cur], abs = Math.abs(n);

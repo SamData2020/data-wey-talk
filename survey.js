@@ -74,19 +74,20 @@ Object.assign(I18N.en, {
   lv_new: "I've never used Excel", lv_some: "I know some Excel", lv_work: "I already use data at work",
 });
 
-// African countries + dialing codes. "Other" lets anyone outside Africa sign up.
+// African countries (plus Turkey, Pakistan and India for the Turkish and Urdu pages) + dialing codes.
+// "Other" lets anyone else sign up.
 const COUNTRIES = [
   ["Nigeria", "+234"], ["Ghana", "+233"], ["Kenya", "+254"], ["South Africa", "+27"], ["Cameroon", "+237"],
   ["Algeria", "+213"], ["Angola", "+244"], ["Benin", "+229"], ["Botswana", "+267"], ["Burkina Faso", "+226"],
   ["Burundi", "+257"], ["Cabo Verde", "+238"], ["Central African Republic", "+236"], ["Chad", "+235"],
   ["Comoros", "+269"], ["Congo (Brazzaville)", "+242"], ["Congo (DRC)", "+243"], ["Côte d'Ivoire", "+225"],
   ["Djibouti", "+253"], ["Egypt", "+20"], ["Equatorial Guinea", "+240"], ["Eritrea", "+291"], ["Eswatini", "+268"],
-  ["Ethiopia", "+251"], ["Gabon", "+241"], ["Gambia", "+220"], ["Guinea", "+224"], ["Guinea-Bissau", "+245"],
+  ["Ethiopia", "+251"], ["Gabon", "+241"], ["Gambia", "+220"], ["Guinea", "+224"], ["Guinea-Bissau", "+245"], ["India", "+91"],
   ["Lesotho", "+266"], ["Liberia", "+231"], ["Libya", "+218"], ["Madagascar", "+261"], ["Malawi", "+265"],
   ["Mali", "+223"], ["Mauritania", "+222"], ["Mauritius", "+230"], ["Morocco", "+212"], ["Mozambique", "+258"],
-  ["Namibia", "+264"], ["Niger", "+227"], ["Rwanda", "+250"], ["São Tomé and Príncipe", "+239"], ["Senegal", "+221"],
+  ["Namibia", "+264"], ["Niger", "+227"], ["Pakistan", "+92"], ["Rwanda", "+250"], ["São Tomé and Príncipe", "+239"], ["Senegal", "+221"],
   ["Seychelles", "+248"], ["Sierra Leone", "+232"], ["Somalia", "+252"], ["South Sudan", "+211"], ["Sudan", "+249"],
-  ["Tanzania", "+255"], ["Togo", "+228"], ["Tunisia", "+216"], ["Uganda", "+256"], ["Zambia", "+260"], ["Zimbabwe", "+263"],
+  ["Tanzania", "+255"], ["Togo", "+228"], ["Tunisia", "+216"], ["Turkey", "+90"], ["Uganda", "+256"], ["Zambia", "+260"], ["Zimbabwe", "+263"],
 ];
 
 (function survey() {

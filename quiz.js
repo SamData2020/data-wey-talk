@@ -181,7 +181,7 @@ function quizSet(period, bankLen, correctOf) {
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  const locale = () => ({ pcm: "en-NG", ar: "ar-u-nu-latn" }[lang] || lang);
+  const locale = () => ({ pcm: "en-NG", ar: "ar-u-nu-latn", ur: "ur-u-nu-latn" }[lang] || lang);
   const fmtDate = (d) => { try { return d.toLocaleDateString(locale(), { day: "numeric", month: "long", year: "numeric" }); } catch (_) { return d.toDateString(); } };
   const monthName = () => { try { return now.toLocaleString(locale(), { month: "long", year: "numeric" }); } catch (_) { return monthKey; } };
   const P = () => ({ amount: PRIZE.amount, kind: PRIZE["kind_" + lang] || t("qzPrizeKind"), month: monthName(), date: fmtDate(nextMonth) });
