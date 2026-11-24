@@ -129,12 +129,24 @@ const COUNTRIES = [
   form.addEventListener("change", syncFollowUps);
   syncFollowUps();
 
+  // Before sign-up the page is "locked": the tool, My Book, the game and the quiz show a lock card;
+  // lessons, curriculum and videos stay open to everyone.
+  const setLockedClass = (on) => document.documentElement.classList.toggle("locked", on);
+  window.dwtLockCard = () => `<div class="lock-card">
+      <p class="lock-ico" aria-hidden="true">🔒</p>
+      <p><b>${esc(t("lkMsg"))}</b></p>
+      <a class="btn" href="#start">${esc(t("lkBtn"))}</a>
+    </div>`;
+
   function setUnlocked(name) {
     form.hidden = true;
     tool.hidden = false;
+    setLockedClass(false);
     const thanks = $("svThanks");
-    thanks.textContent = name ? t("svThanks", { name }) : t("svThanksNoName");
+    thanks.textContent = (name ? t("svThanks", { name }) : t("svThanksNoName")) + " " + t("suDone");
     thanks.hidden = false;
+    document.dispatchEvent(new Event("dwt:unlocked"));
+    $("start").scrollIntoView({ block: "start" });
   }
 
   async function send(payload) {
@@ -209,6 +221,7 @@ const COUNTRIES = [
   let done = null;
   try { done = JSON.parse(store.get(DONE_KEY) || "null"); } catch (_) {}
   window.dwtSurveyDone = () => !!store.get(DONE_KEY);
+  setLockedClass(!done);
   if (done) {
     form.hidden = true;
     tool.hidden = false;

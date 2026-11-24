@@ -229,7 +229,7 @@ const BOOK_EXPENSES = ["materials", "transport", "rent", "data", "power", "tools
   const inp = (k, v, extra = "") => `<input data-k="${k}" value="${esc(v ?? "")}" ${extra}>`;
   const num = (k, v, ph = "") => inp(k, v, `inputmode="decimal" autocomplete="off" placeholder="${esc(ph)}"`);
 
-  function sLocked() { return `<p class="qz-banner">${esc(t("gmLocked"))} <a class="mail" href="#start">↑</a></p>`; }
+  function sLocked() { return window.dwtLockCard ? window.dwtLockCard() : `<p class="qz-banner">${esc(t("gmLocked"))} <a class="mail" href="#start">↑</a></p>`; }
   function sSetup() {
     const curs = `<select data-b="cur">${CURRENCIES.map((c) => `<option value="${c.code}"${B.cur === c.code ? " selected" : ""}>${c.code} · ${esc(c.sym)}</option>`).join("")}</select>`;
     return `<h3>${esc(t("bkSetupT"))}</h3>
@@ -572,6 +572,7 @@ const BOOK_EXPENSES = ["materials", "transport", "rent", "data", "power", "tools
   let installEvt = null;
   window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; render(); });
   document.addEventListener("dwt:lang", render);
+  document.addEventListener("dwt:unlocked", render);
   document.querySelectorAll('a[href="#book"]').forEach((a) => a.addEventListener("click", () => render()));
   render();
 })();

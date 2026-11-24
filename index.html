@@ -50,12 +50,12 @@
       </label>
     </div>
     <nav class="subnav" aria-label="Sections">
-      <a href="#start" data-i18n="navTool"></a>
-      <a href="#book" data-i18n="navBook"></a>
-      <a href="#game" data-i18n="navGame"></a>
+      <a href="#start" class="lockable" data-i18n="navTool"></a>
+      <a href="#book" class="lockable" data-i18n="navBook"></a>
+      <a href="#game" class="lockable" data-i18n="navGame"></a>
       <a href="#learn" data-i18n="navLessons"></a>
       <a href="#curriculum" data-i18n="navCurriculum"></a>
-      <a href="#quiz" data-i18n="navQuiz"></a>
+      <a href="#quiz" class="lockable" data-i18n="navQuiz"></a>
       <a href="#about" data-i18n="navAbout"></a>
     </nav>
   </header>
@@ -73,7 +73,17 @@
     <section class="upload" id="start">
       <!-- Step 1: survey -->
       <form id="survey" class="survey" novalidate>
-        <h2 data-i18n="svTitle"></h2>
+        <div class="unlock">
+          <h2 data-i18n="suUnlockT"></h2>
+          <ul class="unlock-list">
+            <li>📊 <span data-i18n="navTool"></span></li>
+            <li>📒 <span data-i18n="navBook"></span></li>
+            <li>🎮 <span data-i18n="navGame"></span></li>
+            <li>🏆 <span data-i18n="navQuiz"></span></li>
+          </ul>
+          <p class="muted small"><a class="unlock-open" href="#learn" data-i18n="suOpen"></a></p>
+        </div>
+        <h3 class="sv-title" data-i18n="svTitle"></h3>
         <p class="muted" data-i18n="svLede"></p>
 
         <fieldset>
@@ -360,6 +370,7 @@
   <script src="lang/quiz-more.js"></script>
   <script src="lang/book-i18n.js"></script>
   <script src="lang/entry-i18n.js"></script>
+  <script src="lang/signup-i18n.js"></script>
   <script>applyLang();</script>
 </body>
 </html>

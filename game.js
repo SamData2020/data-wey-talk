@@ -290,6 +290,7 @@ Object.assign(I18N.en, {
 
   function sIntro() {
     const locked = window.dwtSurveyDone && !window.dwtSurveyDone();
+    if (locked && window.dwtLockCard) return window.dwtLockCard();
     return `<div class="gm-intro">
       ${locked ? `<p class="qz-banner">${esc(t("gmLocked"))} <a class="mail" href="#start">↑</a></p>` : ""}
       <button type="button" class="btn" data-act="start"${locked ? " disabled" : ""}>${esc(saved && g.name ? t("gmResume") : t("gmStart"))}</button>
@@ -606,6 +607,7 @@ ${wiOn ? `<h2>${esc(t("rpWhatIf"))}</h2><table>
 
   window.dwtGameReport = reportHTML;   // handy for checking the report
   document.addEventListener("dwt:lang", render);
+  document.addEventListener("dwt:unlocked", render);
   render();
   // The survey may finish while this page is open: re-check the lock when people come to the game.
   document.querySelectorAll('a[href="#game"]').forEach((a) => a.addEventListener("click", () => { if (g.stage === "intro") render(); }));

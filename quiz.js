@@ -229,7 +229,8 @@ function quizSet(period, bankLen, correctOf) {
       const locked = window.dwtSurveyDone && !window.dwtSurveyDone();
       const prof = profile();
       if (locked || !prof.email) {
-        box.innerHTML = `${banner}<p class="qz-banner">${esc(t("qzNeedForm"))} <a class="mail" href="#start">↑</a></p>`;
+        box.innerHTML = locked && window.dwtLockCard ? banner + window.dwtLockCard()
+          : `${banner}<p class="qz-banner">${esc(t("qzNeedForm"))} <a class="mail" href="#start">↑</a></p>`;
         return;
       }
       box.innerHTML = `${banner}
@@ -345,6 +346,7 @@ function quizSet(period, bankLen, correctOf) {
     } catch (_) { /* offline: the Sheet decides anyway */ }
   }
 
+  document.addEventListener("dwt:unlocked", render);
   document.addEventListener("dwt:lang", () => { if (qs.stage !== "q" || !box.querySelector(".qz-feedback.good, .qz-feedback.bad")) render(); else renderStatic(); });
   render();
   checkStatus();

@@ -644,3 +644,28 @@ span.chip.on { opacity: 1; }
   .en-sum { margin-inline-start: 0; width: 100%; }
   .tool-mode button { padding: 8px 12px; font-size: 14px; }
 }
+
+/* ---------- Sign-up gate ---------- */
+.unlock {
+  background: var(--page); border: 1px solid var(--gold); border-radius: var(--radius);
+  padding: 16px 18px; margin: 0 0 20px; text-align: center;
+}
+.unlock h2 { margin: 0 0 10px; }
+.unlock-list {
+  list-style: none; padding: 0; margin: 0 0 10px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
+}
+.unlock-list li {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 8px; font-weight: 600;
+}
+.unlock .muted { margin: 0; }
+.sv-title { font-size: clamp(18px, 4vw, 22px); margin: 0; }
+.lock-card {
+  text-align: center; background: var(--page); border: 1px dashed var(--gold);
+  border-radius: var(--radius); padding: 22px 18px; max-width: 520px; margin: 0 auto;
+}
+.lock-card .lock-ico { font-size: 34px; margin: 0 0 6px; line-height: 1; }
+.lock-card p { margin: 0 0 14px; }
+html.locked .subnav a.lockable::after { content: " 🔒"; font-size: .85em; }
+.unlock-open { color: var(--link); font-weight: 600; }
