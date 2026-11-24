@@ -605,6 +605,22 @@ ${wiOn ? `<h2>${esc(t("rpWhatIf"))}</h2><table>
     }
   });
 
+  // Find Distributors → "Test it in the Business Game": one product, bought by the case, sold by the unit.
+  // s = { product, business, cur, cases, units, cost (per case), price (per unit) }
+  window.dwtGameLoad = (s) => {
+    const sold = s.cases * s.units;
+    g = Object.assign(blank(), {
+      name: s.product, type: "retail", cur: CUR_BY_CODE[s.cur] ? s.cur : g.cur, period: "month",
+      items: [{ name: s.product, qty: String(sold), price: String(s.price) }], customers: String(sold),
+      costs: [{ name: t("dsStock") + (s.business ? " (" + s.business + ")" : ""), amt: String(Math.round(s.cost * s.cases * 100) / 100), varies: true }],
+    });
+    const locked = window.dwtSurveyDone && !window.dwtSurveyDone();
+    if (locked) { g.stage = "intro"; save(); render(); }   // lock card first; "Start" opens these numbers after sign-up
+    else go("results");
+    $("game").scrollIntoView({ block: "start" });
+  };
+  window.dwtGameHasOwn = () => !!(store.get() && store.get().name && !store.get().demo);
+
   window.dwtGameReport = reportHTML;   // handy for checking the report
   document.addEventListener("dwt:lang", render);
   document.addEventListener("dwt:unlocked", render);

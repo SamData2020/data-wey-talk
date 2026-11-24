@@ -669,3 +669,41 @@ span.chip.on { opacity: 1; }
 .lock-card p { margin: 0 0 14px; }
 html.locked .subnav a.lockable::after { content: " 🔒"; font-size: .85em; }
 .unlock-open { color: var(--link); font-weight: 600; }
+
+/* ---------- Find Distributors ---------- */
+.dist-box { max-width: 1040px; }
+.ds-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+.ds-bar input[type="search"], .ds-bar select, .ds-form select, .ds-form textarea {
+  font: inherit; font-weight: 400; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--axis); border-radius: 10px; padding: 10px; min-height: 44px; }
+.ds-bar input[type="search"] { flex: 1 1 220px; min-width: 0; }
+.ds-bar .btn { white-space: nowrap; }
+.ds-form textarea { width: 100%; resize: vertical; }
+.ds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.ds-card { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; display: flex; flex-direction: column; }
+.ds-img { aspect-ratio: 4 / 3; background: var(--page); display: grid; place-items: center; font-size: 48px; }
+.ds-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ds-body { padding: 14px 16px 16px; display: grid; gap: 8px; }
+.ds-body h3 { margin: 0; font-family: var(--slab); font-size: 19px; }
+.ds-body p { margin: 0; }
+.ds-who { color: var(--muted); font-size: 14px; font-weight: 600; }
+.ds-desc { font-size: 14px; }
+.ds-nums { margin: 0; display: grid; gap: 6px; border-top: 1px solid var(--grid); padding-top: 8px; }
+.ds-nums div { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+.ds-nums dt { color: var(--muted); }
+.ds-nums dd { margin: 0; font-weight: 600; text-align: end; font-variant-numeric: tabular-nums; }
+.ds-earn dd { font-size: 16px; font-weight: 800; }
+.ds-earn.up dd { color: var(--up); } .ds-earn.down dd { color: var(--down); }
+.ds-calc { display: grid; grid-template-columns: 120px 1fr; gap: 10px; align-items: end; background: var(--page); border-radius: 10px; padding: 10px; }
+.ds-calc p { font-size: 14px; display: grid; } .ds-calc b { font-size: 18px; color: var(--up); font-variant-numeric: tabular-nums; }
+.ds-acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ds-acts .chip.wa { min-height: 40px; text-decoration: none; padding: 6px 12px; }
+.ds-msg { text-align: center; padding: 24px 8px; }
+.ds-safety { margin: 18px 0 0; padding: 10px 14px; border-inline-start: 3px solid var(--gold); background: var(--page); border-radius: 8px; }
+.ds-form h3 { margin-top: 0; font-family: var(--slab); }
+.ds-preview-row { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+.ds-thumb { width: 96px; height: 72px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+.ds-back { margin-top: 12px; }
+@media (max-width: 640px) { .ds-form .grid2 { grid-template-columns: 1fr; } .ds-bar .btn { width: 100%; } }
+.ds-bar select { width: auto; flex: 0 1 200px; }
+@media (max-width: 640px) { .ds-bar select { flex: 1 1 100%; } }

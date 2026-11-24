@@ -31,3 +31,17 @@ Google will ask for one extra permission (sending email). Allow it.
 
 **When you get the winner email:** send their $5 voucher / gift card by email or WhatsApp, then write "Yes" in **Prize sent?** in the Winners tab.
 If the winner doesn't reply within 7 days, the rules say the prize goes to the next qualifying person. That's the next row for that month in **Quiz Entries**.
+
+## Find Distributors (product posts with photos)
+
+Distributors post products on the website. Each post lands in the **Distributors** tab and its photo in a Drive folder called
+**Data Wey Talk – Product photos**. **Nothing shows on the website until you approve it.**
+
+**One-time update:** paste the new `Code.gs`, Save, then **Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy**.
+Google will ask for a new permission (Google Drive, to save the photos). Allow it. Until you do this, the site says "Posting opens very soon".
+
+**When a post comes in** you get an email. Open the **Distributors** tab, look at the details and the photo link, then:
+- to **publish** it, type **Yes** in the **Approved? (type Yes)** column. It appears on the site the next time someone opens the page;
+- to **remove** it later, delete the Yes (or the whole row).
+
+The email and account phone columns are private and never sent to the website.

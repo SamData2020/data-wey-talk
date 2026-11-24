@@ -1,5 +1,7 @@
 /**
- * Data Wey Talk — survey + quiz + Business Boss game receiver.
+ * Data Wey Talk — survey + quiz + Business Boss game + Find Distributors receiver.
+ * Find Distributors: posts land in the "Distributors" tab, photos in a Drive folder.
+ * A post only shows on the website after you type Yes in its "Approved?" column.
  * Quiz: each person can take it ONCE a month (checked by email/phone). Every attempt is recorded.
  * Quiz prize: ONE winner per month = the FIRST person that month to score above 80%.
  * The winner is recorded automatically in the "Winners" tab and you get an email.
@@ -34,7 +36,15 @@ const SHEETS = {
       "Currency", "Period", "Sales", "Costs", "Profit", "Margin %", "Customers", "Profit goal", "Health score",
       "Language", "Submitted at (device)"],
   },
+  listing: {
+    name: "Distributors",
+    headers: ["Received at", "ID", "Approved? (type Yes)", "Business name", "Contact name", "Public WhatsApp / phone",
+      "Email (private)", "Account phone (private)", "Country", "City", "Product", "Description", "Units per case",
+      "Cost per case", "Selling price per unit", "Currency", "Minimum order (cases)", "Photo link", "Language", "Submitted at (device)"],
+  },
 };
+const PHOTO_FOLDER = "Data Wey Talk – Product photos";
+const MAX_PHOTO_CHARS = 1500000;   // ~1 MB picture (the site shrinks photos before sending)
 
 function thisMonth_() { return Utilities.formatDate(new Date(), TZ, "yyyy-MM"); }
 
@@ -57,9 +67,23 @@ function doGet(e) {
     try { return json({ ok: true, mail: "allowed", quotaLeft: MailApp.getRemainingDailyQuota() }); }
     catch (err) { return json({ ok: true, mail: "NOT allowed", error: String(err).slice(0, 120) }); }
   }
+  // ?listings=1 → approved Find Distributors posts (public details only, never the email)
+  if (e && e.parameter && e.parameter.listings) return json({ ok: true, listings: approvedListings_() });
   const month = thisMonth_();
   return json({ ok: true, month: month, claimed: !!monthWinner_(month) });
 }
+
+function approvedListings_() {
+  const rows = sheet_("listing").getDataRange().getValues().slice(1);
+  return rows.filter((r) => /^\s*y(es)?\s*$/i.test(String(r[2]))).map((r) => ({
+    id: String(r[1]), date: r[0] instanceof Date ? r[0].toISOString() : String(r[0]),
+    business: plain_(r[3]), contact: plain_(r[4]), phone: plain_(r[5]), country: plain_(r[8]), city: plain_(r[9]),
+    product: plain_(r[10]), description: plain_(r[11]), units: Number(r[12]) || 1, cost: Number(r[13]) || 0,
+    price: Number(r[14]) || 0, currency: plain_(r[15]), minOrder: Number(r[16]) || 0, photo: plain_(r[17]),
+  })).reverse().slice(0, 300);
+}
+// Undo the ' that clean() adds in front of values starting with = + - @
+function plain_(v) { return String(v == null ? "" : v).replace(/^'/, ""); }
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -96,6 +120,9 @@ function doPost(e) {
       return json({ ok: true, winner: isWinner, passed: passed, month: month, email: emailStatus });
     }
 
+    // Find Distributors: a distributor posts a product (shows on the site only after you approve it).
+    if (d.type === "listing") return saveListing_(d);
+
     // Business Boss game: one row when someone reaches the scoreboard, one when they download the report.
     if (d.type === "game") {
       const n = (v) => (isFinite(Number(v)) ? Math.round(Number(v) * 100) / 100 : "");
@@ -119,6 +146,36 @@ function doPost(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+function saveListing_(d) {
+  const num = (v) => { const n = Number(v); return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; };
+  const units = Math.min(100000, Math.round(num(d.units)) || 1), cost = num(d.cost), price = num(d.price);
+  if (!d.business || !d.product || !d.contact_phone || !cost || !price) return json({ ok: false, listing: true, error: "missing fields" });
+  const photo = String(d.photo || "");
+  const m = photo.match(/^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+\/=]+)$/);
+  if (!m || photo.length > MAX_PHOTO_CHARS) return json({ ok: false, listing: true, error: "bad photo" });
+
+  const id = Utilities.getUuid().slice(0, 8);
+  const folders = DriveApp.getFoldersByName(PHOTO_FOLDER);
+  const folder = folders.hasNext() ? folders.next() : DriveApp.createFolder(PHOTO_FOLDER);
+  const file = folder.createFile(Utilities.newBlob(Utilities.base64Decode(m[2]), "image/" + m[1], id + "." + (m[1] === "jpeg" ? "jpg" : m[1])));
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  const link = "https://drive.google.com/thumbnail?id=" + file.getId() + "&sz=w800";
+
+  sheet_("listing").appendRow([
+    new Date(), id, "", clean(d.business), clean(d.name), clean(d.contact_phone), clean(d.email), clean(d.phone),
+    clean(d.country), clean(d.city), clean(d.product), clean(d.description, 500), units, cost, price,
+    clean(d.currency), Math.round(num(d.min_order)) || "", link, clean(d.language), clean(d.submitted_at),
+  ]);
+  try {
+    MailApp.sendEmail(notifyTo_(), "🛒 New Find Distributors post to check: " + clean(d.product),
+      "A distributor posted a product. It is NOT on the website yet.\n\n" +
+      "Business: " + clean(d.business) + "\nProduct: " + clean(d.product) + "\nCost per case: " + cost + " " + clean(d.currency) +
+      "\nSelling price per unit: " + price + " (" + units + " per case)\nPhone: " + clean(d.contact_phone) + "\nPhoto: " + link +
+      "\n\nTo publish it, open the Distributors tab and type Yes in the 'Approved?' column for ID " + id + ".");
+  } catch (err) { /* never block the post because of email */ }
+  return json({ ok: true, listing: true, id: id });
 }
 
 function notifyTo_() { return NOTIFY_EMAIL; }
@@ -158,8 +215,8 @@ function sheet_(key) {
 }
 
 // Trim length and stop spreadsheet formula injection (values starting with = + - @).
-function clean(v) {
-  v = String(v == null ? "" : v).slice(0, 200).trim();
+function clean(v, max) {
+  v = String(v == null ? "" : v).slice(0, max || 200).trim();
   return /^[=+\-@]/.test(v) ? "'" + v : v;
 }
 
