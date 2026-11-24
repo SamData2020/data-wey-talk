@@ -14,7 +14,7 @@
 
   let listings = ls.get(CACHE_KEY) || null;    // last list we saw, so the page fills straight away
   let status = listings ? "ok" : "loading";      // loading | ok | error
-  let canPost = true;                             // false while the Sheet script is the old version
+  let canPost = null;                             // null = still checking; false while the Sheet script is the old version
   let view = "list";                              // list | form | sent
   let q = "", country = "", role = "";
   const cases = {};                               // cases per month typed on each card
@@ -41,7 +41,7 @@
 
   // ---------- load approved posts ----------
   async function load() {
-    if (!endpoint) { status = listings ? "ok" : "error"; render(); return; }
+    if (!endpoint) { status = listings ? "ok" : "error"; canPost = false; render(); return; }
     try {
       const res = await fetch(endpoint + (endpoint.includes("?") ? "&" : "?") + "listings=1");
       const data = await res.json();
@@ -50,8 +50,8 @@
         ls.set(CACHE_KEY, listings); canPost = true;
       } else { listings = listings || []; canPost = false; }   // old script: nothing to list yet, posting not ready
       status = "ok";
-    } catch (_) { status = listings ? "ok" : "error"; }
-    if (view === "list") renderList(); else render();
+    } catch (_) { status = listings ? "ok" : "error"; if (canPost === null) canPost = true; }   // offline: let them fill it in
+    if (view === "list") renderList(); else if (!$("dsForm")) render();   // never wipe a form someone is filling in
   }
 
   // ---------- list ----------
@@ -116,6 +116,7 @@
   // ---------- post form ----------
   function sForm() {
     if (!signedUp()) return (window.dwtLockCard ? window.dwtLockCard() : "") + back();
+    if (canPost === null) return `<p class="muted ds-msg">${esc(t("dsLoading"))}</p>` + back();
     if (!canPost) return `<p class="ds-msg">${esc(t("dsSoon"))}</p>` + back();
     const p = profile(), d = draft;
     const val = (k, dflt = "") => esc(d[k] ?? dflt);
