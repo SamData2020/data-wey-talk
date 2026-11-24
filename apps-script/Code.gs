@@ -40,7 +40,7 @@ const SHEETS = {
     name: "Distributors",
     headers: ["Received at", "ID", "Approved? (type Yes)", "Business name", "Contact name", "Public WhatsApp / phone",
       "Email (private)", "Account phone (private)", "Country", "City", "Product", "Description", "Units per case",
-      "Cost per case", "Selling price per unit", "Currency", "Minimum order (cases)", "Photo link", "Language", "Submitted at (device)"],
+      "Cost per case", "Selling price per unit", "Currency", "Minimum order (cases)", "Photo link", "Language", "Submitted at (device)", "Poster type"],
   },
 };
 const PHOTO_FOLDER = "Data Wey Talk – Product photos";
@@ -80,6 +80,7 @@ function approvedListings_() {
     business: plain_(r[3]), contact: plain_(r[4]), phone: plain_(r[5]), country: plain_(r[8]), city: plain_(r[9]),
     product: plain_(r[10]), description: plain_(r[11]), units: Number(r[12]) || 1, cost: Number(r[13]) || 0,
     price: Number(r[14]) || 0, currency: plain_(r[15]), minOrder: Number(r[16]) || 0, photo: plain_(r[17]),
+    role: /importer/i.test(String(r[20])) ? "importer" : "distributor",
   })).reverse().slice(0, 300);
 }
 // Undo the ' that clean() adds in front of values starting with = + - @
@@ -167,10 +168,11 @@ function saveListing_(d) {
     new Date(), id, "", clean(d.business), clean(d.name), clean(d.contact_phone), clean(d.email), clean(d.phone),
     clean(d.country), clean(d.city), clean(d.product), clean(d.description, 500), units, cost, price,
     clean(d.currency), Math.round(num(d.min_order)) || "", link, clean(d.language), clean(d.submitted_at),
+    d.role === "importer" ? "Importer looking for distributors" : "Distributor selling",
   ]);
   try {
     MailApp.sendEmail(notifyTo_(), "🛒 New Find Distributors post to check: " + clean(d.product),
-      "A distributor posted a product. It is NOT on the website yet.\n\n" +
+      (d.role === "importer" ? "An importer looking for distributors" : "A distributor") + " posted a product. It is NOT on the website yet.\n\n" +
       "Business: " + clean(d.business) + "\nProduct: " + clean(d.product) + "\nCost per case: " + cost + " " + clean(d.currency) +
       "\nSelling price per unit: " + price + " (" + units + " per case)\nPhone: " + clean(d.contact_phone) + "\nPhoto: " + link +
       "\n\nTo publish it, open the Distributors tab and type Yes in the 'Approved?' column for ID " + id + ".");

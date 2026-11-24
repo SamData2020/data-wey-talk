@@ -707,3 +707,7 @@ html.locked .subnav a.lockable::after { content: " 🔒"; font-size: .85em; }
 @media (max-width: 640px) { .ds-form .grid2 { grid-template-columns: 1fr; } .ds-bar .btn { width: 100%; } }
 .ds-bar select { width: auto; flex: 0 1 200px; }
 @media (max-width: 640px) { .ds-bar select { flex: 1 1 100%; } }
+.ds-badge { font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.ds-badge.imp { color: var(--accent); }
+.ds-role { border: 0; padding: 0; margin: 0 0 14px; display: grid; gap: 8px; }
+.ds-role legend { font-size: 14px; font-weight: 700; margin-bottom: 6px; padding: 0; }

@@ -16,7 +16,7 @@
   let status = listings ? "ok" : "loading";      // loading | ok | error
   let canPost = true;                             // false while the Sheet script is the old version
   let view = "list";                              // list | form | sent
-  let q = "", country = "";
+  let q = "", country = "", role = "";
   const cases = {};                               // cases per month typed on each card
   let photo = "";                                 // shrunk photo as a data: URL
   let draft = {};
@@ -59,10 +59,11 @@
     const e = earn(x), n = cases[x.id] ?? (x.minOrder > 0 ? x.minOrder : 10);
     const img = safePhoto(x.photo);
     const wa = String(x.phone || "").replace(/\D/g, "");
-    const waText = encodeURIComponent(t("dsWaMsg", { product: x.product }));
+    const waText = encodeURIComponent(t(x.role === "importer" ? "dsWaMsgImp" : "dsWaMsg", { product: x.product }));
     return `<article class="ds-card" data-id="${esc(x.id)}">
       <div class="ds-img">${img ? `<img src="${esc(img)}" alt="${esc(x.product)}" loading="lazy" referrerpolicy="no-referrer">` : `<span aria-hidden="true">📦</span>`}</div>
       <div class="ds-body">
+        <p class="ds-badge ${x.role === "importer" ? "imp" : ""}">${esc(t(x.role === "importer" ? "dsBadgeImp" : "dsBadgeDist"))}</p>
         <h3 dir="auto">${esc(x.product)}</h3>
         <p class="ds-who" dir="auto">${esc(x.business)}${x.city || x.country ? ` · ${esc([x.city, x.country].filter(Boolean).join(", "))}` : ""}</p>
         ${x.description ? `<p class="ds-desc" dir="auto">${esc(x.description)}</p>` : ""}
@@ -87,7 +88,7 @@
   }
   function filtered() {
     const s = q.trim().toLowerCase();
-    return (listings || []).filter((x) => (!country || x.country === country) &&
+    return (listings || []).filter((x) => (!country || x.country === country) && (!role || (x.role || "distributor") === role) &&
       (!s || [x.product, x.business, x.description, x.city].join(" ").toLowerCase().includes(s)));
   }
   function listHTML() {
@@ -102,6 +103,9 @@
     return `<div class="ds-bar">
         <input type="search" id="dsQ" value="${esc(q)}" placeholder="${esc(t("dsSearch"))}" aria-label="${esc(t("dsSearch"))}">
         ${cs.length > 1 ? `<select id="dsC" aria-label="${esc(t("svCountry"))}"><option value="">${esc(t("dsAllC"))}</option>${cs.map((c) => `<option${c === country ? " selected" : ""}>${esc(c)}</option>`).join("")}</select>` : ""}
+        ${(listings || []).length ? `<select id="dsR" aria-label="${esc(t("dsRoleQ"))}"><option value="">${esc(t("dsAllRoles"))}</option>
+          <option value="importer"${role === "importer" ? " selected" : ""}>${esc(t("dsFImp"))}</option>
+          <option value="distributor"${role === "distributor" ? " selected" : ""}>${esc(t("dsFDist"))}</option></select>` : ""}
         <button type="button" class="btn gold" data-act="post">${esc(t("dsPost"))}</button>
       </div>
       <div id="dsList">${listHTML()}</div>
@@ -123,8 +127,12 @@
     return `<form class="ds-form" id="dsForm" novalidate>
       <h3>${esc(t("dsFormT"))}</h3>
       <p class="muted small">${esc(t("dsFormX"))}</p>
+      <fieldset class="ds-role"><legend>${esc(t("dsRoleQ"))}</legend>
+        ${[["importer", "dsRoleImp"], ["distributor", "dsRoleDist"]].map(([v, k]) =>
+          `<label class="check"><input type="radio" name="dsRole" value="${v}"${d.role === v ? " checked" : ""}><span>${esc(t(k))}</span></label>`).join("")}
+      </fieldset>
       <div class="grid2">
-        ${f("business", t("dsBiz"), 'maxlength="80" required')}
+        ${f("business", t("gmName"), 'maxlength="80" required')}
         ${f("contact_phone", t("dsContact"), 'inputmode="tel" maxlength="30" required')}
         <label class="field"><span>${esc(t("svCountry"))}</span><select data-f="country"><option value="">${esc(t("svPick"))}</option>${countries}</select></label>
         ${f("city", t("svCity"), 'maxlength="60"')}
@@ -174,11 +182,11 @@
   async function submit() {
     const err = $("dsErr"), btn = $("dsSend");
     const d = draft, units = Math.max(1, Math.round(N(d.units)) || 1), cost = N(d.cost), price = N(d.price);
-    const okFields = (d.business || "").trim() && (d.product || "").trim() && (d.contact_phone ?? profile().phone ?? "").replace(/\D/g, "").length >= 7 && cost > 0 && price > 0 && photo;
-    if (!okFields || !$("dsOk").checked) { err.textContent = t(okFields ? "svErrConsent" : "dsErr"); err.hidden = false; return; }
+    const okFields = d.role && (d.business || "").trim() && (d.product || "").trim() && (d.contact_phone ?? profile().phone ?? "").replace(/\D/g, "").length >= 7 && cost > 0 && price > 0 && photo;
+    if (!okFields || !$("dsOk").checked) { err.textContent = t(!d.role ? "dsErrRole" : okFields ? "svErrConsent" : "dsErr"); err.hidden = false; return; }
     const p = profile();
     const payload = {
-      type: "listing", website: d.website || "", name: p.name || "", email: p.email || "", phone: p.phone || "", consent: true,
+      type: "listing", role: d.role, website: d.website || "", name: p.name || "", email: p.email || "", phone: p.phone || "", consent: true,
       business: d.business.trim(), contact_phone: (d.contact_phone ?? p.phone ?? "").trim(), country: d.country ?? p.country ?? "", city: (d.city || "").trim(),
       product: d.product.trim(), description: (d.description || "").trim(), units, cost, price,
       currency: d.currency || (CURRENCIES.find((c) => c.c.includes(p.country)) || { code: "NGN" }).code,
@@ -221,10 +229,12 @@
     }
     if (el.dataset.f) { draft[el.dataset.f] = el.value; const pv = $("dsPrev"); if (pv) pv.innerHTML = previewText(); }
     if (el.id === "dsOk") draft.ok = el.checked;
+    if (el.name === "dsRole") draft.role = el.value;
   });
   box.addEventListener("change", async (e) => {
     const el = e.target;
     if (el.id === "dsC") { country = el.value; $("dsList").innerHTML = listHTML(); return; }
+    if (el.id === "dsR") { role = el.value; $("dsList").innerHTML = listHTML(); return; }
     if (el.tagName === "SELECT" && el.dataset.f) { draft[el.dataset.f] = el.value; const pv = $("dsPrev"); if (pv) pv.innerHTML = previewText(); return; }
     if (el.id === "dsPhoto" && el.files[0]) {
       try { photo = await shrink(el.files[0]); } catch (_) { photo = ""; }
