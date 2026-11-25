@@ -10,5 +10,5 @@ window.DWT_CONFIG = {
   quizPrize: { amount: "$5" },
   // Visitor counting with GoatCounter (free, no cookies, no personal data). Put your GoatCounter code here,
   // e.g. "datawey" for https://datawey.goatcounter.com. Leave "" to switch counting off.
-  goatcounter: "",
+  goatcounter: "datalization",
 };
