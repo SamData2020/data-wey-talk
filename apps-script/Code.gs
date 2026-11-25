@@ -4,6 +4,8 @@
  * A post only shows on the website after you type Yes in its "Approved?" column.
  * Once approved, the poster can edit or remove it from the website ("My posts"): they need the same email + phone
  * and their private edit code (emailed to them when they post). You get an email for every edit.
+ * Type Yes in "Verified?" to give a post the ✔ Verified badge (after you've called them). It clears itself if they change the phone number.
+ * "Report this post" lands in the "Reports" tab and emails you. Shops can also post what they are LOOKING FOR (Poster type = Buyer).
  * Quiz: each person can take it ONCE a month (checked by email/phone). Every attempt is recorded.
  * Quiz prize: ONE winner per month = the FIRST person that month to score above 80%.
  * The winner is recorded automatically in the "Winners" tab and you get an email.
@@ -42,7 +44,11 @@ const SHEETS = {
     name: "Distributors",
     headers: ["Received at", "ID", "Approved? (type Yes)", "Business name", "Contact name", "Public WhatsApp / phone",
       "Email (private)", "Account phone (private)", "Country", "City", "Product", "Description", "Units per case",
-      "Cost per case", "Selling price per unit", "Currency", "Minimum order (cases)", "Photo link", "Language", "Submitted at (device)", "Poster type", "Edit key (private)", "Last edited by poster"],
+      "Cost per case", "Selling price per unit", "Currency", "Minimum order (cases)", "Photo link", "Language", "Submitted at (device)", "Poster type", "Edit key (private)", "Last edited by poster", "Verified? (type Yes)"],
+  },
+  reports: {
+    name: "Reports",
+    headers: ["Received at", "Post ID", "Product", "Business", "Reason", "Details", "Reporter name", "Reporter email", "Reporter phone", "Done? (fill in)"],
   },
 };
 const PHOTO_FOLDER = "Data Wey Talk – Product photos";
@@ -77,14 +83,18 @@ function doGet(e) {
 
 function approvedListings_() {
   const rows = sheet_("listing").getDataRange().getValues().slice(1);
-  return rows.filter((r) => /^\s*y(es)?\s*$/i.test(String(r[2]))).map((r) => ({
+  return rows.filter((r) => isYes_(r[2])).map((r) => ({
     id: String(r[1]), date: r[0] instanceof Date ? r[0].toISOString() : String(r[0]),
     business: plain_(r[3]), contact: plain_(r[4]), phone: plain_(r[5]), country: plain_(r[8]), city: plain_(r[9]),
     product: plain_(r[10]), description: plain_(r[11]), units: Number(r[12]) || 1, cost: Number(r[13]) || 0,
     price: Number(r[14]) || 0, currency: plain_(r[15]), minOrder: Number(r[16]) || 0, photo: plain_(r[17]),
-    role: /importer/i.test(String(r[20])) ? "importer" : "distributor",
+    role: roleOf_(r[20]), verified: isYes_(r[23]),
   })).reverse().slice(0, 300);
 }
+const ROLE_TEXT = { importer: "Importer looking for distributors", buyer: "Buyer looking for a product", distributor: "Distributor selling" };
+function roleOf_(v) { v = String(v); return /importer/i.test(v) ? "importer" : /buyer/i.test(v) ? "buyer" : "distributor"; }
+function roleText_(role) { return ROLE_TEXT[role] || ROLE_TEXT.distributor; }
+
 // Undo the ' that clean() adds in front of values starting with = + - @
 function plain_(v) { return String(v == null ? "" : v).replace(/^'/, ""); }
 
@@ -127,6 +137,7 @@ function doPost(e) {
     if (d.type === "listing") return saveListing_(d);
     if (d.type === "myposts") return json({ ok: true, listing: true, posts: myPosts_(d) });
     if (d.type === "editpost" || d.type === "removepost") return editListing_(d);
+    if (d.type === "report") return reportListing_(d);
 
     // Business Boss game: one row when someone reaches the scoreboard, one when they download the report.
     if (d.type === "game") {
@@ -156,17 +167,18 @@ function doPost(e) {
 function saveListing_(d) {
   const num = (v) => { const n = Number(v); return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; };
   const units = Math.min(100000, Math.round(num(d.units)) || 1), cost = num(d.cost), price = num(d.price);
-  if (!d.business || !d.product || !d.contact_phone || !cost || !price) return json({ ok: false, listing: true, error: "missing fields" });
+  const buyer = d.role === "buyer";   // shops looking for a product: target price per case, photo optional
+  if (!d.business || !d.product || !d.contact_phone || !cost || (!price && !buyer)) return json({ ok: false, listing: true, error: "missing fields" });
   const id = Utilities.getUuid().slice(0, 8);
-  const link = savePhoto_(d.photo, id);
-  if (!link) return json({ ok: false, listing: true, error: "bad photo" });
+  const link = d.photo ? savePhoto_(d.photo, id) : "";
+  if (!link && (d.photo || !buyer)) return json({ ok: false, listing: true, error: "bad photo" });
   const key = Utilities.getUuid().replace(/-/g, "").slice(0, 8).toUpperCase();   // private edit code for the poster
 
   listingSheet_().appendRow([
     new Date(), id, "", clean(d.business), clean(d.name), clean(d.contact_phone), clean(d.email), clean(d.phone),
     clean(d.country), clean(d.city), clean(d.product), clean(d.description, 500), units, cost, price,
     clean(d.currency), Math.round(num(d.min_order)) || "", link, clean(d.language), clean(d.submitted_at),
-    d.role === "importer" ? "Importer looking for distributors" : "Distributor selling", key, "",
+    roleText_(d.role), key, "", "",
   ]);
   try {   // the poster's own copy of the edit code, so they can edit from another phone
     MailApp.sendEmail(String(d.email).trim(), "Your Data Wey Talk post: " + clean(d.product),
@@ -177,7 +189,7 @@ function saveListing_(d) {
   } catch (err) { /* never block the post because of email */ }
   try {
     MailApp.sendEmail(notifyTo_(), "🛒 New Find Distributors post to check: " + clean(d.product),
-      (d.role === "importer" ? "An importer looking for distributors" : "A distributor") + " posted a product. It is NOT on the website yet.\n\n" +
+      (buyer ? "A shop looking for a product" : d.role === "importer" ? "An importer looking for distributors" : "A distributor") + " posted. It is NOT on the website yet.\n\n" +
       "Business: " + clean(d.business) + "\nProduct: " + clean(d.product) + "\nCost per case: " + cost + " " + clean(d.currency) +
       "\nSelling price per unit: " + price + " (" + units + " per case)\nPhone: " + clean(d.contact_phone) + "\nPhoto: " + link +
       "\n\nTo publish it, open the Distributors tab and type Yes in the 'Approved?' column for ID " + id + ".");
@@ -217,7 +229,7 @@ function myPosts_(d) {
     business: plain_(r[3]), phone: plain_(r[5]), country: plain_(r[8]), city: plain_(r[9]), product: plain_(r[10]),
     description: plain_(r[11]), units: Number(r[12]) || 1, cost: Number(r[13]) || 0, price: Number(r[14]) || 0,
     currency: plain_(r[15]), minOrder: Number(r[16]) || 0, photo: plain_(r[17]),
-    role: /importer/i.test(String(r[20])) ? "importer" : "distributor", needsKey: !!String(r[21] || "").trim(),
+    role: roleOf_(r[20]), verified: isYes_(r[23]), needsKey: !!String(r[21] || "").trim(),
   })).reverse();
 }
 
@@ -240,7 +252,9 @@ function editListing_(d) {
   }
   const num = (v) => { const n = Number(v); return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; };
   const units = Math.min(100000, Math.round(num(d.units)) || 1), cost = num(d.cost), price = num(d.price);
-  if (!d.business || !d.product || !d.contact_phone || !cost || !price) return json({ ok: false, listing: true, error: "missing fields" });
+  const buyer = d.role === "buyer";
+  if (!d.business || !d.product || !d.contact_phone || !cost || (!price && !buyer)) return json({ ok: false, listing: true, error: "missing fields" });
+  if (!buyer && !d.photo && !r[17]) return json({ ok: false, listing: true, error: "bad photo" });
   let link = r[17];
   if (d.photo) { link = savePhoto_(d.photo, r[1]); if (!link) return json({ ok: false, listing: true, error: "bad photo" }); }
 
@@ -249,11 +263,34 @@ function editListing_(d) {
   sh.getRange(row, 6, 1, 1).setValue(clean(d.contact_phone));
   sh.getRange(row, 9, 1, 10).setValues([[clean(d.country), clean(d.city), clean(d.product), clean(d.description, 500), units, cost, price,
     clean(d.currency), Math.round(num(d.min_order)) || "", link]]);
-  sh.getRange(row, 21).setValue(d.role === "importer" ? "Importer looking for distributors" : "Distributor selling");
+  sh.getRange(row, 21).setValue(roleText_(d.role));
   sh.getRange(row, 23).setValue(new Date());
+  const phoneChanged = digits_(r[5]) !== digits_(d.contact_phone);
+  if (phoneChanged && isYes_(r[23])) sh.getRange(row, 24).setValue("No (phone changed — check again)");   // re-verify a new number
   notifyEdit_(r, "edited their post", "WhatsApp: " + before[0] + " → " + clean(d.contact_phone) +
+    (phoneChanged && isYes_(r[23]) ? "  ⚠️ The ✔ Verified badge was removed because the number changed." : "") +
     "\nCost per case: " + before[1] + " → " + cost + "\nSelling price per unit: " + before[2] + " → " + price + (d.photo ? "\nNew photo: " + link : ""));
   return json({ ok: true, listing: true, id: String(r[1]) });
+}
+
+/** "Report this post": saved in the Reports tab, and you get an email. One report per person per post. */
+function reportListing_(d) {
+  const rows = listingSheet_().getDataRange().getValues();
+  const r = rows.find((x, n) => n > 0 && String(x[1]) === String(d.id || ""));
+  if (!r) return json({ ok: false, listing: true, error: "not found" });
+  const sh = sheet_("reports"), email = String(d.email).trim().toLowerCase();
+  const dup = sh.getDataRange().getValues().slice(1).some((x) => String(x[1]) === String(r[1]) && String(x[7]).trim().toLowerCase() === email);
+  if (dup) return json({ ok: true, listing: true, already: true });
+  const REASONS = { scam: "Scam or fake", price: "Wrong or misleading price", photo: "Bad or offensive photo", other: "Something else" };
+  const reason = REASONS[d.reason] || REASONS.other;
+  sh.appendRow([new Date(), String(r[1]), plain_(r[10]), plain_(r[3]), reason, clean(d.note, 500), clean(d.name), clean(d.email), clean(d.phone), ""]);
+  try {
+    MailApp.sendEmail(notifyTo_(), "🚩 Find Distributors report: " + plain_(r[10]) + " (" + reason + ")",
+      "Someone reported a live post.\n\nPost: " + plain_(r[10]) + " by " + plain_(r[3]) + " (ID " + r[1] + ")\nReason: " + reason +
+      "\nDetails: " + clean(d.note, 500) + "\nReported by: " + clean(d.name) + " · " + clean(d.email) + " · " + clean(d.phone) +
+      "\n\nTo hide the post, clear its 'Approved?' cell in the Distributors tab.");
+  } catch (err) { /* never block the report because of email */ }
+  return json({ ok: true, listing: true });
 }
 
 function notifyEdit_(r, what, changes) {

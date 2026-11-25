@@ -8,4 +8,7 @@ window.DWT_CONFIG = {
   videos: {},
   // Quiz prize: one winner a month — the first person to score above 80%. Change the amount here.
   quizPrize: { amount: "$5" },
+  // Visitor counting with GoatCounter (free, no cookies, no personal data). Put your GoatCounter code here,
+  // e.g. "datawey" for https://datawey.goatcounter.com. Leave "" to switch counting off.
+  goatcounter: "",
 };

@@ -53,3 +53,18 @@ To protect buyers, they must be signed up with the **same email and phone** they
 **edit code** emailed to them when they posted (the phone they posted from remembers it). Edits go live straight away,
 and **you get an email for every edit** showing the old and new WhatsApp number and prices. If something looks wrong,
 change it back in the Distributors tab or clear the "Approved?" cell. "Removed by poster" in that column means they took it down.
+
+### Verified badge, reports and "Looking for a product"
+
+- **✔ Verified:** after you've called a poster and are happy they're genuine, type **Yes** in the **Verified? (type Yes)** column.
+  Their card shows "✔ Verified by Scitylana". If they later change their WhatsApp number, the badge is removed automatically and you get an email.
+- **Reports:** anyone signed up can tap **🚩 Report** on a post. Reports land in the **Reports** tab and you get an email.
+  To hide a post, clear its **Approved?** cell. Write anything in **Done?** to keep track.
+- **Looking for a product:** shops and traders can post what they want to buy (Poster type = *Buyer looking for a product*).
+  Approve them like any other post. Suppliers reply with the "I can supply this" WhatsApp button.
+
+## Visitor counting (GoatCounter)
+
+1. Make a free account at **https://www.goatcounter.com/signup**. The "code" you choose becomes your address, e.g. `datawey` → `datawey.goatcounter.com`.
+2. Put the code in [`../config.js`](../config.js): `goatcounter: "datawey",`
+3. Sync. Visits and button uses (signup, game-results, quiz-done, share-game, share-quiz, share-product, contact, report, post-…) appear in your GoatCounter dashboard.

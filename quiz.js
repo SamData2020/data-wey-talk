@@ -215,6 +215,7 @@ function quizSet(period, bankLen, correctOf) {
     $("qzRules").innerHTML = rules.map((r) => `<li>${esc(r.replace(/\{(\w+)\}/g, (_, k) => P()[k] ?? ""))}</li>`).join("");
   }
 
+  const shareQuiz = (score, total) => `<p class="qz-share"><a class="btn wa-btn small-btn" href="${esc(waShareURL(t("shQuiz", { score, total, url: SITE_URL + "#quiz" })))}" target="_blank" rel="noopener" data-track="share-quiz">${esc(t("shShare"))}</a></p>`;
   function render() {
     renderStatic();
     const banner = claimed && qs.stage !== "done" ? `<p class="qz-banner">${esc(t("qzClaimed", P()))}</p>` : "";
@@ -223,7 +224,7 @@ function quizSet(period, bankLen, correctOf) {
       const tk = taken();
       if (tk && tk.month === monthKey) {
         box.innerHTML = `${banner}<p class="qz-score">${esc(t("qzScore", { score: tk.score, total: tk.total, pct: Math.round((tk.score / tk.total) * 100) }))}</p>
-          <p class="qz-ok">${esc(t("qzTaken", P()))}</p>`;
+          <p class="qz-ok">${esc(t("qzTaken", P()))}</p>${shareQuiz(tk.score, tk.total)}`;
         return;
       }
       const locked = window.dwtSurveyDone && !window.dwtSurveyDone();
@@ -266,7 +267,7 @@ function quizSet(period, bankLen, correctOf) {
       else if (qs.result === "late") msg = t("qzLate", P());
       else msg = t("qzEntered", P());
       box.innerHTML = `<p class="qz-score">${esc(t("qzScore", { score: qs.score, total, pct: Math.round((qs.score / total) * 100) }))}</p>
-        <p class="qz-ok${qs.result === "won" ? " qz-won" : ""}">${esc(msg)}</p>`;
+        <p class="qz-ok${qs.result === "won" ? " qz-won" : ""}">${esc(msg)}</p>${shareQuiz(qs.score, total)}`;
     }
   }
 
@@ -297,7 +298,7 @@ function quizSet(period, bankLen, correctOf) {
         store.set("dwt-survey-queue", JSON.stringify(q.slice(-5)));
       } catch (_) {}
     }
-    qs.stage = "done"; render();
+    qs.stage = "done"; render(); window.dwtTrack("quiz-done");
   }
 
   box.addEventListener("click", (e) => {

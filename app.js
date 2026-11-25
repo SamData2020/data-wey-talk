@@ -156,6 +156,14 @@ function t(key, vars = {}) {
   const s = (I18N[lang] && I18N[lang][key]) ?? I18N.en[key] ?? key;
   return s.replace(/\{(\w+)\}/g, (_, k) => (vars[k] ?? ""));
 }
+// ---------- sharing + counting (used by the game, quiz and Find Distributors) ----------
+const SITE_URL = "https://www.datalization.co.uk/";
+const waShareURL = (text) => "https://wa.me/?text=" + encodeURIComponent(text);
+// Counts a button use in GoatCounter (only names like "share-game", never personal details). Does nothing when counting is off.
+document.addEventListener("click", (e) => { const el = e.target.closest && e.target.closest("[data-track]"); if (el) window.dwtTrack(el.dataset.track); });
+window.dwtTrack = (name) => {
+  try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: "event/" + name, title: name, event: true }); } catch (_) {}
+};
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const $ = (id) => document.getElementById(id);
 

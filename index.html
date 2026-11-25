@@ -6,6 +6,13 @@
   <title>Data Wey Talk · Scitylana</title>
   <meta name="description" content="Free data analytics wey dey talk Pidgin — a Scitylana Academy CSR initiative. Learn data analytics and see wetin your business numbers dey talk.">
   <meta name="theme-color" content="#760308">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Data Wey Talk · Scitylana">
+  <meta property="og:title" content="Data Wey Talk — free data skills for business">
+  <meta property="og:description" content="Free lessons, a business game, a quiz with a prize, and Find Distributors: see what you could earn before you buy. 18 languages.">
+  <meta property="og:image" content="https://www.datalization.co.uk/assets/icon-512.png">
+  <meta property="og:url" content="https://www.datalization.co.uk/">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="assets/favicon.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/icon-192.png">
@@ -351,6 +358,17 @@
     <span><span data-i18n="footer"></span> · <a class="mail" href="privacy.html" data-i18n="privacyLink"></a> · <a class="mail" href="mailto:scitylanaltd@gmail.com">scitylanaltd@gmail.com</a></span>
   </footer>
   <script src="config.js"></script>
+  <script>
+    // Visitor counting (GoatCounter): only loads when a code is set in config.js.
+    (function () {
+      var gc = window.DWT_CONFIG && window.DWT_CONFIG.goatcounter;
+      if (!gc || !/^[a-z0-9-]+$/i.test(gc)) return;
+      var sc = document.createElement("script");
+      sc.async = true; sc.src = "https://gc.zgo.at/count.js";
+      sc.setAttribute("data-goatcounter", "https://" + gc + ".goatcounter.com/count");
+      document.head.appendChild(sc);
+    })();
+  </script>
   <script src="app.js"></script>
   <script src="survey.js"></script>
   <script src="quiz.js"></script>
@@ -384,6 +402,7 @@
   <script src="lang/entry-i18n.js"></script>
   <script src="lang/signup-i18n.js"></script>
   <script src="lang/distributors-i18n.js"></script>
+  <script src="lang/share-i18n.js"></script>
   <script>applyLang();</script>
 </body>
 </html>

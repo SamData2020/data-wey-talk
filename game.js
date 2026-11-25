@@ -396,6 +396,7 @@ Object.assign(I18N.en, {
         <p>${achs.map((a) => `<span class="chip${g.ach.includes(a) ? " on" : ""}" data-ach="${a}">${esc(t(a))}</span>`).join("")}</p></div>
 
       <div class="gm-actions">
+        <a class="btn wa-btn" href="${esc(waShareURL(t("shGame", { score: sc, badge: badge(sc), url: SITE_URL + "#game" })))}" target="_blank" rel="noopener" data-track="share-game">${esc(t("shShare"))}</a>
         <button type="button" class="btn gold" data-act="report">${esc(t("gmReport"))}</button>
         <button type="button" class="btn ghost" data-act="print">${esc(t("gmPrint"))}</button>
         <button type="button" class="btn ghost" data-go="s1">${esc(t("gmEdit"))}</button>
@@ -523,7 +524,7 @@ ${wiOn ? `<h2>${esc(t("rpWhatIf"))}</h2><table>
       if (g.costMode === "items" && r.list.length >= 3) unlock("achDetective");
     }
     g.stage = stage; save(); render();
-    if (stage === "results") logPlay("played");
+    if (stage === "results") { logPlay("played"); window.dwtTrack("game-results"); }
     box.closest("section").scrollIntoView({ block: "start" });
   }
   function seek(v) {
