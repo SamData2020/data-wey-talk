@@ -45,3 +45,11 @@ Google will ask for a new permission (Google Drive, to save the photos). Allow i
 - to **remove** it later, delete the Yes (or the whole row).
 
 The email and account phone columns are private and never sent to the website.
+
+### Posters edit their own posts
+
+Once you've approved a post, the poster can change or remove it themselves from **Find Distributors → ✏️ My posts**.
+To protect buyers, they must be signed up with the **same email and phone** they posted with, and enter the private
+**edit code** emailed to them when they posted (the phone they posted from remembers it). Edits go live straight away,
+and **you get an email for every edit** showing the old and new WhatsApp number and prices. If something looks wrong,
+change it back in the Distributors tab or clear the "Approved?" cell. "Removed by poster" in that column means they took it down.

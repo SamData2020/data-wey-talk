@@ -2,6 +2,8 @@
  * Data Wey Talk — survey + quiz + Business Boss game + Find Distributors receiver.
  * Find Distributors: posts land in the "Distributors" tab, photos in a Drive folder.
  * A post only shows on the website after you type Yes in its "Approved?" column.
+ * Once approved, the poster can edit or remove it from the website ("My posts"): they need the same email + phone
+ * and their private edit code (emailed to them when they post). You get an email for every edit.
  * Quiz: each person can take it ONCE a month (checked by email/phone). Every attempt is recorded.
  * Quiz prize: ONE winner per month = the FIRST person that month to score above 80%.
  * The winner is recorded automatically in the "Winners" tab and you get an email.
@@ -40,7 +42,7 @@ const SHEETS = {
     name: "Distributors",
     headers: ["Received at", "ID", "Approved? (type Yes)", "Business name", "Contact name", "Public WhatsApp / phone",
       "Email (private)", "Account phone (private)", "Country", "City", "Product", "Description", "Units per case",
-      "Cost per case", "Selling price per unit", "Currency", "Minimum order (cases)", "Photo link", "Language", "Submitted at (device)", "Poster type"],
+      "Cost per case", "Selling price per unit", "Currency", "Minimum order (cases)", "Photo link", "Language", "Submitted at (device)", "Poster type", "Edit key (private)", "Last edited by poster"],
   },
 };
 const PHOTO_FOLDER = "Data Wey Talk – Product photos";
@@ -123,6 +125,8 @@ function doPost(e) {
 
     // Find Distributors: a distributor posts a product (shows on the site only after you approve it).
     if (d.type === "listing") return saveListing_(d);
+    if (d.type === "myposts") return json({ ok: true, listing: true, posts: myPosts_(d) });
+    if (d.type === "editpost" || d.type === "removepost") return editListing_(d);
 
     // Business Boss game: one row when someone reaches the scoreboard, one when they download the report.
     if (d.type === "game") {
@@ -153,23 +157,24 @@ function saveListing_(d) {
   const num = (v) => { const n = Number(v); return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; };
   const units = Math.min(100000, Math.round(num(d.units)) || 1), cost = num(d.cost), price = num(d.price);
   if (!d.business || !d.product || !d.contact_phone || !cost || !price) return json({ ok: false, listing: true, error: "missing fields" });
-  const photo = String(d.photo || "");
-  const m = photo.match(/^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+\/=]+)$/);
-  if (!m || photo.length > MAX_PHOTO_CHARS) return json({ ok: false, listing: true, error: "bad photo" });
-
   const id = Utilities.getUuid().slice(0, 8);
-  const folders = DriveApp.getFoldersByName(PHOTO_FOLDER);
-  const folder = folders.hasNext() ? folders.next() : DriveApp.createFolder(PHOTO_FOLDER);
-  const file = folder.createFile(Utilities.newBlob(Utilities.base64Decode(m[2]), "image/" + m[1], id + "." + (m[1] === "jpeg" ? "jpg" : m[1])));
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  const link = "https://drive.google.com/thumbnail?id=" + file.getId() + "&sz=w800";
+  const link = savePhoto_(d.photo, id);
+  if (!link) return json({ ok: false, listing: true, error: "bad photo" });
+  const key = Utilities.getUuid().replace(/-/g, "").slice(0, 8).toUpperCase();   // private edit code for the poster
 
-  sheet_("listing").appendRow([
+  listingSheet_().appendRow([
     new Date(), id, "", clean(d.business), clean(d.name), clean(d.contact_phone), clean(d.email), clean(d.phone),
     clean(d.country), clean(d.city), clean(d.product), clean(d.description, 500), units, cost, price,
     clean(d.currency), Math.round(num(d.min_order)) || "", link, clean(d.language), clean(d.submitted_at),
-    d.role === "importer" ? "Importer looking for distributors" : "Distributor selling",
+    d.role === "importer" ? "Importer looking for distributors" : "Distributor selling", key, "",
   ]);
+  try {   // the poster's own copy of the edit code, so they can edit from another phone
+    MailApp.sendEmail(String(d.email).trim(), "Your Data Wey Talk post: " + clean(d.product),
+      "Thank you for posting " + clean(d.product) + " on Data Wey Talk (Find Distributors).\n\n" +
+      "We check every post before it shows. Once it is live you can change or remove it yourself:\n" +
+      "open Find Distributors → ✏️ My posts, signed up with this email and phone.\n\n" +
+      "Your edit code: " + key + "\n(Keep it private. You need it to edit from a different phone or browser.)\n\n— Scitylana");
+  } catch (err) { /* never block the post because of email */ }
   try {
     MailApp.sendEmail(notifyTo_(), "🛒 New Find Distributors post to check: " + clean(d.product),
       (d.role === "importer" ? "An importer looking for distributors" : "A distributor") + " posted a product. It is NOT on the website yet.\n\n" +
@@ -177,7 +182,86 @@ function saveListing_(d) {
       "\nSelling price per unit: " + price + " (" + units + " per case)\nPhone: " + clean(d.contact_phone) + "\nPhoto: " + link +
       "\n\nTo publish it, open the Distributors tab and type Yes in the 'Approved?' column for ID " + id + ".");
   } catch (err) { /* never block the post because of email */ }
-  return json({ ok: true, listing: true, id: id });
+  return json({ ok: true, listing: true, id: id, key: key });
+}
+
+// Saves a data:image photo to the Drive folder and returns its public thumbnail link ("" if the photo is not valid).
+function savePhoto_(photo, id) {
+  photo = String(photo || "");
+  const m = photo.match(/^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+\/=]+)$/);
+  if (!m || photo.length > MAX_PHOTO_CHARS) return "";
+  const folders = DriveApp.getFoldersByName(PHOTO_FOLDER);
+  const folder = folders.hasNext() ? folders.next() : DriveApp.createFolder(PHOTO_FOLDER);
+  const file = folder.createFile(Utilities.newBlob(Utilities.base64Decode(m[2]), "image/" + m[1], id + "-" + Date.now() + "." + (m[1] === "jpeg" ? "jpg" : m[1])));
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return "https://drive.google.com/thumbnail?id=" + file.getId() + "&sz=w800";
+}
+
+// The Distributors tab, with the newer header cells filled in on sheets made before they existed.
+function listingSheet_() {
+  const sh = sheet_("listing"), h = SHEETS.listing.headers;
+  const top = sh.getRange(1, 1, 1, h.length).getValues()[0];
+  h.forEach((name, i) => { if (top[i] === "" || top[i] == null) sh.getRange(1, i + 1).setValue(name); });
+  return sh;
+}
+
+const isYes_ = (v) => /^\s*y(es)?\s*$/i.test(String(v));
+const samePerson_ = (r, d) => String(r[6]).trim().toLowerCase() === String(d.email || "").trim().toLowerCase() &&
+  digits_(r[7]).length >= 7 && digits_(r[7]) === digits_(d.phone);
+
+/** "My posts": everything this email + phone has posted, with its status (never the edit code). */
+function myPosts_(d) {
+  const rows = listingSheet_().getDataRange().getValues().slice(1);
+  return rows.filter((r) => r[1] && samePerson_(r, d)).map((r) => ({
+    id: String(r[1]), status: isYes_(r[2]) ? "live" : /removed/i.test(String(r[2])) ? "removed" : "pending",
+    business: plain_(r[3]), phone: plain_(r[5]), country: plain_(r[8]), city: plain_(r[9]), product: plain_(r[10]),
+    description: plain_(r[11]), units: Number(r[12]) || 1, cost: Number(r[13]) || 0, price: Number(r[14]) || 0,
+    currency: plain_(r[15]), minOrder: Number(r[16]) || 0, photo: plain_(r[17]),
+    role: /importer/i.test(String(r[20])) ? "importer" : "distributor", needsKey: !!String(r[21] || "").trim(),
+  })).reverse();
+}
+
+/** The poster edits or removes their own APPROVED post. Needs the same email + phone and the edit code. */
+function editListing_(d) {
+  const sh = listingSheet_(), rows = sh.getDataRange().getValues();
+  const i = rows.findIndex((r, n) => n > 0 && String(r[1]) === String(d.id || ""));
+  if (i < 1) return json({ ok: false, listing: true, error: "not found" });
+  const r = rows[i], row = i + 1;
+  if (!samePerson_(r, d)) return json({ ok: false, listing: true, error: "not yours" });
+  const key = String(r[21] || "").trim();
+  if (key && key !== String(d.key || "").trim().toUpperCase()) return json({ ok: false, listing: true, error: "bad key" });
+  if (!isYes_(r[2])) return json({ ok: false, listing: true, error: "not approved" });
+
+  if (d.type === "removepost") {
+    sh.getRange(row, 3).setValue("Removed by poster");
+    sh.getRange(row, 23).setValue(new Date());
+    notifyEdit_(r, "REMOVED their post", "");
+    return json({ ok: true, listing: true, removed: true });
+  }
+  const num = (v) => { const n = Number(v); return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; };
+  const units = Math.min(100000, Math.round(num(d.units)) || 1), cost = num(d.cost), price = num(d.price);
+  if (!d.business || !d.product || !d.contact_phone || !cost || !price) return json({ ok: false, listing: true, error: "missing fields" });
+  let link = r[17];
+  if (d.photo) { link = savePhoto_(d.photo, r[1]); if (!link) return json({ ok: false, listing: true, error: "bad photo" }); }
+
+  const before = [plain_(r[5]), plain_(r[13]), plain_(r[14])];
+  sh.getRange(row, 4, 1, 1).setValue(clean(d.business));
+  sh.getRange(row, 6, 1, 1).setValue(clean(d.contact_phone));
+  sh.getRange(row, 9, 1, 10).setValues([[clean(d.country), clean(d.city), clean(d.product), clean(d.description, 500), units, cost, price,
+    clean(d.currency), Math.round(num(d.min_order)) || "", link]]);
+  sh.getRange(row, 21).setValue(d.role === "importer" ? "Importer looking for distributors" : "Distributor selling");
+  sh.getRange(row, 23).setValue(new Date());
+  notifyEdit_(r, "edited their post", "WhatsApp: " + before[0] + " → " + clean(d.contact_phone) +
+    "\nCost per case: " + before[1] + " → " + cost + "\nSelling price per unit: " + before[2] + " → " + price + (d.photo ? "\nNew photo: " + link : ""));
+  return json({ ok: true, listing: true, id: String(r[1]) });
+}
+
+function notifyEdit_(r, what, changes) {
+  try {
+    MailApp.sendEmail(notifyTo_(), "✏️ Find Distributors: " + plain_(r[3]) + " " + what,
+      plain_(r[3]) + " " + what + " (ID " + r[1] + ", " + plain_(r[10]) + "). It is already live.\n\n" + changes +
+      "\n\nIf anything looks wrong, change it back in the Distributors tab or clear the 'Approved?' cell to hide it.");
+  } catch (err) { /* never block the edit because of email */ }
 }
 
 function notifyTo_() { return NOTIFY_EMAIL; }

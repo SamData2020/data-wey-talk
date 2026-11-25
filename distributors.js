@@ -15,7 +15,10 @@
   let listings = ls.get(CACHE_KEY) || null;    // last list we saw, so the page fills straight away
   let status = listings ? "ok" : "loading";      // loading | ok | error
   let canPost = null;                             // null = still checking; false while the Sheet script is the old version
-  let view = "list";                              // list | form | sent
+  let view = "list";                              // list | form | sent | mine | saved
+  let editing = null;                             // the post being edited (from "My posts"), or null for a new post
+  let mine = null, mineStatus = "";               // the signed-up person's own posts: loading | ok | error
+  const KEYS = "dwt-edit-keys";                   // { postId: edit code } for posts made on this device
   let q = "", country = "", role = "";
   const cases = {};                               // cases per month typed on each card
   let photo = "";                                 // shrunk photo as a data: URL
@@ -107,6 +110,7 @@
           <option value="importer"${role === "importer" ? " selected" : ""}>${esc(t("dsFImp"))}</option>
           <option value="distributor"${role === "distributor" ? " selected" : ""}>${esc(t("dsFDist"))}</option></select>` : ""}
         <button type="button" class="btn gold" data-act="post">${esc(t("dsPost"))}</button>
+        <button type="button" class="btn ghost" data-act="mine">${esc(t("dsMine"))}</button>
       </div>
       <div id="dsList">${listHTML()}</div>
       <p class="ds-safety small">${esc(t("dsSafety"))}</p>`;
@@ -116,8 +120,8 @@
   // ---------- post form ----------
   function sForm() {
     if (!signedUp()) return (window.dwtLockCard ? window.dwtLockCard() : "") + back();
-    if (canPost === null) return `<p class="muted ds-msg">${esc(t("dsLoading"))}</p>` + back();
-    if (!canPost) return `<p class="ds-msg">${esc(t("dsSoon"))}</p>` + back();
+    if (canPost === null && !editing) return `<p class="muted ds-msg">${esc(t("dsLoading"))}</p>` + back();
+    if (!canPost && !editing) return `<p class="ds-msg">${esc(t("dsSoon"))}</p>` + back();
     const p = profile(), d = draft;
     const val = (k, dflt = "") => esc(d[k] ?? dflt);
     const curDefault = (CURRENCIES.find((c) => c.c.includes(p.country)) || { code: "NGN" }).code;
@@ -126,8 +130,8 @@
     const countries = COUNTRIES.map(([c]) => `<option${c === ctry ? " selected" : ""}>${esc(c)}</option>`).join("");
     const f = (k, label, attrs = "", wide = false) => `<label class="field${wide ? " wide" : ""}"><span>${esc(label)}</span><input data-f="${k}" value="${val(k, k === "contact_phone" ? p.phone || "" : "")}" ${attrs}></label>`;
     return `<form class="ds-form" id="dsForm" novalidate>
-      <h3>${esc(t("dsFormT"))}</h3>
-      <p class="muted small">${esc(t("dsFormX"))}</p>
+      <h3>${esc(t(editing ? "dsEditT" : "dsFormT"))}</h3>
+      <p class="muted small">${esc(editing ? editing.product : t("dsFormX"))}</p>
       <fieldset class="ds-role"><legend>${esc(t("dsRoleQ"))}</legend>
         ${[["importer", "dsRoleImp"], ["distributor", "dsRoleDist"]].map(([v, k]) =>
           `<label class="check"><input type="radio" name="dsRole" value="${v}"${d.role === v ? " checked" : ""}><span>${esc(t(k))}</span></label>`).join("")}
@@ -146,14 +150,20 @@
         ${f("min_order", t("dsMinL"), 'inputmode="numeric" placeholder="5"')}
         <label class="field"><span>${esc(t("dsPhoto"))}</span><input type="file" id="dsPhoto" accept="image/*"></label>
       </div>
-      <div class="ds-preview-row">${photo ? `<img class="ds-thumb" src="${photo}" alt="">` : ""}<p class="muted small">${esc(t("dsPhotoX"))}</p></div>
+      <div class="ds-preview-row">${thumbHTML()}</div>
+      ${editing && editing.needsKey && !(ls.get(KEYS) || {})[editing.id] ? `<label class="field ds-key"><span>${esc(t("dsKey"))}</span><input data-f="key" value="${val("key")}" maxlength="12" autocomplete="off" autocapitalize="characters"></label>` : ""}
       <p class="gm-live" id="dsPrev">${previewText()}</p>
       <input class="hp" data-f="website" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label class="check consent"><input type="checkbox" id="dsOk"${d.ok ? " checked" : ""}><span>${esc(t("dsConsent"))}</span></label>
       <p class="error" id="dsErr" role="alert" hidden></p>
       <div class="gm-nav"><button type="button" class="btn ghost" data-act="list">${esc(t("dsCancel"))}</button>
-        <button type="submit" class="btn" id="dsSend">${esc(t("dsSubmit"))}</button></div>
+        <button type="submit" class="btn" id="dsSend">${esc(t(editing ? "dsSave" : "dsSubmit"))}</button></div>
     </form>`;
+  }
+  function thumbHTML() {
+    const src = photo || (editing ? safePhoto(editing.photo) : "");
+    return (src ? `<img class="ds-thumb" src="${esc(src)}" alt="" referrerpolicy="no-referrer">` : "") +
+      `<p class="muted small">${esc(t(editing ? "dsPhotoKeep" : "dsPhotoX"))}</p>`;
   }
   const back = () => `<p class="ds-back"><button type="button" class="btn ghost small-btn" data-act="list">← ${esc(t("dsTitle"))}</button></p>`;
   function previewText() {
@@ -183,11 +193,12 @@
   async function submit() {
     const err = $("dsErr"), btn = $("dsSend");
     const d = draft, units = Math.max(1, Math.round(N(d.units)) || 1), cost = N(d.cost), price = N(d.price);
-    const okFields = d.role && (d.business || "").trim() && (d.product || "").trim() && (d.contact_phone ?? profile().phone ?? "").replace(/\D/g, "").length >= 7 && cost > 0 && price > 0 && photo;
+    const okFields = d.role && (d.business || "").trim() && (d.product || "").trim() && (d.contact_phone ?? profile().phone ?? "").replace(/\D/g, "").length >= 7 && cost > 0 && price > 0 && (photo || editing);
     if (!okFields || !$("dsOk").checked) { err.textContent = t(!d.role ? "dsErrRole" : okFields ? "svErrConsent" : "dsErr"); err.hidden = false; return; }
     const p = profile();
     const payload = {
-      type: "listing", role: d.role, website: d.website || "", name: p.name || "", email: p.email || "", phone: p.phone || "", consent: true,
+      type: editing ? "editpost" : "listing", id: editing ? editing.id : undefined,
+      key: editing ? ((ls.get(KEYS) || {})[editing.id] || String(d.key || "").trim().toUpperCase()) : undefined, role: d.role, website: d.website || "", name: p.name || "", email: p.email || "", phone: p.phone || "", consent: true,
       business: d.business.trim(), contact_phone: (d.contact_phone ?? p.phone ?? "").trim(), country: d.country ?? p.country ?? "", city: (d.city || "").trim(),
       product: d.product.trim(), description: (d.description || "").trim(), units, cost, price,
       currency: d.currency || (CURRENCIES.find((c) => c.c.includes(p.country)) || { code: "NGN" }).code,
@@ -195,23 +206,87 @@
     };
     btn.disabled = true; btn.textContent = t("dsSending"); err.hidden = true;
     const opts = { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) };
-    let ok = false;
+    let ok = false, r = null;
     try {
       const res = await fetch(endpoint, opts);
-      const r = await res.json();
+      r = await res.json();
       ok = !!(r && r.ok && r.listing);
     } catch (_) {
-      try { await fetch(endpoint, { ...opts, mode: "no-cors" }); ok = true; } catch (_) { ok = false; }   // sent, reply unreadable
+      if (!editing) { try { await fetch(endpoint, { ...opts, mode: "no-cors" }); ok = true; } catch (_) { ok = false; } }   // sent, reply unreadable
     }
-    if (!ok) { btn.disabled = false; btn.textContent = t("dsSubmit"); err.textContent = t("dsFail"); err.hidden = false; return; }
-    draft = {}; photo = ""; view = "sent"; render();
+    if (!ok) {
+      btn.disabled = false; btn.textContent = t(editing ? "dsSave" : "dsSubmit");
+      err.textContent = t(r && r.error === "bad key" ? "dsKeyErr" : r && r.error ? "dsEditFail" : "dsFail"); err.hidden = false; return;
+    }
+    if (r && r.id && r.key) { const k = ls.get(KEYS) || {}; k[r.id] = r.key; ls.set(KEYS, k); }   // remember the edit code on this device
+    if (editing && d.key) { const k = ls.get(KEYS) || {}; k[editing.id] = String(d.key).trim().toUpperCase(); ls.set(KEYS, k); }
+    const wasEdit = !!editing;
+    draft = {}; photo = ""; editing = null; view = wasEdit ? "saved" : "sent"; render();
+    if (wasEdit) load();
   }
 
   // ---------- render + events ----------
   function render() {
     box.innerHTML = view === "form" ? sForm()
-      : view === "sent" ? `<p class="qz-ok ds-msg">✅ ${esc(t("dsThanks"))}</p>` + back()
+      : view === "sent" ? `<p class="qz-ok ds-msg">✅ ${esc(t("dsThanks"))}<br><span class="muted small">${esc(t("dsThanksKey"))}</span></p>` + back()
+      : view === "saved" ? `<p class="qz-ok ds-msg">✅ ${esc(t("dsSaved"))}</p>` + back()
+      : view === "mine" ? sMine()
       : sList();
+  }
+
+  // ---------- My posts: edit or remove your own approved posts ----------
+  const postJSON = async (payload) => {
+    const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+    return res.json();
+  };
+  const who = () => { const p = profile(); return { email: p.email || "", phone: p.phone || "", consent: true }; };
+  async function loadMine() {
+    mineStatus = "loading"; render();
+    try {
+      const r = await postJSON({ type: "myposts", ...who() });
+      if (!r || !Array.isArray(r.posts)) throw new Error("old script");
+      mine = r.posts; mineStatus = "ok";
+    } catch (_) { mineStatus = "error"; }
+    if (view === "mine") render();
+  }
+  function sMine() {
+    if (!signedUp()) return (window.dwtLockCard ? window.dwtLockCard() : "") + back();
+    let body;
+    if (mineStatus === "loading") body = `<p class="muted ds-msg">${esc(t("dsLoading"))}</p>`;
+    else if (mineStatus === "error") body = `<p class="ds-msg">${esc(t("dsOffline"))} <button type="button" class="btn ghost small-btn" data-act="mine">↻</button></p>`;
+    else if (!mine.length) body = `<p class="ds-msg">${esc(t("dsMineNone"))}</p>`;
+    else body = `<ul class="ds-mine">${mine.map((x) => {
+      const img = safePhoto(x.photo);
+      const st = x.status === "live" ? "dsLive" : x.status === "removed" ? "dsRemoved" : "dsPending";
+      return `<li>${img ? `<img class="ds-thumb" src="${esc(img)}" alt="" referrerpolicy="no-referrer">` : `<span class="ds-thumb ds-noimg" aria-hidden="true">📦</span>`}
+        <div><b dir="auto">${esc(x.product)}</b><br><span class="ds-status ${x.status}">${esc(t(st))}</span>
+          <span class="muted small"> · ${esc(money(x.cost, x.currency))}</span></div>
+        ${x.status === "live" ? `<div class="ds-acts"><button type="button" class="btn small-btn" data-edit="${esc(x.id)}">${esc(t("dsEdit"))}</button>
+          <button type="button" class="btn ghost small-btn" data-remove="${esc(x.id)}">${esc(t("dsRemove"))}</button></div>` : ""}</li>`;
+    }).join("")}</ul>`;
+    return `<h3 class="ds-mine-t">${esc(t("dsMineT"))}</h3>${body}<p class="ds-err-line error" id="dsMineErr" role="alert" hidden></p>` + back();
+  }
+  function startEdit(x) {
+    editing = x; photo = "";
+    draft = { role: x.role, business: x.business, contact_phone: x.phone, country: x.country, city: x.city, product: x.product,
+      description: x.description, units: String(x.units), cost: String(x.cost), price: String(x.price), currency: x.currency,
+      min_order: x.minOrder ? String(x.minOrder) : "", ok: false };
+    view = "form"; render(); box.closest("section").scrollIntoView({ block: "start" });
+  }
+  async function removePost(x, btn) {
+    if (!confirm(t("dsRemoveQ"))) return;
+    let key = (ls.get(KEYS) || {})[x.id] || "";
+    if (x.needsKey && !key) { key = (prompt(t("dsKey")) || "").trim().toUpperCase(); if (!key) return; }
+    btn.disabled = true;
+    try {
+      const r = await postJSON({ type: "removepost", id: x.id, key, ...who() });
+      if (!r || !r.ok) throw r;
+      if (key) { const k = ls.get(KEYS) || {}; k[x.id] = key; ls.set(KEYS, k); }
+      await loadMine(); load();
+    } catch (r) {
+      btn.disabled = false;
+      const e = $("dsMineErr"); if (e) { e.textContent = t(r && r.error === "bad key" ? "dsKeyErr" : "dsEditFail"); e.hidden = false; }
+    }
   }
   function playIt(x) {
     if (!window.dwtGameLoad) return;
@@ -240,7 +315,7 @@
     if (el.id === "dsPhoto" && el.files[0]) {
       try { photo = await shrink(el.files[0]); } catch (_) { photo = ""; }
       const row = box.querySelector(".ds-preview-row");
-      if (row) row.innerHTML = (photo ? `<img class="ds-thumb" src="${photo}" alt="">` : "") + `<p class="muted small">${esc(t("dsPhotoX"))}</p>`;
+      if (row) row.innerHTML = thumbHTML();
     }
   });
   box.addEventListener("submit", (e) => { e.preventDefault(); submit(); });
@@ -248,15 +323,18 @@
     const b = e.target.closest("button");
     if (!b) return;
     if (b.dataset.play) { const x = listings.find((y) => y.id === b.dataset.play); if (x) playIt(x); return; }
+    if (b.dataset.edit) { const x = (mine || []).find((y) => y.id === b.dataset.edit); if (x) startEdit(x); return; }
+    if (b.dataset.remove) { const x = (mine || []).find((y) => y.id === b.dataset.remove); if (x) removePost(x, b); return; }
     switch (b.dataset.act) {
-      case "post": view = "form"; render(); box.closest("section").scrollIntoView({ block: "start" }); return;
-      case "list": view = "list"; render(); return;
+      case "mine": view = "mine"; editing = null; if (signedUp()) loadMine(); else render(); box.closest("section").scrollIntoView({ block: "start" }); return;
+      case "post": view = "form"; editing = null; draft = {}; photo = ""; render(); box.closest("section").scrollIntoView({ block: "start" }); return;
+      case "list": view = "list"; editing = null; render(); return;
       case "retry": status = "loading"; render(); load(); return;
     }
   });
 
   document.addEventListener("dwt:lang", render);
-  document.addEventListener("dwt:unlocked", () => { if (view === "form") render(); });
+  document.addEventListener("dwt:unlocked", () => { if (view === "form") render(); if (view === "mine") loadMine(); });
   render();
   load();
 })();

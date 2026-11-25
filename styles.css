@@ -711,3 +711,11 @@ html.locked .subnav a.lockable::after { content: " 🔒"; font-size: .85em; }
 .ds-badge.imp { color: var(--accent); }
 .ds-role { border: 0; padding: 0; margin: 0 0 14px; display: grid; gap: 8px; }
 .ds-role legend { font-size: 14px; font-weight: 700; margin-bottom: 6px; padding: 0; }
+.ds-mine-t { font-family: var(--slab); margin-top: 0; }
+.ds-mine { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ds-mine li { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; background: var(--surface); }
+.ds-mine li > div:first-of-type { flex: 1 1 180px; min-width: 0; }
+.ds-noimg { display: grid; place-items: center; font-size: 30px; background: var(--page); }
+.ds-status { font-size: 13px; font-weight: 700; }
+.ds-status.live { color: var(--up); } .ds-status.pending { color: var(--muted); } .ds-status.removed { color: var(--down); }
+.ds-key input { font-family: ui-monospace, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }

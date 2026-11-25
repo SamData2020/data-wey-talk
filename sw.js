@@ -1,7 +1,7 @@
 /* Offline support for Data Wey Talk.
    Network first (so updates show up straight away), saved copy when there's no internet.
    Videos and other websites (Google Sheet, fonts) are not cached. */
-const CACHE = "dwt-v9";
+const CACHE = "dwt-v10";
 const CORE = [
   "./", "index.html", "privacy.html", "styles.css", "config.js", "app.js", "survey.js", "quiz.js", "correlate.js", "curriculum.js",
   "game.js", "book.js", "entry.js", "lang/entry-i18n.js", "lang/signup-i18n.js", "lang/distributors-i18n.js", "distributors.js", "video/versions.js", "lang/sw.js", "lang/fr.js", "lang/ar.js", "lang/ha.js", "lang/yo.js", "lang/ig.js", "lang/zu.js", "lang/pt.js", "lang/ss.js", "lang/sn.js", "lang/ts.js", "lang/tn.js", "lang/af.js", "lang/ur.js", "lang/tr.js", "lang/es.js",
