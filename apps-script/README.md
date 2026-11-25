@@ -46,13 +46,18 @@ Google will ask for a new permission (Google Drive, to save the photos). Allow i
 
 The email and account phone columns are private and never sent to the website.
 
-### Posters edit their own posts
+### Posters edit their own posts (PIN)
 
-Once you've approved a post, the poster can change or remove it themselves from **Find Distributors → ✏️ My posts**.
-To protect buyers, they must be signed up with the **same email and phone** they posted with, and enter the private
-**edit code** emailed to them when they posted (the phone they posted from remembers it). Edits go live straight away,
-and **you get an email for every edit** showing the old and new WhatsApp number and prices. If something looks wrong,
-change it back in the Distributors tab or clear the "Approved?" cell. "Removed by poster" in that column means they took it down.
+Once you've approved a post, the poster can change or remove it from **Find Distributors → ✏️ My posts**.
+They need the **same email and phone** they posted with, plus their own **PIN (4 or 6 digits, their choice)**:
+- New posters create the PIN on the posting form.
+- Posters who already have posts but no PIN get a 6-digit code by email first (so nobody else can grab their account).
+- **Forgot or want to change it?** "Forgot or want to change your PIN?" emails a code (valid 30 minutes).
+- 5 wrong PINs lock editing for 30 minutes. 5 wrong email codes cancel the code.
+
+PINs live in the **Poster PINs** tab only as a scrambled hash: nobody, including you, can read them.
+To help someone who is stuck, delete their row in Poster PINs; they can then set a new PIN with an email code.
+Edits go live straight away and **you get an email for every edit**. The old "Edit key" column is no longer used.
 
 ### Verified badge, reports and "Looking for a product"
 

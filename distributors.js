@@ -18,7 +18,8 @@
   let view = "list";                              // list | form | sent | mine | saved
   let editing = null;                             // the post being edited (from "My posts"), or null for a new post
   let mine = null, mineStatus = "";               // the signed-up person's own posts: loading | ok | error
-  const KEYS = "dwt-edit-keys";                   // { postId: edit code } for posts made on this device
+  // PIN for editing: { has: null (not checked yet) | true | false, len: 4 | 6, canCreate: first post, no PIN yet }
+  let pin = { has: null, len: 4, canCreate: false }, sessionPin = "", pinStep = "", pinReset = false, pinMsg = "";
   let q = "", country = "", role = "";
   const cases = {};                               // cases per month typed on each card
   let photo = "";                                 // shrunk photo as a data: URL
@@ -170,6 +171,7 @@
   // ---------- post form ----------
   function sForm() {
     if (!signedUp()) return (window.dwtLockCard ? window.dwtLockCard() : "") + back();
+    if (pin.has === null && !editing) { loadPin().then(() => { if (view === "form" && !$("dsForm")) render(); }); return `<p class="muted ds-msg">${esc(t("dsLoading"))}</p>` + back(); }
     if (canPost === null && !editing) return `<p class="muted ds-msg">${esc(t("dsLoading"))}</p>` + back();
     if (!canPost && !editing) return `<p class="ds-msg">${esc(t("dsSoon"))}</p>` + back();
     const p = profile(), d = draft, buyer = d.role === "buyer";
@@ -201,7 +203,7 @@
         <label class="field"><span>${esc(t("dsPhoto"))}</span><input type="file" id="dsPhoto" accept="image/*"></label>
       </div>
       <div class="ds-preview-row">${thumbHTML()}</div>
-      ${editing && editing.needsKey && !(ls.get(KEYS) || {})[editing.id] ? `<label class="field ds-key"><span>${esc(t("dsKey"))}</span><input data-f="key" value="${val("key")}" maxlength="12" autocomplete="off" autocapitalize="characters"></label>` : ""}
+      ${!editing && pin.has === false && pin.canCreate ? `<fieldset class="ds-pin"><legend>${esc(t("pnCreateT"))}</legend>${pinFields()}</fieldset>` : ""}
       <p class="gm-live" id="dsPrev">${previewText()}</p>
       <input class="hp" data-f="website" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label class="check consent"><input type="checkbox" id="dsOk"${d.ok ? " checked" : ""}><span>${esc(t("dsConsent"))}</span></label>
@@ -245,10 +247,12 @@
     const d = draft, units = Math.max(1, Math.round(N(d.units)) || 1), cost = N(d.cost), price = N(d.price);
     const okFields = d.role && (d.business || "").trim() && (d.product || "").trim() && (d.contact_phone ?? profile().phone ?? "").replace(/\D/g, "").length >= 7 && cost > 0 && (price > 0 || d.role === "buyer") && (photo || editing || d.role === "buyer");
     if (!okFields || !$("dsOk").checked) { err.textContent = t(!d.role ? "dsErrRole" : okFields ? "svErrConsent" : "dsErr"); err.hidden = false; return; }
+    const newPin = !editing && pin.has === false && pin.canCreate ? readNewPin(err) : null;
+    if (!editing && pin.has === false && pin.canCreate && !newPin) return;
     const p = profile();
     const payload = {
       type: editing ? "editpost" : "listing", id: editing ? editing.id : undefined,
-      key: editing ? ((ls.get(KEYS) || {})[editing.id] || String(d.key || "").trim().toUpperCase()) : undefined, role: d.role, website: d.website || "", name: p.name || "", email: p.email || "", phone: p.phone || "", consent: true,
+      pin: editing ? sessionPin : newPin ? newPin.pin : undefined, pin_length: newPin ? newPin.len : undefined, role: d.role, website: d.website || "", name: p.name || "", email: p.email || "", phone: p.phone || "", consent: true,
       business: d.business.trim(), contact_phone: (d.contact_phone ?? p.phone ?? "").trim(), country: d.country ?? p.country ?? "", city: (d.city || "").trim(),
       product: d.product.trim(), description: (d.description || "").trim(), units, cost, price,
       currency: d.currency || (CURRENCIES.find((c) => c.c.includes(p.country)) || { code: "NGN" }).code,
@@ -266,10 +270,10 @@
     }
     if (!ok) {
       btn.disabled = false; btn.textContent = t(editing ? "dsSave" : "dsSubmit");
-      err.textContent = t(r && r.error === "bad key" ? "dsKeyErr" : r && r.error ? "dsEditFail" : "dsFail"); err.hidden = false; return;
+      if (r && /pin|locked/.test(r.error || "")) sessionPin = "";
+      err.textContent = pinError(r) || t(r && r.error ? "dsEditFail" : "dsFail"); err.hidden = false; return;
     }
-    if (r && r.id && r.key) { const k = ls.get(KEYS) || {}; k[r.id] = r.key; ls.set(KEYS, k); }   // remember the edit code on this device
-    if (editing && d.key) { const k = ls.get(KEYS) || {}; k[editing.id] = String(d.key).trim().toUpperCase(); ls.set(KEYS, k); }
+    if (newPin) { pin = { has: true, len: newPin.len, canCreate: false }; sessionPin = newPin.pin; }
     const wasEdit = !!editing;
     window.dwtTrack(wasEdit ? "post-edit" : "post-" + (d.role || "new"));
     draft = {}; photo = ""; editing = null; view = wasEdit ? "saved" : "sent"; render();
@@ -291,10 +295,86 @@
     return res.json();
   };
   const who = () => { const p = profile(); return { email: p.email || "", phone: p.phone || "", consent: true }; };
+  async function loadPin() {
+    try {
+      const r = await postJSON({ type: "pinstatus", ...who() });
+      if (r && r.ok && typeof r.hasPin === "boolean") pin = { has: r.hasPin, len: r.length === 6 ? 6 : 4, canCreate: !!r.canCreate };
+      else pin = { has: false, len: 4, canCreate: false };
+    } catch (_) { /* keep what we had */ }
+  }
+  // ---------- PIN helpers ----------
+  function pinFields() {
+    const len = Number(draft.pin_len) === 6 ? 6 : 4;
+    const inp = (k, label) => `<label class="field"><span>${esc(label)}</span><input type="password" data-f="${k}" value="${esc(draft[k] || "")}"
+      inputmode="numeric" pattern="[0-9]*" maxlength="${len}" autocomplete="new-password" class="ds-pin-in"></label>`;
+    return `<div class="field"><span>${esc(t("pnLen"))}</span><div class="seg" role="radiogroup">
+        ${[4, 6].map((n) => `<button type="button" role="radio" aria-checked="${len === n}" data-pinlen="${n}">${esc(t("pn" + n))}</button>`).join("")}</div></div>
+      <div class="grid2">${inp("pin_a", t("pnPin"))}${inp("pin_b", t("pnPin2"))}</div>`;
+  }
+  function readNewPin(err) {
+    const len = Number(draft.pin_len) === 6 ? 6 : 4, a = String(draft.pin_a || ""), b = String(draft.pin_b || "");
+    const bad = !new RegExp("^\\d{" + len + "}$").test(a) ? t("pnErrFmt", { n: len }) : a !== b ? t("pnErrMatch") : "";
+    if (bad) { err.textContent = bad; err.hidden = false; return null; }
+    return { pin: a, len };
+  }
+  function pinError(r) {
+    if (!r) return "";
+    if (r.error === "bad pin") return t("pnBad", { left: r.left ?? "" });
+    if (r.error === "locked") return t("pnLocked");
+    if (r.error === "no pin") return t("pnSetupT");
+    if (r.error === "bad code") return t("pnCodeBad");
+    return "";
+  }
+  function pinBlock() {
+    const email = profile().email || "";
+    if (pin.has === null) return "";
+    if (pin.has === false || pinReset) {   // set a PIN (first time on an existing account, or forgot/change): email code
+      const intro = pin.has === false && pin.canCreate ? "" : pinStep === "sent"
+        ? `<p class="small">${esc(t("pnSent", { email }))}</p><label class="field"><span>${esc(t("pnCode"))}</span><input data-f="code" value="${esc(draft.code || "")}" inputmode="numeric" maxlength="6" autocomplete="one-time-code" class="ds-pin-in"></label>`
+        : `<p class="small">${esc(t("pnSetupX", { email }))}</p><button type="button" class="btn small-btn" data-act="pinsend">${esc(t("pnSend"))}</button>`;
+      const ready = (pin.has === false && pin.canCreate) || pinStep === "sent";
+      return `<div class="ds-pin card"><h4>${esc(t(pinReset ? "pnResetT" : "pnSetupT"))}</h4>${intro}
+        ${ready ? pinFields() + `<div class="ds-acts"><button type="button" class="btn small-btn" data-act="pinsave">${esc(t("pnSave"))}</button>
+          ${pinReset ? `<button type="button" class="btn ghost small-btn" data-act="pincancel">${esc(t("dsCancel"))}</button>` : ""}</div>` : ""}
+        <p class="error small" id="dsPinErr" role="alert" hidden></p></div>`;
+    }
+    if (!sessionPin) return `<div class="ds-pin card"><h4>${esc(t("pnUnlockT"))}</h4>
+        <div class="ds-pin-row"><input type="password" id="dsPinIn" inputmode="numeric" pattern="[0-9]*" maxlength="${pin.len}" autocomplete="current-password" class="ds-pin-in" aria-label="${esc(t("pnPin"))}">
+        <button type="button" class="btn small-btn" data-act="pinunlock">${esc(t("pnUnlock"))}</button></div>
+        <p class="error small" id="dsPinErr" role="alert" hidden></p>
+        <button type="button" class="linkish small" data-act="pinforgot">${esc(t("pnForgot"))}</button></div>`;
+    return `<p class="small ds-unlocked">${esc(t("pnUnlocked"))} · <button type="button" class="linkish" data-act="pinforgot">${esc(t("pnForgot"))}</button></p>`;
+  }
+  const pinErrShow = (msg) => { const e = $("dsPinErr"); if (e) { e.textContent = msg; e.hidden = false; } };
+  async function pinAct(act, btn) {
+    btn.disabled = true;
+    try {
+      if (act === "pinunlock") {
+        const v = ($("dsPinIn") || {}).value || "";
+        const r = await postJSON({ type: "pincheck", pin: v, ...who() });
+        if (r && r.ok) { sessionPin = v; pinMsg = ""; render(); return; }
+        pinErrShow(pinError(r) || t("dsFail"));
+      } else if (act === "pinsend") {
+        const r = await postJSON({ type: "pinreset", ...who() });
+        if (r && r.ok) { pinStep = "sent"; render(); return; }
+        pinErrShow(t("dsFail"));
+      } else if (act === "pinsave") {
+        const np = readNewPin($("dsPinErr")); if (!np) { btn.disabled = false; return; }
+        const r = await postJSON({ type: "pinset", pin: np.pin, pin_length: np.len, code: String(draft.code || "").trim(), ...who() });
+        if (r && r.ok) {
+          pin = { has: true, len: np.len, canCreate: false }; sessionPin = np.pin; pinStep = ""; pinReset = false; pinMsg = t("pnSaved");
+          ["pin_a", "pin_b", "code"].forEach((k) => delete draft[k]); render(); return;
+        }
+        pinErrShow(pinError(r) || t("dsFail"));
+      }
+    } catch (_) { pinErrShow(t("dsFail")); }
+    btn.disabled = false;
+  }
+
   async function loadMine() {
     mineStatus = "loading"; render();
     try {
-      const r = await postJSON({ type: "myposts", ...who() });
+      const [r] = await Promise.all([postJSON({ type: "myposts", ...who() }), loadPin()]);
       if (!r || !Array.isArray(r.posts)) throw new Error("old script");
       mine = r.posts; mineStatus = "ok";
     } catch (_) { mineStatus = "error"; }
@@ -312,10 +392,11 @@
       return `<li>${img ? `<img class="ds-thumb" src="${esc(img)}" alt="" referrerpolicy="no-referrer">` : `<span class="ds-thumb ds-noimg" aria-hidden="true">📦</span>`}
         <div><b dir="auto">${esc(x.product)}</b><br><span class="ds-status ${x.status}">${esc(t(st))}</span>
           <span class="muted small"> · ${esc(money(x.cost, x.currency))}</span></div>
-        ${x.status === "live" ? `<div class="ds-acts"><button type="button" class="btn small-btn" data-edit="${esc(x.id)}">${esc(t("dsEdit"))}</button>
+        ${x.status === "live" && sessionPin ? `<div class="ds-acts"><button type="button" class="btn small-btn" data-edit="${esc(x.id)}">${esc(t("dsEdit"))}</button>
           <button type="button" class="btn ghost small-btn" data-remove="${esc(x.id)}">${esc(t("dsRemove"))}</button></div>` : ""}</li>`;
     }).join("")}</ul>`;
-    return `<h3 class="ds-mine-t">${esc(t("dsMineT"))}</h3>${body}<p class="ds-err-line error" id="dsMineErr" role="alert" hidden></p>` + back();
+    const top = mineStatus === "ok" && mine.length ? (pinMsg ? `<p class="qz-ok small">✅ ${esc(pinMsg)}</p>` : "") + pinBlock() : "";
+    return `<h3 class="ds-mine-t">${esc(t("dsMineT"))}</h3>${top}${body}<p class="ds-err-line error" id="dsMineErr" role="alert" hidden></p>` + back();
   }
   function startEdit(x) {
     editing = x; photo = "";
@@ -326,17 +407,15 @@
   }
   async function removePost(x, btn) {
     if (!confirm(t("dsRemoveQ"))) return;
-    let key = (ls.get(KEYS) || {})[x.id] || "";
-    if (x.needsKey && !key) { key = (prompt(t("dsKey")) || "").trim().toUpperCase(); if (!key) return; }
     btn.disabled = true;
     try {
-      const r = await postJSON({ type: "removepost", id: x.id, key, ...who() });
+      const r = await postJSON({ type: "removepost", id: x.id, pin: sessionPin, ...who() });
       if (!r || !r.ok) throw r;
-      if (key) { const k = ls.get(KEYS) || {}; k[x.id] = key; ls.set(KEYS, k); }
       await loadMine(); load();
     } catch (r) {
       btn.disabled = false;
-      const e = $("dsMineErr"); if (e) { e.textContent = t(r && r.error === "bad key" ? "dsKeyErr" : "dsEditFail"); e.hidden = false; }
+      if (r && /pin|locked/.test(r.error || "")) { sessionPin = ""; render(); }
+      const e = $("dsMineErr"); if (e) { e.textContent = pinError(r) || t("dsEditFail"); e.hidden = false; }
     }
   }
   function playIt(x) {
@@ -371,10 +450,19 @@
     }
   });
   box.addEventListener("submit", (e) => { e.preventDefault(); submit(); });
+  box.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "dsPinIn") { e.preventDefault(); box.querySelector('[data-act="pinunlock"]')?.click(); } });
   box.addEventListener("click", (e) => {
     const b = e.target.closest("button");
     if (!b) return;
     if (b.dataset.play) { const x = listings.find((y) => y.id === b.dataset.play); if (x) playIt(x); return; }
+    if (b.dataset.pinlen) {
+      draft.pin_len = b.dataset.pinlen; draft.pin_a = ""; draft.pin_b = "";
+      if (view === "form") render(); else { const blk = box.querySelector(".ds-pin.card"); if (blk) blk.outerHTML = pinBlock(); }
+      return;
+    }
+    if (/^pin(unlock|send|save)$/.test(b.dataset.act || "")) { pinAct(b.dataset.act, b); return; }
+    if (b.dataset.act === "pinforgot") { pinReset = true; pinStep = ""; pinMsg = ""; render(); return; }
+    if (b.dataset.act === "pincancel") { pinReset = false; pinStep = ""; render(); return; }
     if (b.dataset.report) {
       const panel = box.querySelector(`[data-rbox="${CSS.escape(b.dataset.report)}"]`);
       if (panel) { panel.hidden = !panel.hidden; if (!panel.hidden) panel.innerHTML = reportBox(b.dataset.report); }

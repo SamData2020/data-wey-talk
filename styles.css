@@ -731,3 +731,10 @@ html.locked .subnav a.lockable::after { content: " 🔒"; font-size: .85em; }
 .ds-card.ds-hl { outline: 3px solid var(--gold); outline-offset: 2px; scroll-margin-top: 120px; }
 .ds-want .ds-img { aspect-ratio: 3 / 1; }
 .ds-report[hidden] { display: none; }
+.ds-pin { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin: 0 0 14px; background: var(--page); display: grid; gap: 10px; }
+.ds-pin legend, .ds-pin h4 { font-weight: 700; font-size: 15px; margin: 0; padding: 0; }
+.ds-pin .grid2 { margin: 0; }
+.ds-pin-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.ds-pin-in { font: inherit; font-size: 20px; letter-spacing: .35em; text-align: center; max-width: 220px; padding: 8px 10px; border: 1px solid var(--axis); border-radius: 10px; background: var(--surface); color: var(--ink); min-height: 44px; }
+.linkish { background: none; border: 0; padding: 0; color: var(--link); text-decoration: underline; cursor: pointer; font: inherit; justify-self: start; }
+.ds-unlocked { margin: 0 0 12px; }

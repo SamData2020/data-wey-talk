@@ -3,7 +3,8 @@
  * Find Distributors: posts land in the "Distributors" tab, photos in a Drive folder.
  * A post only shows on the website after you type Yes in its "Approved?" column.
  * Once approved, the poster can edit or remove it from the website ("My posts"): they need the same email + phone
- * and their private edit code (emailed to them when they post). You get an email for every edit.
+ * and their own PIN (4 or 6 digits, stored only as a hash in "Poster PINs"; reset by a code sent to their email).
+ * 5 wrong PINs lock editing for 30 minutes. You get an email for every edit.
  * Type Yes in "Verified?" to give a post the ✔ Verified badge (after you've called them). It clears itself if they change the phone number.
  * "Report this post" lands in the "Reports" tab and emails you. Shops can also post what they are LOOKING FOR (Poster type = Buyer).
  * Quiz: each person can take it ONCE a month (checked by email/phone). Every attempt is recorded.
@@ -45,6 +46,11 @@ const SHEETS = {
     headers: ["Received at", "ID", "Approved? (type Yes)", "Business name", "Contact name", "Public WhatsApp / phone",
       "Email (private)", "Account phone (private)", "Country", "City", "Product", "Description", "Units per case",
       "Cost per case", "Selling price per unit", "Currency", "Minimum order (cases)", "Photo link", "Language", "Submitted at (device)", "Poster type", "Edit key (private)", "Last edited by poster", "Verified? (type Yes)"],
+  },
+  pins: {
+    name: "Poster PINs",
+    headers: ["Email", "Phone (last 9 digits)", "PIN (hashed — not readable)", "Salt", "PIN length", "Created", "Updated",
+      "Reset code (hashed)", "Reset code expires", "Wrong tries", "Locked until"],
   },
   reports: {
     name: "Reports",
@@ -138,6 +144,7 @@ function doPost(e) {
     if (d.type === "myposts") return json({ ok: true, listing: true, posts: myPosts_(d) });
     if (d.type === "editpost" || d.type === "removepost") return editListing_(d);
     if (d.type === "report") return reportListing_(d);
+    if (d.type === "pinstatus" || d.type === "pincheck" || d.type === "pinreset" || d.type === "pinset") return pinAction_(d);
 
     // Business Boss game: one row when someone reaches the scoreboard, one when they download the report.
     if (d.type === "game") {
@@ -172,20 +179,21 @@ function saveListing_(d) {
   const id = Utilities.getUuid().slice(0, 8);
   const link = d.photo ? savePhoto_(d.photo, id) : "";
   if (!link && (d.photo || !buyer)) return json({ ok: false, listing: true, error: "bad photo" });
-  const key = Utilities.getUuid().replace(/-/g, "").slice(0, 8).toUpperCase();   // private edit code for the poster
+  const firstPost = !hasPosts_(d);   // a PIN can be created here only on a first post; otherwise it needs the email code
+  if (d.pin && firstPost && !pinRow_(d)) setPin_(d, String(d.pin), Number(d.pin_length));
 
   listingSheet_().appendRow([
     new Date(), id, "", clean(d.business), clean(d.name), clean(d.contact_phone), clean(d.email), clean(d.phone),
     clean(d.country), clean(d.city), clean(d.product), clean(d.description, 500), units, cost, price,
     clean(d.currency), Math.round(num(d.min_order)) || "", link, clean(d.language), clean(d.submitted_at),
-    roleText_(d.role), key, "", "",
+    roleText_(d.role), "", "", "",
   ]);
-  try {   // the poster's own copy of the edit code, so they can edit from another phone
+  try {
     MailApp.sendEmail(String(d.email).trim(), "Your Data Wey Talk post: " + clean(d.product),
       "Thank you for posting " + clean(d.product) + " on Data Wey Talk (Find Distributors).\n\n" +
       "We check every post before it shows. Once it is live you can change or remove it yourself:\n" +
-      "open Find Distributors → ✏️ My posts, signed up with this email and phone.\n\n" +
-      "Your edit code: " + key + "\n(Keep it private. You need it to edit from a different phone or browser.)\n\n— Scitylana");
+      "open Find Distributors → ✏️ My posts, signed up with this email and phone, and enter your PIN.\n" +
+      "Forgot your PIN? Tap \"Forgot or want to change your PIN?\" there and we'll email you a code.\n\n— Scitylana");
   } catch (err) { /* never block the post because of email */ }
   try {
     MailApp.sendEmail(notifyTo_(), "🛒 New Find Distributors post to check: " + clean(d.product),
@@ -194,7 +202,7 @@ function saveListing_(d) {
       "\nSelling price per unit: " + price + " (" + units + " per case)\nPhone: " + clean(d.contact_phone) + "\nPhoto: " + link +
       "\n\nTo publish it, open the Distributors tab and type Yes in the 'Approved?' column for ID " + id + ".");
   } catch (err) { /* never block the post because of email */ }
-  return json({ ok: true, listing: true, id: id, key: key });
+  return json({ ok: true, listing: true, id: id });
 }
 
 // Saves a data:image photo to the Drive folder and returns its public thumbnail link ("" if the photo is not valid).
@@ -229,7 +237,7 @@ function myPosts_(d) {
     business: plain_(r[3]), phone: plain_(r[5]), country: plain_(r[8]), city: plain_(r[9]), product: plain_(r[10]),
     description: plain_(r[11]), units: Number(r[12]) || 1, cost: Number(r[13]) || 0, price: Number(r[14]) || 0,
     currency: plain_(r[15]), minOrder: Number(r[16]) || 0, photo: plain_(r[17]),
-    role: roleOf_(r[20]), verified: isYes_(r[23]), needsKey: !!String(r[21] || "").trim(),
+    role: roleOf_(r[20]), verified: isYes_(r[23]),
   })).reverse();
 }
 
@@ -240,8 +248,8 @@ function editListing_(d) {
   if (i < 1) return json({ ok: false, listing: true, error: "not found" });
   const r = rows[i], row = i + 1;
   if (!samePerson_(r, d)) return json({ ok: false, listing: true, error: "not yours" });
-  const key = String(r[21] || "").trim();
-  if (key && key !== String(d.key || "").trim().toUpperCase()) return json({ ok: false, listing: true, error: "bad key" });
+  const pinErr = checkPin_(d);
+  if (pinErr) return json(Object.assign({ ok: false, listing: true }, pinErr));
   if (!isYes_(r[2])) return json({ ok: false, listing: true, error: "not approved" });
 
   if (d.type === "removepost") {
@@ -271,6 +279,82 @@ function editListing_(d) {
     (phoneChanged && isYes_(r[23]) ? "  ⚠️ The ✔ Verified badge was removed because the number changed." : "") +
     "\nCost per case: " + before[1] + " → " + cost + "\nSelling price per unit: " + before[2] + " → " + price + (d.photo ? "\nNew photo: " + link : ""));
   return json({ ok: true, listing: true, id: String(r[1]) });
+}
+
+// ---------- Poster PINs ----------
+const PIN_TRIES = 5, PIN_LOCK_MIN = 30, CODE_MIN = 30;
+const pinOk_ = (pin, len) => (len === 4 || len === 6) && new RegExp("^\\d{" + len + "}$").test(String(pin));
+function hash_(text) {
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, text, Utilities.Charset.UTF_8)
+    .map((b) => ("0" + (b & 255).toString(16)).slice(-2)).join("");
+}
+function hasPosts_(d) { return listingSheet_().getDataRange().getValues().slice(1).some((r) => r[1] && samePerson_(r, d)); }
+// The PIN row for this email + phone: { sh, row, r } or null.
+function pinRow_(d) {
+  const sh = sheet_("pins"), rows = sh.getDataRange().getValues(), email = String(d.email || "").trim().toLowerCase(), ph = digits_(d.phone);
+  const i = rows.findIndex((r, n) => n > 0 && String(r[0]).trim().toLowerCase() === email && String(r[1]).replace(/^'/, "") === ph);
+  return i > 0 ? { sh: sh, row: i + 1, r: rows[i] } : null;
+}
+function setPin_(d, pin, len) {
+  if (!pinOk_(pin, len)) return false;
+  const salt = Utilities.getUuid(), now = new Date(), p = pinRow_(d);
+  const vals = [String(d.email).trim().toLowerCase(), "'" + digits_(d.phone), hash_(salt + pin), salt, len, p ? p.r[5] : now, now, "", "", 0, ""];
+  if (p) p.sh.getRange(p.row, 1, 1, vals.length).setValues([vals]); else sheet_("pins").appendRow(vals);
+  return true;
+}
+// null when the PIN is right, otherwise { error, left? }. Counts wrong tries and locks for a while.
+function checkPin_(d) {
+  const p = pinRow_(d);
+  if (!p || !p.r[2]) return { error: "no pin" };
+  const now = new Date(), lockedUntil = p.r[10] instanceof Date ? p.r[10] : null;
+  if (lockedUntil && lockedUntil > now) return { error: "locked" };
+  if (hash_(p.r[3] + String(d.pin || "")) === p.r[2]) {
+    if (p.r[9] || p.r[10]) p.sh.getRange(p.row, 10, 1, 2).setValues([[0, ""]]);
+    return null;
+  }
+  const tries = (Number(p.r[9]) || 0) + 1;
+  if (tries >= PIN_TRIES) { p.sh.getRange(p.row, 10, 1, 2).setValues([[0, new Date(now.getTime() + PIN_LOCK_MIN * 60000)]]); return { error: "locked" }; }
+  p.sh.getRange(p.row, 10).setValue(tries);
+  return { error: "bad pin", left: PIN_TRIES - tries };
+}
+/** pinstatus → does this poster have a PIN? · pincheck → is this PIN right? · pinreset → email a code · pinset → new PIN (needs the code). */
+function pinAction_(d) {
+  const p = pinRow_(d);
+  if (d.type === "pinstatus") {
+    return json({ ok: true, listing: true, hasPin: !!(p && p.r[2]), length: p ? Number(p.r[4]) || 4 : 0, canCreate: !(p && p.r[2]) && !hasPosts_(d) });
+  }
+  if (d.type === "pincheck") { const e = checkPin_(d); return json(Object.assign({ ok: !e, listing: true }, e || {})); }
+  if (d.type === "pinreset") {
+    if (!hasPosts_(d) && !(p && p.r[2])) return json({ ok: true, listing: true });   // only for real posters; say nothing either way
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    const exp = new Date(Date.now() + CODE_MIN * 60000);
+    if (p) p.sh.getRange(p.row, 8, 1, 2).setValues([[hash_(p.r[3] + "code" + code), exp]]);
+    else {
+      const salt = Utilities.getUuid();
+      sheet_("pins").appendRow([String(d.email).trim().toLowerCase(), "'" + digits_(d.phone), "", salt, "", new Date(), "", hash_(salt + "code" + code), exp, 0, ""]);
+    }
+    try {
+      MailApp.sendEmail(String(d.email).trim(), "Your Data Wey Talk PIN code: " + code,
+        "Your code to set a new PIN for your Find Distributors posts is: " + code + "\n\nIt works for " + CODE_MIN +
+        " minutes. If you didn't ask for this, you can ignore this email — your posts are safe.\n\n— Scitylana");
+    } catch (err) { return json({ ok: false, listing: true, error: "email failed" }); }
+    return json({ ok: true, listing: true, sent: true });
+  }
+  if (d.type === "pinset") {
+    const len = Number(d.pin_length), firstTime = !(p && p.r[2]) && !hasPosts_(d);
+    if (!pinOk_(d.pin, len)) return json({ ok: false, listing: true, error: "bad format" });
+    if (!firstTime) {
+      const exp = p && p.r[8] instanceof Date ? p.r[8] : null;
+      if (!p || !p.r[7] || !exp || exp < new Date()) return json({ ok: false, listing: true, error: "bad code" });
+      if (hash_(p.r[3] + "code" + String(d.code || "").trim()) !== p.r[7]) {
+        const tries = (Number(p.r[9]) || 0) + 1;   // 5 wrong codes cancel the code: they must ask for a new one
+        p.sh.getRange(p.row, 8, 1, 3).setValues(tries >= PIN_TRIES ? [["", "", 0]] : [[p.r[7], p.r[8], tries]]);
+        return json({ ok: false, listing: true, error: "bad code" });
+      }
+    }
+    setPin_(d, String(d.pin), len);
+    return json({ ok: true, listing: true });
+  }
 }
 
 /** "Report this post": saved in the Reports tab, and you get an email. One report per person per post. */
